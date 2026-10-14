@@ -1,0 +1,85 @@
+---
+// Break-Even Lab: markup only. Behavior lives in src/scripts/tools/break-even.js
+import '../../styles/tools/break-even.css';
+---
+<div class="be" data-tool="break-even">
+  <section class="be-bench">
+    <div class="be-panel" aria-label="Business inputs">
+      <h2>Your business</h2>
+      <div class="be-presets" data-presets role="group" aria-label="Example businesses"></div>
+
+      <div class="be-field">
+        <div class="be-field-top">
+          <label for="be-price">Selling price</label>
+          <div class="be-num"><span>$</span><input id="be-price-n" type="number" step="0.25" min="0" aria-label="Selling price in dollars" /></div>
+        </div>
+        <input id="be-price" type="range" min="0" max="50" step="0.25" />
+        <span class="be-hint">What the customer pays for one item.</span>
+      </div>
+
+      <div class="be-field">
+        <div class="be-field-top">
+          <label for="be-vc">Variable cost per unit</label>
+          <div class="be-num"><span>$</span><input id="be-vc-n" type="number" step="0.25" min="0" aria-label="Variable cost per unit in dollars" /></div>
+        </div>
+        <input id="be-vc" type="range" min="0" max="50" step="0.25" />
+        <span class="be-hint">Costs that grow with every item: ingredients, materials, packaging.</span>
+      </div>
+
+      <div class="be-field">
+        <div class="be-field-top">
+          <label for="be-fc">Fixed costs</label>
+          <div class="be-num"><span>$</span><input id="be-fc-n" type="number" step="10" min="0" aria-label="Fixed costs in dollars" /></div>
+        </div>
+        <input id="be-fc" type="range" min="0" max="10000" step="10" />
+        <span class="be-hint">Costs you pay no matter what: rent, equipment, permits.</span>
+      </div>
+
+      <div class="be-field">
+        <div class="be-field-top">
+          <label for="be-q">Units you expect to sell</label>
+          <div class="be-num"><input id="be-q-n" type="number" step="1" min="0" aria-label="Expected units sold" /></div>
+        </div>
+        <input id="be-q" type="range" min="0" max="2000" step="1" />
+        <span class="be-hint">Your sales forecast. The dashed line on the chart.</span>
+      </div>
+    </div>
+
+    <div class="be-panel be-chart-panel">
+      <div class="be-legend" aria-hidden="true">
+        <span><i style="background:var(--good)"></i>Total revenue</span>
+        <span><i style="background:var(--bad)"></i>Total cost</span>
+        <span><i style="background:var(--accent)"></i>Break-even point</span>
+      </div>
+      <div class="be-chart-box"><svg data-chart viewBox="0 0 640 360" role="img" aria-label="Break-even chart"></svg></div>
+      <div class="be-results">
+        <div class="be-stat be-stat-be"><span class="k">Break-even units</span><span class="v" data-r="units">–</span></div>
+        <div class="be-stat"><span class="k">Break-even sales $</span><span class="v" data-r="dollars">–</span></div>
+        <div class="be-stat"><span class="k">Contribution margin</span><span class="v" data-r="cm">–</span></div>
+        <div class="be-stat" data-r="profit-box"><span class="k" data-r="profit-k">Profit at forecast</span><span class="v" data-r="profit">–</span></div>
+      </div>
+      <div class="be-verdict" data-r="verdict" role="status"></div>
+    </div>
+  </section>
+
+  <section class="be-lower">
+    <div class="be-panel">
+      <h2>The math</h2>
+      <div class="be-formula" data-r="formula"></div>
+      <p><strong>Contribution margin</strong> is what each sale has left over after paying its own variable cost. That money goes toward covering fixed costs. Once enough sales cover all the fixed costs, every sale after that is profit.</p>
+    </div>
+    <div class="be-panel">
+      <h2>Try it</h2>
+      <ol class="be-qs">
+        <li>With the lemonade stand, what happens to break-even if you raise the price by $1? Why does such a small change matter so much? <button type="button" class="be-reveal">Hint</button><span class="be-ans" hidden>Raising price raises contribution margin. Every cup now covers more of the fixed costs, so you need fewer cups.</span></li>
+        <li>Set the variable cost equal to the price. What does the chart show, and why? <button type="button" class="be-reveal">Hint</button><span class="be-ans" hidden>Contribution margin is $0. Each sale only pays for itself, so nothing is left to cover fixed costs. The lines never cross.</span></li>
+        <li>The food truck owner can cut rent by $1,000 or cut variable cost by $1 per meal. Which lowers break-even more? Test both. <button type="button" class="be-reveal">Hint</button><span class="be-ans" hidden>Compare the two break-even numbers. Which one wins depends on the numbers; that's the business decision.</span></li>
+      </ol>
+    </div>
+  </section>
+</div>
+
+<script>
+  import { initBreakEven } from '../../scripts/tools/break-even.js';
+  document.querySelectorAll('[data-tool="break-even"]').forEach(initBreakEven);
+</script>

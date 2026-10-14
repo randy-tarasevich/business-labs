@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const tools = (await getCollection('tools', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
+const courses = [...new Set(tools.map((t) => t.data.course))];
+---
+<Base>
+  <section class="grid gap-3 mb-10">
+    <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight">Business Lab</h1>
+    <p class="text-muted max-w-[60ch] text-lg">
+      Interactive tools for high school business and personal finance. Change the numbers, see what happens, and explain why.
+    </p>
+  </section>
+
+  {courses.map((course) => (
+    <section class="mb-10">
+      <h2 class="text-sm uppercase tracking-wider font-sans font-semibold text-muted mb-3">{course}</h2>
+      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {tools.filter((t) => t.data.course === course).map((t) => (
+          <li>
+            <a href={`/tools/${t.id}/`} class="group block h-full rounded-xl border border-line bg-panel p-5 hover:border-accent transition-colors">
+              <span class="text-xs text-muted">{t.data.unit} · Grades {t.data.grades}</span>
+              <h3 class="text-xl font-semibold mt-1 group-hover:text-accent">{t.data.title}</h3>
+              <p class="text-muted mt-2 text-[15px]">{t.data.summary}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</Base>

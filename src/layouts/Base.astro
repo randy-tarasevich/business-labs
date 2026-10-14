@@ -1,0 +1,40 @@
+---
+import '../styles/global.css';
+const { title, description = 'Free interactive tools for high school business and personal finance classes.' } = Astro.props;
+const siteName = 'Business Lab';
+const pageTitle = title ? `${title} · ${siteName}` : siteName;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <!-- Embed mode: runs before paint so the header never flashes. -->
+    <script is:inline>
+      if (new URLSearchParams(location.search).get('embed') === '1') document.documentElement.classList.add('embed');
+    </script>
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <header class="site-chrome border-b border-line bg-panel">
+      <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between gap-4">
+        <a href="/" class="font-display text-xl font-bold no-underline text-ink">{siteName}</a>
+        <nav class="flex gap-5 text-sm font-medium text-muted">
+          <a href="/" class="hover:text-ink">Tools</a>
+          <a href="/standards/" class="hover:text-ink">Standards</a>
+        </nav>
+      </div>
+    </header>
+    <main class="flex-1 mx-auto w-full max-w-6xl px-4 py-8">
+      <slot />
+    </main>
+    <footer class="site-chrome border-t border-line text-sm text-muted">
+      <div class="mx-auto max-w-6xl px-4 py-5">
+        No accounts, no tracking of students. Everything runs in your browser.
+      </div>
+    </footer>
+  </body>
+</html>

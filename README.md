@@ -1,0 +1,52 @@
+# Business Lab
+
+Interactive tools for high school business and personal finance classes.
+Astro + Tailwind v4, plain JavaScript, deployed on Cloudflare Pages.
+
+**No accounts, no student data.** Every tool runs entirely in the browser. Nothing is stored on a server.
+
+## Run it
+
+```bash
+npm install
+npm run dev      # http://localhost:4321
+npm run build    # outputs to dist/
+```
+
+## Deploy (Cloudflare Pages)
+
+1. Push this repo to GitHub.
+2. Cloudflare dashboard → Workers & Pages → Create → Pages → Connect to Git.
+3. Framework preset: **Astro**. Build command: `npm run build`. Output directory: `dist`.
+4. When the domain is chosen: add it under Custom domains, then update `site` in `astro.config.mjs`.
+
+## Add a tool
+
+1. **Component:** `src/components/tools/MyTool.astro` (markup) and `src/scripts/tools/my-tool.js` (behavior, exports an `init(root)` function).
+2. **Styles:** `src/styles/tools/my-tool.css`, prefixed with the tool's class so nothing leaks. Use the color tokens in `src/styles/global.css` (`var(--good)`, `var(--bad)`, etc.) so light and dark mode both work.
+3. **Register it:** import it in `src/components/tools/index.js`.
+4. **Content:** add `src/content/tools/my-tool.md`. Frontmatter is the tool's metadata (course, unit, standards). The markdown body becomes the "For teachers" notes.
+
+The home page, tool page, and standards coverage page all build from the content files automatically.
+
+## Standards
+
+Only add MBA Research indicator codes you've verified against the official documents. Tools with no codes show up as "Not yet aligned" on `/standards/`.
+
+## Embed mode
+
+Add `?embed=1` to any tool URL to hide the site header, footer, and teacher notes. Use it for projecting or for linking from slides.
+
+## Structure
+
+```
+src/
+  content/tools/        one .md per tool (metadata + teacher notes)
+  content.config.js     schema for tool metadata
+  components/tools/     tool markup + registry (index.js)
+  scripts/tools/        tool behavior (plain JS)
+  scripts/lib/util.js   shared helpers (money format, chart scale, SVG, beep)
+  styles/               global tokens + per-tool CSS
+  pages/                home, tools/[slug], standards, 404
+  layouts/Base.astro    site shell, embed mode
+```

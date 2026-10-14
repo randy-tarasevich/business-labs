@@ -1,0 +1,39 @@
+---
+// Projector-ready class timer. Segments come from a preset in src/scripts/tools/timer-presets.js
+import '../../styles/tools/class-timer.css';
+const { preset = 'balance-the-budget' } = Astro.props;
+---
+<div class="ct" data-tool="class-timer" data-preset={preset}>
+  <div class="ct-top">
+    <h2 class="ct-title" data-title>Timer</h2>
+    <div class="ct-tabs" data-tabs role="group" aria-label="Choose a timer"></div>
+  </div>
+
+  <div class="ct-stage">
+    <div class="ct-clock">
+      <svg viewBox="0 0 200 200" aria-hidden="true">
+        <circle class="ct-ring-bg" cx="100" cy="100" r="88" stroke-width="12"></circle>
+        <circle class="ct-ring" data-ring cx="100" cy="100" r="88" stroke-width="12"></circle>
+        <line class="ct-half" data-half x1="100" y1="4" x2="100" y2="20" transform="rotate(90 100 100)"></line>
+      </svg>
+      <div class="ct-clock-text">
+        <div class="ct-time" data-time role="timer" aria-live="off">0:00</div>
+        <div class="ct-sub" data-sub>Ready</div>
+      </div>
+    </div>
+    <div class="ct-side" data-side></div>
+  </div>
+
+  <div class="ct-controls">
+    <button class="primary" data-go type="button">Start</button>
+    <button data-plus type="button">+1 min</button>
+    <button data-reset type="button">Reset</button>
+    <button data-sound type="button" aria-pressed="true">Chime on</button>
+    <span class="ct-hint">Space = start/pause · R = reset</span>
+  </div>
+</div>
+
+<script>
+  import { initClassTimer } from '../../scripts/tools/class-timer.js';
+  document.querySelectorAll('[data-tool="class-timer"]').forEach(initClassTimer);
+</script>

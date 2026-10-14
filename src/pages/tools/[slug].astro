@@ -1,0 +1,58 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+import { TOOL_COMPONENTS } from '../../components/tools/index.js';
+
+export async function getStaticPaths() {
+  const tools = await getCollection('tools', ({ data }) => !data.draft);
+  return tools.map((tool) => ({ params: { slug: tool.id }, props: { tool } }));
+}
+
+const { tool } = Astro.props;
+const { Content } = await render(tool);
+const Tool = TOOL_COMPONENTS[tool.data.component];
+if (!Tool) throw new Error(`No component "${tool.data.component}" registered in src/components/tools/index.js`);
+const { indicators, alsoAligned } = tool.data;
+---
+<Base title={tool.data.title} description={tool.data.summary}>
+  <div class="site-chrome mb-6 grid gap-1">
+    <a href="/" class="text-sm text-muted hover:text-ink">← All tools</a>
+    <h1 class="text-3xl sm:text-4xl font-extrabold">{tool.data.title}</h1>
+    <p class="text-muted">{tool.data.course} · {tool.data.unit} · Grades {tool.data.grades}</p>
+  </div>
+
+  <Tool {...tool.data.props} />
+
+  <details class="site-chrome mt-12 rounded-xl border border-line bg-panel p-5">
+    <summary class="cursor-pointer font-display text-lg font-semibold">For teachers</summary>
+    <div class="mt-4 grid gap-6">
+      <div class="notes">
+        <Content />
+      </div>
+      <div>
+        <h2 class="text-lg font-semibold mb-2">Standards</h2>
+        {indicators.length === 0 && alsoAligned.length === 0 ? (
+          <p class="text-muted text-sm">Not yet aligned. Add verified codes in this tool's markdown file.</p>
+        ) : (
+          <ul class="text-sm grid gap-1">
+            {indicators.map((i) => <li><span class="font-mono">{i.code}</span> {i.name} ({i.level})</li>)}
+            {alsoAligned.map((a) => <li class="text-muted">{a}</li>)}
+          </ul>
+        )}
+        <p class="text-sm mt-3"><a class="text-accent" href={`?embed=1`}>Open in embed mode</a> (hides the site header for projecting or linking from slides)</p>
+      </div>
+    </div>
+  </details>
+</Base>
+
+<style is:global>
+  .notes { max-width: 70ch; display: grid; gap: 12px; }
+  .notes h2 { font-size: 1.125rem; font-weight: 600; margin-top: 8px; }
+  .notes ul, .notes ol { padding-left: 1.25rem; display: grid; gap: 4px; }
+  .notes ul { list-style: disc; }
+  .notes ol { list-style: decimal; }
+  .notes code { font-family: var(--font-mono); font-size: .9em; background: var(--bg); padding: 1px 5px; border-radius: 4px; }
+  .notes table { border-collapse: collapse; font-size: 14px; display: block; overflow-x: auto; }
+  .notes th, .notes td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; }
+  .notes th { background: var(--bg); }
+</style>
