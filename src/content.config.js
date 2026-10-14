@@ -2,12 +2,17 @@ import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 // One markdown file per tool. Frontmatter = metadata, body = teacher notes.
+// Display order for course sections.
+export const COURSES = ['Intro to Business', 'Personal Finance', 'Accounting', 'Marketing', 'Entrepreneurship'];
+
 const tools = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/tools' }),
   schema: z.object({
     title: z.string(),
     summary: z.string(),
-    course: z.enum(['Intro to Business', 'Personal Finance', 'Marketing', 'Accounting', 'Entrepreneurship']),
+    // First course is the tool's home section on the index page.
+    // List every other course the tool fits so it can be cross-listed.
+    courses: z.array(z.enum(COURSES)).min(1),
     unit: z.string(),
     grades: z.string().default('9–12'),
     // Key into src/components/tools/index.js

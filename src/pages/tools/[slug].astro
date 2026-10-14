@@ -18,7 +18,7 @@ const { indicators, alsoAligned } = tool.data;
   <div class="site-chrome mb-6 grid gap-1">
     <a href="/" class="text-sm text-muted hover:text-ink">← All tools</a>
     <h1 class="text-3xl sm:text-4xl font-extrabold">{tool.data.title}</h1>
-    <p class="text-muted">{tool.data.course} · {tool.data.unit} · Grades {tool.data.grades}</p>
+    <p class="text-muted">{tool.data.courses.join(', ')} · {tool.data.unit} · Grades {tool.data.grades}</p>
   </div>
 
   <Tool {...tool.data.props} />

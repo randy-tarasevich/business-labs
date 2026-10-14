@@ -26,7 +26,7 @@ Connected to Cloudflare through Git: every push to `main` builds and deploys.
 1. **Component:** `src/components/tools/MyTool.astro` (markup) and `src/scripts/tools/my-tool.js` (behavior, exports an `init(root)` function).
 2. **Styles:** `src/styles/tools/my-tool.css`, prefixed with the tool's class so nothing leaks. Use the color tokens in `src/styles/global.css` (`var(--good)`, `var(--bad)`, etc.) so light and dark mode both work.
 3. **Register it:** import it in `src/components/tools/index.js`.
-4. **Content:** add `src/content/tools/my-tool.md`. Frontmatter is the tool's metadata (course, unit, standards). The markdown body becomes the "For teachers" notes.
+4. **Content:** add `src/content/tools/my-tool.md`. Frontmatter is the tool's metadata (courses, unit, standards). `courses` is a list: the first is the tool's home section on the index page, the rest show as "Also fits". The markdown body becomes the "For teachers" notes.
 
 The home page, tool page, and standards coverage page all build from the content files automatically.
 

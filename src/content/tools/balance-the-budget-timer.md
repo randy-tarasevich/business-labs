@@ -1,7 +1,7 @@
 ---
 title: Balance the Budget Timer
 summary: Projector countdown for the 50/30/20 budgeting lesson, with the pair-task steps on screen.
-course: Personal Finance
+courses: [Personal Finance]
 unit: Spending and Budgeting
 grades: 10–12
 component: ClassTimer
