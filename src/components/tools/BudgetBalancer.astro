@@ -1,0 +1,70 @@
+---
+// Budget Balancer: digital version of the Balance the Budget scenario cards.
+// Behavior lives in src/scripts/tools/budget-balancer.js, card data in budget-cards.js
+import '../../styles/tools/budget-balancer.css';
+---
+<div class="bb" data-tool="budget-balancer">
+  <div class="bb-top">
+    <div class="bb-cards" data-cards role="group" aria-label="Choose a scenario card"></div>
+    <label class="bb-pay">
+      <span>Take-home pay</span>
+      <span class="bb-money-input">$<input data-pay type="number" min="0" step="50" value="2400" aria-label="Monthly take-home pay in dollars" /></span>
+      <span class="bb-per">/ month</span>
+    </label>
+  </div>
+
+  <div class="bb-main">
+    <section class="bb-panel bb-card" aria-label="Scenario card">
+      <h2 data-card-title>Card</h2>
+      <p class="bb-blurb" data-blurb></p>
+      <div class="bb-housing" data-housing hidden>
+        <p data-housing-text></p>
+        <label class="bb-switch"><input type="checkbox" data-housing-toggle /> <span>Use this housing option</span></label>
+      </div>
+
+      <div class="bb-table-wrap">
+        <table class="bb-table">
+          <thead>
+            <tr><th scope="col">Line</th><th scope="col" class="num">Planned</th><th scope="col">Need, want, or savings?</th><th scope="col" class="num">New $</th></tr>
+          </thead>
+          <tbody data-lines></tbody>
+        </table>
+      </div>
+      <p class="bb-tip">A <b>need</b> keeps you housed, fed, healthy, and able to work. Some lines could go either way. Pick one and be ready to defend it.</p>
+    </section>
+
+    <aside class="bb-side">
+      <section class="bb-panel bb-status" aria-live="polite">
+        <div class="bb-gap" data-gap>
+          <span class="bb-gap-k" data-gap-k>Over by</span>
+          <span class="bb-gap-v" data-gap-v>$0</span>
+        </div>
+        <div class="bb-total">Total <b data-total>$0</b> of <b data-pay-label>$2,400</b></div>
+        <div class="bb-unlabeled" data-unlabeled></div>
+
+        <div class="bb-bars" data-bars></div>
+        <p class="bb-note">Line on each bar = the 50/30/20 target. It's a starting point, not a law.</p>
+      </section>
+
+      <section class="bb-panel bb-tradeoffs">
+        <h2>Your two hardest trade-offs</h2>
+        <label for="bb-t1">Trade-off 1</label>
+        <textarea id="bb-t1" data-trade="0" rows="2" placeholder="We cut eating out to $100 because rent already takes 61% of Sofia's pay."></textarea>
+        <label for="bb-t2">Trade-off 2</label>
+        <textarea id="bb-t2" data-trade="1" rows="2" placeholder="We kept the car because there's no bus to his job sites."></textarea>
+        <div class="bb-actions">
+          <button type="button" class="primary" data-copy>Copy my budget</button>
+          <button type="button" data-reset>Reset this card</button>
+        </div>
+        <p class="bb-copy-status" data-copy-status role="status"></p>
+        <textarea class="bb-copy-fallback" data-copy-fallback rows="8" readonly hidden aria-label="Budget summary to copy"></textarea>
+        <p class="bb-note">Nothing you type is saved or sent anywhere. Copy your budget and paste it where your teacher asks.</p>
+      </section>
+    </aside>
+  </div>
+</div>
+
+<script>
+  import { initBudgetBalancer } from '../../scripts/tools/budget-balancer.js';
+  document.querySelectorAll('[data-tool="budget-balancer"]').forEach(initBudgetBalancer);
+</script>

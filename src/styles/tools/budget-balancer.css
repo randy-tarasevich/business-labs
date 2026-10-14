@@ -1,0 +1,102 @@
+/* Budget Balancer. Uses global tokens; needs/wants/savings get their own hues. */
+.bb {
+  --need: #2f5bd3;
+  --want: #b5590f;
+  --save: #1c8a5a;
+  display: grid;
+  gap: 16px;
+}
+@media (prefers-color-scheme: dark) {
+  .bb { --need: #7c9cff; --want: #f0a050; --save: #4cc78d; }
+}
+.bb h2 { font-family: var(--font-display); font-weight: 600; font-size: 20px; margin: 0; }
+
+.bb-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+.bb-cards { display: flex; flex-wrap: wrap; gap: 6px; }
+.bb-cards button { font: 600 14px var(--font-sans); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; cursor: pointer; }
+.bb-cards button span { font-weight: 400; color: var(--muted); }
+.bb-cards button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.bb-cards button[aria-pressed="true"] span { color: inherit; opacity: .8; }
+
+.bb-pay { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; }
+.bb-money-input { display: inline-flex; align-items: center; gap: 2px; font-family: var(--font-mono); color: var(--muted); }
+.bb-money-input input { width: 90px; font: 500 15px var(--font-mono); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 5px 8px; text-align: right; }
+.bb-per { font-weight: 400; color: var(--muted); }
+
+.bb-main { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(280px, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 900px) { .bb-main { grid-template-columns: minmax(0, 1fr); } }
+.bb-side { display: grid; gap: 16px; position: sticky; top: 16px; }
+@media (max-width: 900px) { .bb-side { position: static; } }
+
+.bb-panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 12px; min-width: 0; }
+.bb-blurb { margin: 0; color: var(--muted); max-width: 70ch; }
+
+.bb-housing { border: 1px dashed var(--line); border-radius: 8px; padding: 12px 14px; display: grid; gap: 8px; background: var(--bg); }
+.bb-housing p { margin: 0; font-size: 14px; }
+.bb-switch { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; cursor: pointer; }
+.bb-switch input { width: 18px; height: 18px; accent-color: var(--accent); }
+
+.bb-table-wrap { overflow-x: auto; }
+.bb-table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 520px; }
+.bb-table th.num { font-family: var(--font-sans); }
+.bb-table th { text-align: left; font-size: 12px; font-weight: 600; color: var(--muted); padding: 6px 8px; border-bottom: 1px solid var(--line); }
+.bb-table td { padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.bb-table .num { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.bb-table tr.changed .planned { text-decoration: line-through; color: var(--muted); }
+
+.bb-seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.bb-seg button { font: 600 13px var(--font-sans); background: transparent; color: var(--muted); border: 0; padding: 5px 10px; cursor: pointer; min-width: 64px; }
+.bb-seg button + button { border-left: 1px solid var(--line); }
+.bb-seg button[aria-pressed="true"][data-cat="N"] { background: var(--need); color: var(--panel); }
+.bb-seg button[aria-pressed="true"][data-cat="W"] { background: var(--want); color: var(--panel); }
+.bb-seg button[aria-pressed="true"][data-cat="S"] { background: var(--save); color: var(--panel); }
+tr.unlabeled .bb-seg { border-color: var(--warn); }
+
+.bb-new { width: 84px; font: 500 15px var(--font-mono); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 4px 8px; text-align: right; font-variant-numeric: tabular-nums; }
+tr.changed .bb-new { border-color: var(--accent); }
+.bb-tip { margin: 0; font-size: 13.5px; color: var(--muted); }
+
+.bb-gap { display: grid; gap: 2px; border-radius: 10px; padding: 12px 14px; background: var(--bad-soft); }
+.bb-gap.ok { background: var(--good-soft); }
+.bb-gap.under { background: var(--warn-soft); }
+.bb-gap-k { font-size: 13px; font-weight: 600; color: var(--muted); }
+.bb-gap-v { font: 600 34px/1.1 var(--font-mono); font-variant-numeric: tabular-nums; }
+.bb-gap .bb-gap-v { color: var(--bad); }
+.bb-gap.ok .bb-gap-v { color: var(--good); }
+.bb-gap.under .bb-gap-v { color: var(--warn); }
+.bb-total { font-size: 14px; color: var(--muted); }
+.bb-total b { color: var(--ink); font-family: var(--font-mono); font-weight: 500; }
+.bb-unlabeled { font-size: 13.5px; color: var(--warn); font-weight: 600; min-height: 1.2em; }
+
+.bb-bars { display: grid; gap: 12px; }
+.bb-bar { display: grid; gap: 4px; }
+.bb-bar-top { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; }
+.bb-bar-top b { font-family: var(--font-mono); font-weight: 500; font-variant-numeric: tabular-nums; }
+.bb-bar-top span { color: var(--muted); font-size: 12.5px; }
+.bb-bar-top .bb-cat-name { font-size: 14px; font-weight: 700; }
+.bb-track { position: relative; height: 12px; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.bb-fill { height: 100%; border-radius: 6px 0 0 6px; transition: width .25s; }
+.bb-target { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--ink); }
+.bb-note { margin: 0; font-size: 12.5px; color: var(--muted); }
+
+.bb-tradeoffs label { font-size: 13px; font-weight: 600; }
+.bb-tradeoffs textarea { width: 100%; font: 15px/1.4 var(--font-sans); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; resize: vertical; }
+.bb-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.bb-actions button { font: 600 14px var(--font-sans); border-radius: 8px; padding: 8px 14px; cursor: pointer; border: 1px solid var(--line); background: var(--panel); color: var(--ink); }
+.bb-actions button.primary { background: var(--accent); border-color: var(--accent); color: var(--panel); }
+.bb-copy-status { margin: 0; font-size: 13.5px; color: var(--good); min-height: 1.2em; }
+.bb-copy-fallback { font-family: var(--font-mono) !important; font-size: 12.5px !important; }
+
+/* Phones: each budget line becomes a small two-row card. */
+@media (max-width: 640px) {
+  .bb-table { min-width: 0; }
+  .bb-table thead { display: none; }
+  .bb-table tbody { display: grid; gap: 8px; }
+  .bb-table tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "name planned" "cat new"; gap: 6px 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .bb-table td { border: 0; padding: 0; }
+  .bb-table .c-name { grid-area: name; font-weight: 600; }
+  .bb-table .c-planned { grid-area: planned; }
+  .bb-table .c-cat { grid-area: cat; }
+  .bb-table .c-new { grid-area: new; }
+  .bb-seg button { min-width: 0; padding: 6px 9px; }
+}
