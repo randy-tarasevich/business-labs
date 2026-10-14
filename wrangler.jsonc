@@ -1,0 +1,9 @@
+{
+  // Cloudflare Workers static-assets deploy for the Astro build.
+  "name": "business-labs",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}

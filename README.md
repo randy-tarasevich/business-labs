@@ -13,12 +13,13 @@ npm run dev      # http://localhost:4321
 npm run build    # outputs to dist/
 ```
 
-## Deploy (Cloudflare Pages)
+## Deploy (Cloudflare Workers)
 
-1. Push this repo to GitHub.
-2. Cloudflare dashboard → Workers & Pages → Create → Pages → Connect to Git.
-3. Framework preset: **Astro**. Build command: `npm run build`. Output directory: `dist`.
-4. When the domain is chosen: add it under Custom domains, then update `site` in `astro.config.mjs`.
+Connected to Cloudflare through Git: every push to `main` builds and deploys.
+
+- Build command: `npm run build`
+- Deploy command: `npx wrangler deploy` (reads `wrangler.jsonc`, uploads `dist/` as static assets)
+- Custom domain: add it in the Worker's Settings → Domains & Routes, then update `site` in `astro.config.mjs`.
 
 ## Add a tool
 
