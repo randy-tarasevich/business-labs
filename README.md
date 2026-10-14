@@ -1,4 +1,4 @@
-# Business Lab
+# Business Labs
 
 Interactive tools for high school business and personal finance classes.
 Astro + Tailwind v4, plain JavaScript, deployed on Cloudflare Pages.

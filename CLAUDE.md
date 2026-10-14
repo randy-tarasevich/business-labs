@@ -1,4 +1,4 @@
-# Business Lab
+# Business Labs
 
 Free interactive tools for high school business and personal finance classes. Students change the numbers, see what happens, and explain why. Built by Randy Tarasevich, a CT Business Education teacher candidate, for his own classroom, other teachers, and teaching interviews.
 
