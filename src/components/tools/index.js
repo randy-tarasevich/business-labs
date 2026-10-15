@@ -3,9 +3,11 @@
 import BreakEven from './BreakEven.astro';
 import ClassTimer from './ClassTimer.astro';
 import BudgetBalancer from './BudgetBalancer.astro';
+import AccountingEquation from './AccountingEquation.astro';
 
 export const TOOL_COMPONENTS = {
   BreakEven,
   ClassTimer,
   BudgetBalancer,
+  AccountingEquation,
 };
