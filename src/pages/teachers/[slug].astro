@@ -1,0 +1,68 @@
+---
+// Teacher notes for one tool. Not linked from any student page, and marked noindex.
+// When the site moves to a custom domain, protect /teachers/* with Cloudflare Access.
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const tools = await getCollection('tools', ({ data }) => !data.draft);
+  return tools.map((tool) => ({ params: { slug: tool.id }, props: { tool } }));
+}
+
+const { tool } = Astro.props;
+const { Content } = await render(tool);
+const { indicators, alsoAligned } = tool.data;
+const toolPath = `/tools/${tool.id}/`;
+const studentUrl = new URL(toolPath, Astro.site).href;
+---
+<Base title={`Teacher notes: ${tool.data.title}`} description={`Teacher notes for ${tool.data.title}.`} noindex>
+  <div class="mb-6 grid gap-1">
+    <a href="/teachers/" class="text-sm text-muted hover:text-ink">← All teacher notes</a>
+    <p class="text-xs uppercase tracking-wider font-semibold text-muted mt-2">Teacher notes</p>
+    <h1 class="text-3xl sm:text-4xl font-extrabold">{tool.data.title}</h1>
+    <p class="text-muted">{tool.data.courses.join(', ')} · {tool.data.unit} · Grades {tool.data.grades}</p>
+  </div>
+
+  <div class="flex flex-wrap gap-2 mb-8">
+    <a href={toolPath} class="rounded-lg bg-accent text-panel font-semibold text-sm px-4 py-2">Open the tool</a>
+    <a href={`${toolPath}?embed=1`} class="rounded-lg border border-line text-accent font-semibold text-sm px-4 py-2 hover:border-accent">Open in embed mode</a>
+  </div>
+
+  <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px] items-start">
+    <article class="notes rounded-xl border border-line bg-panel p-5">
+      <Content />
+    </article>
+    <aside class="grid gap-4">
+      <div class="rounded-xl border border-line bg-panel p-5">
+        <h2 class="text-lg font-semibold mb-2">Standards</h2>
+        {indicators.length === 0 && alsoAligned.length === 0 ? (
+          <p class="text-muted text-sm">Not yet aligned. Add verified codes in this tool's markdown file.</p>
+        ) : (
+          <ul class="text-sm grid gap-1">
+            {indicators.map((i) => <li><span class="font-mono">{i.code}</span> {i.name} ({i.level})</li>)}
+            {alsoAligned.map((a) => <li class="text-muted">{a}</li>)}
+          </ul>
+        )}
+      </div>
+      <div class="rounded-xl border border-line bg-panel p-5 text-sm grid gap-2">
+        <h2 class="text-lg font-semibold">Student link</h2>
+        <p class="text-muted">Share the tool link, not this page. Embed mode hides the site header for projecting or linking from slides.</p>
+        <code class="font-mono text-xs break-all bg-bg rounded p-2 select-all">{studentUrl}</code>
+      </div>
+    </aside>
+  </div>
+</Base>
+
+<style is:global>
+  .notes { display: grid; gap: 12px; }
+  .notes > * { max-width: 70ch; }
+  .notes h2 { font-size: 1.125rem; font-weight: 600; margin-top: 8px; }
+  .notes h2:first-child { margin-top: 0; }
+  .notes ul, .notes ol { padding-left: 1.25rem; display: grid; gap: 4px; }
+  .notes ul { list-style: disc; }
+  .notes ol { list-style: decimal; }
+  .notes code { font-family: var(--font-mono); font-size: .9em; background: var(--bg); padding: 1px 5px; border-radius: 4px; }
+  .notes table { border-collapse: collapse; font-size: 14px; display: block; overflow-x: auto; max-width: 100%; }
+  .notes th, .notes td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; }
+  .notes th { background: var(--bg); }
+</style>

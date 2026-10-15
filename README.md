@@ -26,9 +26,13 @@ Connected to Cloudflare through Git: every push to `main` builds and deploys.
 1. **Component:** `src/components/tools/MyTool.astro` (markup) and `src/scripts/tools/my-tool.js` (behavior, exports an `init(root)` function).
 2. **Styles:** `src/styles/tools/my-tool.css`, prefixed with the tool's class so nothing leaks. Use the color tokens in `src/styles/global.css` (`var(--good)`, `var(--bad)`, etc.) so light and dark mode both work.
 3. **Register it:** import it in `src/components/tools/index.js`.
-4. **Content:** add `src/content/tools/my-tool.md`. Frontmatter is the tool's metadata (courses, unit, standards). `courses` is a list: the first is the tool's home section on the index page, the rest show as "Also fits". The markdown body becomes the "For teachers" notes.
+4. **Content:** add `src/content/tools/my-tool.md`. Frontmatter is the tool's metadata (courses, unit, standards). `courses` is a list: the first is the tool's home section on the index page, the rest show as "Also fits". The markdown body becomes the teacher notes page at `/teachers/<slug>/`.
 
-The home page, tool page, and standards coverage page all build from the content files automatically.
+The home page, tool page, teacher notes pages, and standards coverage page all build from the content files automatically.
+
+## Teacher notes
+
+Teacher notes live at `/teachers/` (bookmark it). Those pages are marked `noindex` and are not linked from any student page, so student tool pages never contain answer keys. This is not a login: anyone with the URL can open it. Once the site has a custom domain, protect `/teachers/*` with Cloudflare Access.
 
 ## Standards
 
@@ -36,7 +40,7 @@ Only add MBA Research indicator codes you've verified against the official docum
 
 ## Embed mode
 
-Add `?embed=1` to any tool URL to hide the site header, footer, and teacher notes. Use it for projecting or for linking from slides.
+Add `?embed=1` to any tool URL to hide the site header and footer. Use it for projecting or for linking from slides.
 
 ## Structure
 
@@ -48,6 +52,6 @@ src/
   scripts/tools/        tool behavior (plain JS)
   scripts/lib/util.js   shared helpers (money format, chart scale, SVG, beep)
   styles/               global tokens + per-tool CSS
-  pages/                home, tools/[slug], standards, 404
+  pages/                home, tools/[slug], teachers/ (index + [slug]), standards, 404
   layouts/Base.astro    site shell, embed mode
 ```

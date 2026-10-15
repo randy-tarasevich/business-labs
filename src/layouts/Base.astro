@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-const { title, description = 'Free interactive tools for high school business and personal finance classes.' } = Astro.props;
+const { title, description = 'Free interactive tools for high school business and personal finance classes.', noindex = false } = Astro.props;
 const siteName = 'Business Labs';
 const pageTitle = title ? `${title} · ${siteName}` : siteName;
 ---
@@ -13,6 +13,7 @@ const pageTitle = title ? `${title} · ${siteName}` : siteName;
     <meta name="description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <!-- Embed mode: runs before paint so the header never flashes. -->
     <script is:inline>
       if (new URLSearchParams(location.search).get('embed') === '1') document.documentElement.classList.add('embed');

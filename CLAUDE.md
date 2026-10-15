@@ -13,6 +13,7 @@ Free interactive tools for high school business and personal finance classes. St
 - **No accounts, no student data, no tracking.** Every tool runs entirely in the browser. Never add analytics, forms that submit, or server storage.
 - **Never invent a standards code.** Only add MBA Research indicators verified against the official documents. If unsure, leave `indicators: []` and say so. Jump$tart, CCSS, and CSTA go in `alsoAligned` as free text.
 - Every tool must work in light and dark mode (use the tokens in `src/styles/global.css`), at phone width, and in `?embed=1` mode for projecting.
+- **Teacher content never goes on student pages.** Answer keys, routines, and misconceptions live in the tool's markdown body, which only renders on `/teachers/<slug>/` (noindex, not linked from student pages). Anything on a `/tools/` page is readable in the page source, so hiding it with CSS or JS is not protection.
 - No em-dashes in any copy. Student-facing text is short, plain, and written for high schoolers.
 
 ## Adding a tool
@@ -21,9 +22,9 @@ Follow the README's "Add a tool" steps: component, behavior script exporting `in
 
 Content frontmatter:
 - `courses`: a list. The first course is the tool's home section on the index page; list every other course it genuinely fits so it can be cross-listed. Allowed values live in `COURSES` in `src/content.config.js`.
-- The markdown body is the "For teachers" notes. Start with "How I use it" and describe a short classroom routine (predict, test, explain).
+- The markdown body is the teacher notes, rendered only on `/teachers/<slug>/`. Start with "How I use it" and describe a short classroom routine (predict, test, explain).
 
 ## Roadmap decisions
 
 - Course pages (`/courses/<course>/`) get built once a course has 3 or more tools. They should pull every tool that lists the course, not just its home tools, and add a suggested sequence and time needed.
-- A custom domain is planned; when it's set, update `site` in `astro.config.mjs`.
+- A custom domain is planned; when it's set, update `site` in `astro.config.mjs` and put `/teachers/*` behind Cloudflare Access (email one-time PIN). Path-level Access needs a custom domain; on workers.dev it can only lock the whole site.

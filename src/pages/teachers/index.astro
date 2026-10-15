@@ -1,0 +1,33 @@
+---
+// Teacher notes index. Bookmark this URL; it is not linked from student pages.
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { COURSES } from '../../content.config.js';
+
+const tools = (await getCollection('tools', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
+const courses = COURSES.filter((c) => tools.some((t) => t.data.courses[0] === c));
+---
+<Base title="Teacher notes" description="Teacher notes for Business Labs tools." noindex>
+  <section class="grid gap-3 mb-10">
+    <h1 class="text-4xl font-extrabold">Teacher notes</h1>
+    <p class="text-muted max-w-[60ch]">Routines, answer keys, and common misconceptions for every tool. Share tool links with students, not these pages.</p>
+  </section>
+
+  {courses.map((course) => (
+    <section class="mb-8">
+      <h2 class="text-sm uppercase tracking-wider font-sans font-semibold text-muted mb-3">{course}</h2>
+      <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {tools.filter((t) => t.data.courses[0] === course).map((t) => (
+          <li class="rounded-xl border border-line bg-panel p-5 grid gap-2">
+            <h3 class="text-lg font-semibold">{t.data.title}</h3>
+            <p class="text-muted text-sm">{t.data.unit}</p>
+            <div class="flex gap-4 text-sm font-semibold">
+              <a class="text-accent" href={`/teachers/${t.id}/`}>Teacher notes</a>
+              <a class="text-muted hover:text-ink" href={`/tools/${t.id}/`}>Open tool</a>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</Base>
