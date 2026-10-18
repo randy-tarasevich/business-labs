@@ -15,6 +15,7 @@ import MarketingFunnel from './MarketingFunnel.astro';
 import CurrencyTrade from './CurrencyTrade.astro';
 import ComparativeAdvantage from './ComparativeAdvantage.astro';
 import MarketEntry from './MarketEntry.astro';
+import BusinessPlan from './BusinessPlan.astro';
 
 export const TOOL_COMPONENTS = {
   BreakEven,
@@ -32,4 +33,5 @@ export const TOOL_COMPONENTS = {
   CurrencyTrade,
   ComparativeAdvantage,
   MarketEntry,
+  BusinessPlan,
 };

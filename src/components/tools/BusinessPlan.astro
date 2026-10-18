@@ -1,0 +1,65 @@
+---
+// Business Plan Builder: markup only. Behavior lives in src/scripts/tools/business-plan.js,
+// sections and the example plan in business-plan-sections.js.
+// Work is saved in this browser only; nothing is sent anywhere.
+import { PANEL, H3, BTN, BTN_GHOST, VERDICT } from '../../scripts/lib/ui.js';
+
+const SMALL_BTN = 'font-sans font-medium text-[13px] leading-[normal] text-ink bg-transparent border border-line rounded-lg py-1.5 px-3 cursor-pointer hover:border-accent';
+---
+<div class="grid gap-[18px]" data-tool="business-plan">
+  <div class:list={[PANEL, 'gap-3 print:hidden']}>
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div class="grid gap-0.5">
+        <span class="text-[13.5px] font-semibold text-muted tone-bad:text-bad" data-r="saved" role="status">Your plan saves on this device as you type.</span>
+        <span class="text-[12.5px] text-muted">Nothing you write is sent anywhere. On a shared computer, use Start over when you're done.</span>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <button type="button" class={SMALL_BTN} data-act="download">Download a backup</button>
+        <button type="button" class={SMALL_BTN} data-act="load">Load a backup</button>
+        <button type="button" class={SMALL_BTN} data-act="example">See the example plan</button>
+        <button type="button" class={SMALL_BTN} data-act="new">Start over</button>
+        <input type="file" accept=".json,application/json" data-file hidden />
+      </div>
+    </div>
+    <div class="flex flex-wrap items-center gap-2 rounded-lg py-2.5 px-3.5 text-[14px] bg-warn-soft tone-bad:bg-bad-soft" data-r="confirm" role="status" hidden></div>
+  </div>
+
+  <div class="grid grid-cols-[260px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1 min-[861px]:grid-rows-[auto_1fr] print:block">
+    <nav class:list={[PANEL, 'gap-3 print:hidden']} aria-label="Plan sections">
+      <div class="grid gap-1.5">
+        <span class="text-[12.5px] text-muted font-semibold" data-r="progress-text"></span>
+        <div class="h-1.5 bg-grid rounded-full overflow-hidden" aria-hidden="true"><div class="h-full bg-good transition-[width] duration-300" data-r="progress-bar"></div></div>
+      </div>
+      <div class="grid gap-0.5" data-r="nav"></div>
+    </nav>
+
+    <section aria-label="Your plan" class:list={[PANEL, 'gap-5 min-[861px]:col-start-2 min-[861px]:row-start-1 min-[861px]:row-span-2 print:border-0 print:p-0 print:bg-transparent']}>
+      <div class="grid gap-5" data-r="section"></div>
+      <div class="grid gap-4" data-r="plan-wrap" hidden>
+        <div class="flex flex-wrap items-center justify-between gap-3 print:hidden">
+          <h2 class="font-display font-semibold text-[22px]">Your finished plan</h2>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" class={BTN} data-act="print">Print or save as PDF</button>
+            <button type="button" class={BTN_GHOST} data-act="copy">Copy for Google Docs</button>
+          </div>
+        </div>
+        <div class:list={[VERDICT, 'print:hidden']} data-r="plan-status" role="status"></div>
+        <p class="text-[13.5px] min-h-[1.2em] print:hidden tone-good:text-good tone-bad:text-bad" data-r="copy-status" role="status"></p>
+        <article class="max-w-[72ch] text-[15px] leading-[1.55] print:max-w-none print:text-[11pt] print:**:text-black print:**:border-gray-400 print:**:bg-transparent" data-r="plan"></article>
+      </div>
+    </section>
+
+    <aside class:list={[PANEL, 'gap-3 min-[861px]:col-start-1 min-[861px]:row-start-2 print:hidden']} aria-label="Things to fix">
+      <div class="flex justify-between items-baseline gap-2">
+        <h3 class={H3}>Reality check</h3>
+        <span class="text-[12.5px] text-muted" data-r="checks-count"></span>
+      </div>
+      <ul class="list-none m-0 p-0 grid gap-2.5" data-r="checks"></ul>
+    </aside>
+  </div>
+</div>
+
+<script>
+  import { initBusinessPlan } from '../../scripts/tools/business-plan.js';
+  document.querySelectorAll('[data-tool="business-plan"]').forEach(initBusinessPlan);
+</script>

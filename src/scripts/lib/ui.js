@@ -38,6 +38,10 @@ export const NUM_UNIT = 'text-muted font-mono';
 export const RANGE = 'w-full accent-accent';
 export const SELECT = 'font-sans font-medium text-[14px] leading-[normal] text-ink bg-bg border border-line rounded-md py-1.5 px-2';
 
+/** Free-text inputs for written answers. */
+export const TEXT_INPUT = 'w-full font-sans text-[15px] leading-[1.4] text-ink bg-bg border border-line rounded-lg py-2 px-2.5';
+export const TEXTAREA = 'w-full font-sans text-[15px] leading-[1.4] text-ink bg-bg border border-line rounded-lg py-2 px-2.5 resize-y';
+
 /** Bordered group of inputs with a legend. */
 export const FIELDSET = 'border border-line rounded-lg pt-2.5 px-3 pb-3 m-0 grid gap-3 min-w-0';
 export const LEGEND = 'font-semibold text-[14px] px-1';

@@ -44,7 +44,8 @@ export const COURSE_GUIDES = {
       { id: 'startup-runway', why: 'Add startup costs and see how long the money lasts while sales grow.' },
       { id: 'marketing-funnel', why: 'Plan how to find customers and what each one will cost to win.' },
       { id: 'investor-deal-lab', why: 'If the runway is short, students pitch for money and learn what their ask says the business is worth.' },
-      { id: 'ratio-dashboard', why: 'Finish by reading the business the way a lender or investor will.' },
+      { id: 'ratio-dashboard', why: 'Read the business the way a lender or investor will.' },
+      { id: 'business-plan', why: 'The capstone. Students put their own idea and every number from the earlier tools into one complete plan.' },
     ],
   },
   'International Business': {

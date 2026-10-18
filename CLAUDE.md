@@ -10,7 +10,7 @@ Free interactive tools for high school business and personal finance classes. St
 
 ## Hard rules
 
-- **No accounts, no student data, no tracking.** Every tool runs entirely in the browser. Never add analytics, forms that submit, or server storage.
+- **No accounts, no student data, no tracking.** Every tool runs entirely in the browser. Never add analytics, forms that submit, or server storage. A tool may save a student's work in `localStorage` only if it never leaves the device, the page says so on screen, and it offers a backup download and a Start over button (see Business Plan Builder).
 - **Never invent a standards code.** Only add MBA Research indicators verified against the official documents. If unsure, leave `indicators: []` and say so. Jump$tart, CCSS, and CSTA go in `alsoAligned` as free text.
 - Every tool must work in light and dark mode (use the tokens in `src/styles/global.css`), at phone width, and in `?embed=1` mode for projecting.
 - **Tailwind only.** Style with utility classes; never add a CSS file or a `<style>` block. Use the shared strings in `src/scripts/lib/ui.js` and the components in `src/components/ui/`. For states, use `setTone()` and the `tone-*` variants, not swapped class names. See the README's Styling section.
