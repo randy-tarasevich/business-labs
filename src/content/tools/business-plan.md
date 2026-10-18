@@ -17,27 +17,26 @@ alsoAligned: []
 
 **Entrepreneurship capstone.** Plan on two to four class periods. It works best after students have used Price and Demand, Break-Even, and Startup Runway, because the money section uses the same math.
 
-1. **Day 1: The idea and the market.** Start by loading the example plan (Pawsome Treats) on the projector so students see what a finished plan looks like. Then they hit **Start over**, click **Save to my Drive** so their work follows them, and fill in sections 1 and 2. Every question has a sentence starter and a "See an example" link.
+**The setup: the tool is the workbench, the Google Doc is the plan.** Students build the plan in the tool, where the sentence starters, live numbers, and reality checks help them. What you see and grade is a Google Doc. Before day 1, post a blank Doc in Classroom with "Make a copy for each student."
+
+1. **Day 1: The idea and the market.** Load the example plan (Pawsome Treats) on the projector so students see what a finished plan looks like. Then they hit **Start over** and fill in sections 1 and 2. Every question has a sentence starter and a "See an example" link.
 2. **Day 2: Marketing and operations.** Sections 3 and 4. Good day for peer review: partners read each other's "What makes you different?" and push back.
 3. **Day 3: The money and funding.** Sections 5 and 6. The numbers update as they type, and the **Reality check** box flags problems: price below cost, a forecast bigger than the market, not enough money raised. Students fix each one or explain it in their plan.
-4. **Day 4: Summary and turn in.** Section 7 has a checklist of what the summary should mention. Students open **Your finished plan**, then print or save it as a PDF, or click **Copy for Google Docs** and paste it into a Doc for Classroom.
+4. **Day 4: Summary and turn in.** Section 7 has a checklist of what the summary should mention. Students fix anything left in the Reality check box, then turn in one of two ways: do a final copy into their Doc, or open **Your finished plan**, click **Print or save as PDF**, choose **Save as PDF** (it can save straight to Google Drive), and attach the PDF in Classroom. A PDF can't be changed after it's submitted, which makes it a good final version.
+
+**End of every class (2 minutes):** students open **Your finished plan**, click **Copy for Google Docs**, then in their Classroom Doc press Ctrl+A and Ctrl+V to replace what's there. That gives you a live view of everyone's progress, a place to leave comments, and a copy that survives anything that happens to the Chromebook. Comment in the Doc, and students make the fixes in the tool so the numbers stay right.
 
 **Predict, test, explain** still applies inside the money section: before entering numbers, have students predict their break-even point and how much cash they'll need, then compare.
 
 ## Saving work (important)
 
-Nothing is ever sent to this website, and there are no accounts. Work saves two ways:
+Nothing is ever sent to this website, and there are no accounts.
 
-- **On the Chromebook, automatically.** Students who use their own issued Chromebook will see their plan when they come back. This copy stays on that one device.
-- **In their Google Drive, once they link it.** On day 1, have everyone click **Save to my Drive** and pick **My Drive** (or a class folder) in the save window. From then on the tool keeps saving to that file as they type, and the top of the tool says "Saving to ... in your Drive." The file goes into the student's own Drive, not to this site.
-
-After a page reload, Chrome may ask once more for permission. Students click **Keep saving to my Drive** and it carries on.
-
-**Working at home or on a loaner:** click **Open from my Drive** and pick the same file. It keeps saving there. When they come back to their own Chromebook, the tool sees that the Drive file is newer and loads it, so older work never overwrites newer work.
-
-**Other browsers** (Safari, Firefox) don't have the Drive buttons. There, students use **Download a backup** and **Load a backup** instead.
-
-**See the example plan** and **Start over** disconnect the Drive file first, so they never erase a student's saved work.
+- **Day to day:** the plan saves automatically on the student's issued Chromebook. When they come back to the tool, it's there.
+- **The Google Doc** from the end-of-class copy is the official version. If anything goes wrong with the Chromebook, the work up to the last copy is safe in Classroom.
+- **Working at home or on a loaner (optional):** **Save to my Drive** puts a save file in the student's own Drive, named like "Pawsome Treats (Business Plan Builder save).json." The tool keeps saving to it as they type, and **Open from my Drive** reopens it on any Chromebook. When they come back to their own Chromebook, the tool sees the Drive copy is newer and loads it. Students don't open this file themselves, and it isn't what they turn in. If Chrome asks again after a reload, they click **Keep saving to my Drive**.
+- **Other browsers** (Safari, Firefox) and districts that block file saving get **Download a backup** and **Load a backup** instead.
+- **See the example plan** and **Start over** disconnect the Drive file first, so they never erase a student's saved work.
 
 ## Rubric (40 points)
 

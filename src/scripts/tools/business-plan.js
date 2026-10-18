@@ -323,13 +323,14 @@ export function initBusinessPlan(root) {
     })
   );
 
-  const fileName = () => (plan.name.trim() || 'my-business-plan').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'my-business-plan';
+  // Save files are named so students can tell them apart from the plan they turn in.
+  const fileName = () => `${plan.name.replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 60) || 'My business'} (Business Plan Builder save).json`;
   const PICK = { types: [{ description: 'Business plan', accept: { 'application/json': ['.json'] } }], id: 'business-plan' };
 
   $('[data-act="drive-save"]').addEventListener('click', async () => {
     let h;
     try {
-      h = await window.showSaveFilePicker({ ...PICK, suggestedName: `${fileName()}-business-plan.json` });
+      h = await window.showSaveFilePicker({ ...PICK, suggestedName: fileName() });
     } catch (e) {
       if (e?.name !== 'AbortError') notice("This Chromebook won't let the tool save files. Ask your teacher, and use Download a backup for now.", 'bad'), showFallback();
       return;
@@ -370,7 +371,7 @@ export function initBusinessPlan(root) {
     const blob = new Blob([fileJson()], { type: 'application/json' });
     const a = el('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `${fileName()}.json`;
+    a.download = fileName();
     document.body.appendChild(a);
     a.click();
     a.remove();
