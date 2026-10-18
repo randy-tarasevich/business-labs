@@ -17,7 +17,7 @@ alsoAligned: []
 
 **Entrepreneurship capstone.** Plan on two to four class periods. It works best after students have used Price and Demand, Break-Even, and Startup Runway, because the money section uses the same math.
 
-1. **Day 1: The idea and the market.** Start by loading the example plan (Pawsome Treats) on the projector so students see what a finished plan looks like. Then they hit **Start over** and fill in sections 1 and 2. Every question has a sentence starter and a "See an example" link.
+1. **Day 1: The idea and the market.** Start by loading the example plan (Pawsome Treats) on the projector so students see what a finished plan looks like. Then they hit **Start over**, click **Save to my Drive** so their work follows them, and fill in sections 1 and 2. Every question has a sentence starter and a "See an example" link.
 2. **Day 2: Marketing and operations.** Sections 3 and 4. Good day for peer review: partners read each other's "What makes you different?" and push back.
 3. **Day 3: The money and funding.** Sections 5 and 6. The numbers update as they type, and the **Reality check** box flags problems: price below cost, a forecast bigger than the market, not enough money raised. Students fix each one or explain it in their plan.
 4. **Day 4: Summary and turn in.** Section 7 has a checklist of what the summary should mention. Students open **Your finished plan**, then print or save it as a PDF, or click **Copy for Google Docs** and paste it into a Doc for Classroom.
@@ -26,11 +26,18 @@ alsoAligned: []
 
 ## Saving work (important)
 
-The plan saves automatically **in that browser on that device**. Nothing is sent to a server, and there are no accounts. That means:
+Nothing is ever sent to this website, and there are no accounts. Work saves two ways:
 
-- A student who switches Chromebooks, uses a different browser, or clears browser data won't see their plan. Have everyone click **Download a backup** at the end of each class. **Load a backup** brings it back on any device.
-- On a shared computer, the next student could see the plan. Students should click **Start over** when they finish on a shared machine.
-- If a school browser blocks saving, the tool says so at the top. Backups still work.
+- **On the Chromebook, automatically.** Students who use their own issued Chromebook will see their plan when they come back. This copy stays on that one device.
+- **In their Google Drive, once they link it.** On day 1, have everyone click **Save to my Drive** and pick **My Drive** (or a class folder) in the save window. From then on the tool keeps saving to that file as they type, and the top of the tool says "Saving to ... in your Drive." The file goes into the student's own Drive, not to this site.
+
+After a page reload, Chrome may ask once more for permission. Students click **Keep saving to my Drive** and it carries on.
+
+**Working at home or on a loaner:** click **Open from my Drive** and pick the same file. It keeps saving there. When they come back to their own Chromebook, the tool sees that the Drive file is newer and loads it, so older work never overwrites newer work.
+
+**Other browsers** (Safari, Firefox) don't have the Drive buttons. There, students use **Download a backup** and **Load a backup** instead.
+
+**See the example plan** and **Start over** disconnect the Drive file first, so they never erase a student's saved work.
 
 ## Rubric (40 points)
 

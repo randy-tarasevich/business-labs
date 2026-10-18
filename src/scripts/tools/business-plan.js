@@ -2,8 +2,10 @@
 // Students fill in seven sections. The money section reuses Startup Runway's month-by-month math,
 // so break-even, runway, and cash needed always match that tool.
 //
-// Saving: the plan is kept in this browser only (localStorage) and never sent anywhere.
-// Students can download a backup file and load it on another device.
+// Saving: the plan is kept in this browser (localStorage) and never sent to any server.
+// Where the browser supports it (Chrome and Chromebooks), students can also link a file in their
+// own Google Drive: the tool keeps writing the plan to that file, and "Open from my Drive" loads it
+// on any other Chromebook. Elsewhere, they download a backup file and load it instead.
 
 import { money, num, svgEl, setTone, fitWidth, onWidthChange } from '../lib/util.js';
 import { SECTIONS, FIELDS, blankPlan, examplePlan } from './business-plan-sections.js';
@@ -14,6 +16,7 @@ import {
 
 const KEY = 'business-labs:business-plan';
 const PLAN_VIEW = 'plan';
+const APP = 'business-labs-business-plan';
 
 // ---------- small helpers ----------
 const n = (v) => {
@@ -129,26 +132,147 @@ export function initBusinessPlan(root) {
     canSave = false;
   }
 
+  // ---------- linked Drive file (File System Access API) ----------
+  const canLink = typeof window.showSaveFilePicker === 'function' && typeof window.showOpenFilePicker === 'function';
+  let fileHandle = null;
+  let fileState = 'none'; // none | ok | needs-ok | error
+  let fileSavedAt = 0;
+  let localSavedAt = 0;
+  let writing = Promise.resolve();
+  try {
+    localSavedAt = JSON.parse(localStorage.getItem(KEY) || 'null')?.saved || 0;
+  } catch {}
+
+  const clock = (t) => new Date(t).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  const fileJson = () => JSON.stringify({ app: APP, v: 1, saved: Date.now(), plan }, null, 2);
+
+  function status() {
+    const line = r('saved');
+    const btn = r('reconnect');
+    btn.hidden = fileState !== 'needs-ok';
+    if (fileState === 'ok') {
+      line.textContent = `Saving to ${fileHandle.name} in your Drive${fileSavedAt ? `. Last saved at ${clock(fileSavedAt)}` : ''}.`;
+      setTone(line, 'good');
+    } else if (fileState === 'needs-ok') {
+      line.textContent = `Your plan is linked to ${fileHandle.name}. Click Keep saving to my Drive so changes go there too.`;
+      setTone(line, 'warn');
+    } else if (fileState === 'error') {
+      line.textContent = `Couldn't save to ${fileHandle?.name || 'your Drive file'}. Click Save to my Drive and pick the file again.`;
+      setTone(line, 'bad');
+    } else if (!canSave) {
+      line.textContent = canLink ? "This browser won't keep your work. Click Save to my Drive before you leave." : "This browser won't keep your work. Download a backup before you leave.";
+      setTone(line, 'bad');
+    } else {
+      line.textContent = localSavedAt ? `Saved on this device at ${clock(localSavedAt)}.` : 'Your plan saves on this device as you type.';
+      if (canLink) line.textContent += ' Save to my Drive to open it anywhere.';
+      setTone(line, '');
+    }
+  }
+
+  function writeFile() {
+    if (!fileHandle || fileState !== 'ok') return;
+    const text = fileJson();
+    writing = writing.then(async () => {
+      try {
+        const w = await fileHandle.createWritable();
+        await w.write(text);
+        await w.close();
+        fileSavedAt = Date.now();
+      } catch {
+        fileState = 'error';
+      }
+      status();
+    });
+  }
+
+  // The link survives a reload: the handle is kept in IndexedDB (it never leaves this browser).
+  const DB = 'business-labs';
+  function idb(mode, fn) {
+    return new Promise((resolve) => {
+      try {
+        const open = indexedDB.open(DB, 1);
+        open.onupgradeneeded = () => open.result.createObjectStore('handles');
+        open.onerror = () => resolve(null);
+        open.onsuccess = () => {
+          const tx = open.result.transaction('handles', mode);
+          const req = fn(tx.objectStore('handles'));
+          tx.oncomplete = () => resolve(req?.result ?? null);
+          tx.onerror = () => resolve(null);
+        };
+      } catch {
+        resolve(null);
+      }
+    });
+  }
+  const rememberHandle = (h) => idb('readwrite', (st) => (h ? st.put(h, KEY) : st.delete(KEY)));
+
+  function link(h) {
+    fileHandle = h;
+    fileState = h ? 'ok' : 'none';
+    fileSavedAt = 0;
+    rememberHandle(h);
+    status();
+  }
+
+  async function readPlanFile(h) {
+    const data = JSON.parse(await (await h.getFile()).text());
+    if (data?.app !== APP || !data.plan) throw new Error('not a plan');
+    return data;
+  }
+
+  // Before writing to a reconnected file, load it if it was saved more recently somewhere else
+  // (say, at home), so an older copy on this Chromebook never overwrites newer work.
+  async function syncFromFile() {
+    try {
+      const data = await readPlanFile(fileHandle);
+      if ((data.saved || 0) > localSavedAt + 1000) {
+        plan = normalize(data.plan);
+        render();
+        notice(`Loaded the newer version of your plan from ${fileHandle.name}.`, 'good');
+      }
+    } catch {}
+    fileState = 'ok';
+    save(true);
+  }
+
+  async function reconnect(ask) {
+    if (!fileHandle) return;
+    try {
+      const opts = { mode: 'readwrite' };
+      let perm = await fileHandle.queryPermission(opts);
+      if (perm !== 'granted' && ask) perm = await fileHandle.requestPermission(opts);
+      if (perm === 'granted') return syncFromFile();
+      fileState = 'needs-ok';
+    } catch {
+      fileState = 'error';
+    }
+    status();
+  }
+
+  if (canLink) {
+    idb('readonly', (st) => st.get(KEY)).then((h) => {
+      if (h && typeof h.queryPermission === 'function') {
+        fileHandle = h;
+        reconnect(false);
+      }
+    });
+  }
+
   let saveTimer = 0;
-  function save() {
+  function save(now = false) {
     clearTimeout(saveTimer);
     saveTimer = setTimeout(() => {
       try {
-        localStorage.setItem(KEY, JSON.stringify({ plan, view, saved: Date.now() }));
-        const t = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-        r('saved').textContent = `Saved on this device at ${t}`;
-        setTone(r('saved'), '');
+        localSavedAt = Date.now();
+        localStorage.setItem(KEY, JSON.stringify({ plan, view, saved: localSavedAt }));
       } catch {
         canSave = false;
-        r('saved').textContent = "This browser won't save your work. Download a backup before you leave.";
-        setTone(r('saved'), 'bad');
       }
-    }, 300);
+      writeFile();
+      status();
+    }, now ? 0 : 400);
   }
-  if (!canSave) {
-    r('saved').textContent = "This browser won't save your work. Download a backup before you leave.";
-    setTone(r('saved'), 'bad');
-  }
+  status();
 
   // ---------- inline confirm (no pop-up dialogs) ----------
   function confirmThen(message, yesLabel, action) {
@@ -184,18 +308,69 @@ export function initBusinessPlan(root) {
     render();
   }
 
+  // Example and Start over unlink the Drive file first, so they can never overwrite a student's work.
+  const unlinkNote = () => (fileHandle ? ` Your Drive file (${fileHandle.name}) won't change.` : '');
   $('[data-act="example"]').addEventListener('click', () =>
-    confirmThen('Replace your plan with the example (Pawsome Treats)? Download a backup first if you want to keep yours.', 'Show the example', () => replacePlan(examplePlan()))
+    confirmThen(`Replace your plan on this screen with the example (Pawsome Treats)?${unlinkNote() || ' Save yours to your Drive first if you want to keep it.'}`, 'Show the example', () => {
+      link(null);
+      replacePlan(examplePlan());
+    })
   );
   $('[data-act="new"]').addEventListener('click', () =>
-    confirmThen('Erase this plan from this device and start over? This can\'t be undone.', 'Erase and start over', () => replacePlan(blankPlan()))
+    confirmThen(`Erase this plan from this device and start over?${unlinkNote() || " This can't be undone."}`, 'Erase and start over', () => {
+      link(null);
+      replacePlan(blankPlan());
+    })
   );
+
+  const fileName = () => (plan.name.trim() || 'my-business-plan').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'my-business-plan';
+  const PICK = { types: [{ description: 'Business plan', accept: { 'application/json': ['.json'] } }], id: 'business-plan' };
+
+  $('[data-act="drive-save"]').addEventListener('click', async () => {
+    let h;
+    try {
+      h = await window.showSaveFilePicker({ ...PICK, suggestedName: `${fileName()}-business-plan.json` });
+    } catch (e) {
+      if (e?.name !== 'AbortError') notice("This Chromebook won't let the tool save files. Ask your teacher, and use Download a backup for now.", 'bad'), showFallback();
+      return;
+    }
+    link(h);
+    save(true);
+  });
+
+  $('[data-act="drive-open"]').addEventListener('click', async () => {
+    let h;
+    try {
+      [h] = await window.showOpenFilePicker({ ...PICK, multiple: false });
+    } catch (e) {
+      if (e?.name !== 'AbortError') notice("This Chromebook won't let the tool save files. Ask your teacher, and use Download a backup for now.", 'bad'), showFallback();
+      return;
+    }
+    try {
+      const data = await readPlanFile(h);
+      const open = () => {
+        replacePlan(data.plan);
+        if (typeof h.requestPermission === 'function') {
+          fileHandle = h;
+          rememberHandle(h);
+          reconnect(true);
+        }
+      };
+      const empty = !SECTIONS.some((s) => s.fields.some((f) => filled(f, plan[f.id])));
+      if (empty) open();
+      else confirmThen(`Open "${data.plan.name || h.name}"? It replaces the plan on this screen.`, 'Open this plan', open);
+    } catch {
+      notice("That file isn't a Business Plan Builder plan.", 'bad');
+    }
+  });
+
+  r('reconnect').addEventListener('click', () => reconnect(true));
+
   $('[data-act="download"]').addEventListener('click', () => {
-    const name = (plan.name.trim() || 'my-business-plan').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'my-business-plan';
-    const blob = new Blob([JSON.stringify({ app: 'business-labs-business-plan', v: 1, plan }, null, 2)], { type: 'application/json' });
+    const blob = new Blob([fileJson()], { type: 'application/json' });
     const a = el('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `${name}.json`;
+    a.download = `${fileName()}.json`;
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -209,12 +384,23 @@ export function initBusinessPlan(root) {
     if (!file) return;
     try {
       const data = JSON.parse(await file.text());
-      if (data?.app !== 'business-labs-business-plan' || !data.plan) throw new Error('not a plan');
-      confirmThen(`Replace your current plan with "${data.plan.name || file.name}"?`, 'Load this plan', () => replacePlan(data.plan));
+      if (data?.app !== APP || !data.plan) throw new Error('not a plan');
+      confirmThen(`Replace your current plan with "${data.plan.name || file.name}"?`, 'Load this plan', () => {
+        link(null);
+        replacePlan(data.plan);
+      });
     } catch {
       notice("That file isn't a Business Plan Builder backup.", 'bad');
     }
   });
+
+  // Chromebooks and Chrome get the Drive buttons; other browsers keep download and load.
+  root.querySelectorAll('[data-drive]').forEach((x) => (x.hidden = !canLink));
+  root.querySelectorAll('[data-nodrive]').forEach((x) => (x.hidden = canLink));
+  // If a school blocks file access, bring back download and load so students still have a backup.
+  function showFallback() {
+    root.querySelectorAll('[data-nodrive]').forEach((x) => (x.hidden = false));
+  }
 
   // ---------- navigation ----------
   const nav = r('nav');

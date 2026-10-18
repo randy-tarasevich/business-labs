@@ -1,7 +1,8 @@
 ---
 // Business Plan Builder: markup only. Behavior lives in src/scripts/tools/business-plan.js,
 // sections and the example plan in business-plan-sections.js.
-// Work is saved in this browser only; nothing is sent anywhere.
+// Work is saved in this browser and, on Chrome/Chromebooks, optionally to a file in the student's own Drive.
+// Nothing is ever sent to this site.
 import { PANEL, H3, BTN, BTN_GHOST, VERDICT } from '../../scripts/lib/ui.js';
 
 const SMALL_BTN = 'font-sans font-medium text-[13px] leading-[normal] text-ink bg-transparent border border-line rounded-lg py-1.5 px-3 cursor-pointer hover:border-accent';
@@ -9,19 +10,22 @@ const SMALL_BTN = 'font-sans font-medium text-[13px] leading-[normal] text-ink b
 <div class="grid gap-[18px]" data-tool="business-plan">
   <div class:list={[PANEL, 'gap-3 print:hidden']}>
     <div class="flex flex-wrap items-center justify-between gap-3">
-      <div class="grid gap-0.5">
-        <span class="text-[13.5px] font-semibold text-muted tone-bad:text-bad" data-r="saved" role="status">Your plan saves on this device as you type.</span>
-        <span class="text-[12.5px] text-muted">Nothing you write is sent anywhere. On a shared computer, use Start over when you're done.</span>
+      <div class="grid gap-0.5 min-w-0 flex-[1_1_320px]">
+        <span class="text-[13.5px] font-semibold text-muted tone-good:text-good tone-warn:text-warn tone-bad:text-bad" data-r="saved" role="status">Your plan saves on this device as you type.</span>
+        <span class="text-[12.5px] text-muted">Nothing you write is sent to this website. On a shared computer, use Start over when you're done.</span>
       </div>
       <div class="flex flex-wrap gap-2">
-        <button type="button" class={SMALL_BTN} data-act="download">Download a backup</button>
-        <button type="button" class={SMALL_BTN} data-act="load">Load a backup</button>
+        <button type="button" class={BTN} data-r="reconnect" hidden>Keep saving to my Drive</button>
+        <button type="button" class={SMALL_BTN} data-act="drive-save" data-drive hidden>Save to my Drive</button>
+        <button type="button" class={SMALL_BTN} data-act="drive-open" data-drive hidden>Open from my Drive</button>
+        <button type="button" class={SMALL_BTN} data-act="download" data-nodrive>Download a backup</button>
+        <button type="button" class={SMALL_BTN} data-act="load" data-nodrive>Load a backup</button>
         <button type="button" class={SMALL_BTN} data-act="example">See the example plan</button>
         <button type="button" class={SMALL_BTN} data-act="new">Start over</button>
         <input type="file" accept=".json,application/json" data-file hidden />
       </div>
     </div>
-    <div class="flex flex-wrap items-center gap-2 rounded-lg py-2.5 px-3.5 text-[14px] bg-warn-soft tone-bad:bg-bad-soft" data-r="confirm" role="status" hidden></div>
+    <div class="flex flex-wrap items-center gap-2 rounded-lg py-2.5 px-3.5 text-[14px] bg-warn-soft tone-bad:bg-bad-soft tone-good:bg-good-soft" data-r="confirm" role="status" hidden></div>
   </div>
 
   <div class="grid grid-cols-[260px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1 min-[861px]:grid-rows-[auto_1fr] print:block">
