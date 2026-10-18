@@ -1,0 +1,96 @@
+---
+// Marketing Funnel and Ad ROI: markup only. Behavior lives in src/scripts/tools/marketing-funnel.js
+import { ANS, FORMULA, H2, H3, HINT, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PRESETS, PROSE, QS, RANGE, RESULTS, REVEAL, STAT, STAT_K, STAT_KEY, STAT_V, SVG, TOOL, VERDICT } from '../../scripts/lib/ui.js';
+---
+<div class={TOOL} data-tool="marketing-funnel">
+  <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Campaign inputs">
+      <h2 class={H2}>Your ad campaign</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example campaigns"></div>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="fn-budget" class="font-semibold text-[14px]">Ad budget</label>
+          <div class="flex items-center gap-1 shrink-0"><span class={NUM_UNIT}>$</span><input id="fn-budget-n" type="number" step="50" min="0" inputmode="decimal" aria-label="Ad budget in dollars" class:list={[NUM_INPUT, "w-[100px]"]} /></div>
+        </div>
+        <input id="fn-budget" type="range" class={RANGE} min="0" max="5000" step="50" />
+        <span class={HINT}>What you spend on the campaign.</span>
+      </div>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="fn-cpm" class="font-semibold text-[14px]">Cost per 1,000 views</label>
+          <div class="flex items-center gap-1 shrink-0"><span class={NUM_UNIT}>$</span><input id="fn-cpm-n" type="number" step="0.5" min="0" inputmode="decimal" aria-label="Cost per thousand views in dollars" class:list={[NUM_INPUT, "w-[100px]"]} /></div>
+        </div>
+        <input id="fn-cpm" type="range" class={RANGE} min="0" max="60" step="0.5" />
+        <span class={HINT}>What the ad platform charges.</span>
+      </div>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="fn-ctr" class="font-semibold text-[14px]">Click rate</label>
+          <div class="flex items-center gap-1 shrink-0"><input id="fn-ctr-n" type="number" step="0.1" min="0" inputmode="decimal" aria-label="Click rate in percent" class:list={[NUM_INPUT, "w-[100px]"]} /><span class={NUM_UNIT}>%</span></div>
+        </div>
+        <input id="fn-ctr" type="range" class={RANGE} min="0" max="10" step="0.1" />
+        <span class={HINT}>Percent of viewers who click.</span>
+      </div>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="fn-conv" class="font-semibold text-[14px]">Conversion rate</label>
+          <div class="flex items-center gap-1 shrink-0"><input id="fn-conv-n" type="number" step="0.1" min="0" inputmode="decimal" aria-label="Conversion rate in percent" class:list={[NUM_INPUT, "w-[100px]"]} /><span class={NUM_UNIT}>%</span></div>
+        </div>
+        <input id="fn-conv" type="range" class={RANGE} min="0" max="20" step="0.1" />
+        <span class={HINT}>Percent of clickers who buy.</span>
+      </div>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="fn-aov" class="font-semibold text-[14px]">Average order</label>
+          <div class="flex items-center gap-1 shrink-0"><span class={NUM_UNIT}>$</span><input id="fn-aov-n" type="number" step="1" min="0" inputmode="decimal" aria-label="Average order in dollars" class:list={[NUM_INPUT, "w-[100px]"]} /></div>
+        </div>
+        <input id="fn-aov" type="range" class={RANGE} min="0" max="500" step="1" />
+        <span class={HINT}>What a typical customer spends.</span>
+      </div>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="fn-margin" class="font-semibold text-[14px]">Profit margin</label>
+          <div class="flex items-center gap-1 shrink-0"><input id="fn-margin-n" type="number" step="1" min="0" inputmode="decimal" aria-label="Profit margin in percent" class:list={[NUM_INPUT, "w-[100px]"]} /><span class={NUM_UNIT}>%</span></div>
+        </div>
+        <input id="fn-margin" type="range" class={RANGE} min="0" max="100" step="1" />
+        <span class={HINT}>Percent of each sale left after paying for the product.</span>
+      </div>
+    </div>
+
+    <div class={PANEL}>
+      <h3 class={H3}>The funnel <span class="font-sans font-normal text-[12.5px] text-muted">(shape not to scale)</span></h3>
+      <div class="w-full min-w-0"><svg class={SVG} data-chart viewBox="0 0 640 260" role="img"></svg></div>
+      <h3 class={H3}>Did the ads pay for themselves?</h3>
+      <div class="w-full min-w-0"><svg class={SVG} data-money viewBox="0 0 640 92" role="img"></svg></div>
+      <div class={RESULTS}>
+        <div class={STAT} data-r="profit-box"><span class={STAT_K}>Profit after ads</span><span class={STAT_V} data-r="profit">–</span></div>
+        <div class={STAT_KEY}><span class={STAT_K}>Sales per $1 of ads</span><span class={STAT_V} data-r="roas">–</span></div>
+        <div class={STAT}><span class={STAT_K}>Cost per customer</span><span class={STAT_V} data-r="cac">–</span></div>
+        <div class={STAT}><span class={STAT_K}>Cost per click</span><span class={STAT_V} data-r="cpc">–</span></div>
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}>Most people who see an ad never click, and most who click never buy. Each step of the <strong>funnel</strong> loses people. <strong>Sales per $1 of ads</strong> (marketers call it ROAS) can look good while the campaign still loses money, because the business also has to pay for the products it sold. That's why profit margin matters.</p>
+    </div>
+    <div class={PANEL}>
+      <h2 class={H2}>Try it</h2>
+      <ol class={QS}>
+        <li>Load the bakery. Did the ads pay off? Which single number would you try to improve first, and why? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Barely: about $4 of profit. Conversion rate is the strongest lever. Going from 4% to 5% adds 7 or 8 customers without spending more on ads.</span></li>
+        <li>Load the T-shirts. The ads lost money. What conversion rate would make them break even? Test it. <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>About 5.6%. The verdict tells you, then slide conversion to check.</span></li>
+        <li>Double the bakery's budget. Does profit double too? Why might that not happen in real life? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>In the tool, yes. In real life, the cheapest, most interested viewers are reached first, so extra spending usually gets worse results.</span></li>
+        <li>Tutoring ads cost five times more per view than the bakery's. Why are they still the best deal? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>People searching for tutoring already want it, so more of them click and buy, and each sale is worth $300. Cost per view matters less than cost per customer.</span></li>
+      </ol>
+    </div>
+  </section>
+</div>
+
+<script>
+  import { initMarketingFunnel } from '../../scripts/tools/marketing-funnel.js';
+  document.querySelectorAll('[data-tool="marketing-funnel"]').forEach(initMarketingFunnel);
+</script>

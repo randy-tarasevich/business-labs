@@ -1,0 +1,37 @@
+---
+// Slider plus number box for one value. Pair it with linkRange(root, id, ...) in the tool script.
+// The slider gets id={id}; the number box gets id={`${id}-n`}.
+// unit: '$' shows before the number; '%' or any other text (e.g. ' years') shows after it.
+// labelRef / hintRef add data-r hooks so a script can rewrite the label or hint.
+import { HINT, NUM_INPUT, NUM_UNIT, RANGE } from '../../scripts/lib/ui.js';
+
+interface Props {
+  id: string;
+  label: string;
+  hint?: string;
+  aria: string;
+  unit?: string;
+  step?: number | string;
+  min?: number;
+  max?: number;
+  numMax?: number;
+  width?: string;
+  labelRef?: string;
+  hintRef?: string;
+}
+const { id, label, hint = '', aria, unit = '', step = 1, min = 0, max = 100, numMax, width = 'w-[100px]', labelRef, hintRef } = Astro.props;
+const before = unit === '$';
+const after = unit && !before ? unit : '';
+---
+<div class="grid gap-1.5">
+  <div class="flex justify-between items-baseline gap-2">
+    <label for={id} class="font-semibold text-[14px]" data-r={labelRef}>{label}</label>
+    <div class="flex items-center gap-1 shrink-0">
+      {before && <span class={NUM_UNIT}>$</span>}
+      <input id={`${id}-n`} type="number" step={step} min={min} max={numMax} inputmode="decimal" aria-label={aria} class:list={[NUM_INPUT, width]} />
+      {after && <span class={NUM_UNIT}>{after}</span>}
+    </div>
+  </div>
+  <input id={id} type="range" min={min} max={max} step={step} class={RANGE} />
+  {(hint || hintRef) && <span class={HINT} data-r={hintRef}>{hint}</span>}
+</div>

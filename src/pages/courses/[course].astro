@@ -1,0 +1,77 @@
+---
+// Course page: suggested teaching sequence plus every other tool that fits the course.
+// Built automatically for any course with MIN_TOOLS or more tools (see src/data/courses.js).
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { COURSES } from '../../content.config.js';
+import { COURSE_GUIDES, MIN_TOOLS, courseSlug } from '../../data/courses.js';
+
+export async function getStaticPaths() {
+  const tools = (await getCollection('tools', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
+  return COURSES.map((course) => ({ course, list: tools.filter((t) => t.data.courses.includes(course)) }))
+    .filter(({ list }) => list.length >= MIN_TOOLS)
+    .map(({ course, list }) => ({ params: { course: courseSlug(course) }, props: { course, list } }));
+}
+
+const { course, list } = Astro.props;
+const guide = COURSE_GUIDES[course] ?? { intro: '', sequence: [] };
+const byId = new Map(list.map((t) => [t.id, t]));
+const steps = guide.sequence.filter((s) => byId.has(s.id)).map((s) => ({ ...s, tool: byId.get(s.id) }));
+// Any tool that lists the course but isn't in the guide still shows up; with no guide, all of them form the sequence.
+const inSeq = new Set(steps.map((s) => s.id));
+const others = list.filter((t) => !inSeq.has(t.id));
+const sequence = steps.length ? steps : others.splice(0).map((tool) => ({ id: tool.id, tool }));
+
+const range = ([a, b]) => (a === b ? `${a} min` : `${a}–${b} min`);
+const timed = sequence.filter((s) => s.tool.data.minutes);
+const total = timed.reduce(([a, b], s) => [a + s.tool.data.minutes[0], b + s.tool.data.minutes[1]], [0, 0]);
+const hours = (m) => (m < 60 ? `${m} min` : `${Math.floor(m / 60)} hr${m % 60 ? ` ${m % 60} min` : ''}`);
+const totalText = timed.length ? (total[0] === total[1] ? hours(total[0]) : `${hours(total[0])} to ${hours(total[1])}`) : '';
+---
+<Base title={`${course} tools`} description={`Interactive ${course} tools for high school, in a suggested teaching order with class time for each.`}>
+  <section class="site-chrome grid gap-3 mb-8">
+    <a href="/" class="text-sm text-muted hover:text-ink">← All tools</a>
+    <h1 class="text-4xl font-extrabold">{course}</h1>
+    {guide.intro && <p class="text-muted max-w-[62ch] text-lg">{guide.intro}</p>}
+  </section>
+
+  <section class="mb-10">
+    <div class="flex flex-wrap items-baseline justify-between gap-2 mb-4">
+      <h2 class="text-sm uppercase tracking-wider font-sans font-semibold text-muted">Suggested sequence</h2>
+      {totalText && <p class="text-sm text-muted">{sequence.length} activities · about {totalText} of class time</p>}
+    </div>
+    <ol class="grid gap-3">
+      {sequence.map((s, i) => (
+        <li class="grid grid-cols-[2.25rem_minmax(0,1fr)] gap-3 items-start">
+          <span class="mt-4 grid place-items-center size-9 rounded-full bg-accent text-panel font-mono font-semibold" aria-hidden="true">{i + 1}</span>
+          <a href={`/tools/${s.id}/`} class="group block rounded-xl border border-line bg-panel p-5 hover:border-accent transition-colors">
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
+              <span>{s.tool.data.unit}</span>
+              {s.tool.data.minutes && <span class="font-mono">{range(s.tool.data.minutes)}</span>}
+              {s.level && <span class="rounded-full border border-line px-2 py-0.5 font-semibold text-ink">{s.level}</span>}
+            </div>
+            <h3 class="text-xl font-semibold mt-1 group-hover:text-accent">{s.tool.data.title}</h3>
+            <p class="mt-2 text-[15px]">{s.why ?? s.tool.data.summary}</p>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  {others.length > 0 && (
+    <section class="mb-10">
+      <h2 class="text-sm uppercase tracking-wider font-sans font-semibold text-muted mb-3">Also fits this course</h2>
+      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {others.map((t) => (
+          <li>
+            <a href={`/tools/${t.id}/`} class="group block h-full rounded-xl border border-line bg-panel p-5 hover:border-accent transition-colors">
+              <span class="text-xs text-muted">{t.data.unit}{t.data.minutes && ` · ${range(t.data.minutes)}`}</span>
+              <h3 class="text-xl font-semibold mt-1 group-hover:text-accent">{t.data.title}</h3>
+              <p class="text-muted mt-2 text-[15px]">{t.data.summary}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+</Base>

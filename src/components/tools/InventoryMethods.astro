@@ -1,0 +1,80 @@
+---
+// Inventory Methods Lab: markup only. Behavior lives in src/scripts/tools/inventory-methods.js
+import { ANS, CHART_KEY, FORMULA, H2, HINT, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PRESETS, PROSE, QS, RANGE, REVEAL, SR, SVG, SWATCH, TABLE, TABLE_BOX, TOOL, VERDICT } from '../../scripts/lib/ui.js';
+---
+<div class={TOOL} data-tool="inventory-methods">
+  <section class="grid grid-cols-[380px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Inventory inputs">
+      <h2 class={H2}>Your inventory</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example products"></div>
+      <div class={TABLE_BOX}>
+        <table class="w-full border-collapse text-[14px] [&_th]:p-1 [&_td]:p-1 [&_th]:border-b [&_td]:border-b [&_th]:border-line [&_td]:border-line [&_th]:text-right [&_td]:text-right [&_thead_th]:text-[12.5px] [&_thead_th]:text-muted [&_thead_th]:font-semibold [&_thead_th]:border-b-2 [&_thead_th:first-child]:text-left [&_tbody_th]:text-left [&_tbody_th]:font-normal [&_tbody_th]:pl-0 [&_tbody_th]:text-[13px] [&_tbody_th]:whitespace-nowrap [&_td]:font-mono [&_td]:font-medium [&_td]:text-[13px] [&_td]:leading-[normal] [&_td]:tabular-nums [&_td]:whitespace-nowrap [&_td_span]:text-muted [&_td_span]:mr-0.5 [&_input]:w-[54px] [&_input]:font-mono [&_input]:font-medium [&_input]:text-[13.5px] [&_input]:leading-[normal] [&_input]:text-ink [&_input]:bg-bg [&_input]:border [&_input]:border-line [&_input]:rounded-md [&_input]:py-[3px] [&_input]:px-[5px] [&_input]:text-right">
+          <thead><tr><th scope="col"><span class={SR}>Layer</span></th><th scope="col">Units</th><th scope="col">Cost each</th><th scope="col">Total</th></tr></thead>
+          <tbody data-r="layers"></tbody>
+        </table>
+      </div>
+      <p class:list={[HINT, PROSE]}>Goods available for sale: <strong class="text-ink font-mono" data-r="avail"></strong></p>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="iv-sold" data-r="sold-k" class="font-semibold text-[14px]">Units sold</label>
+          <div class="flex items-center gap-1 shrink-0"><input id="iv-sold-n" type="number" step="1" min="0" inputmode="numeric" aria-label="Units sold" class:list={[NUM_INPUT, "w-[100px]"]} /></div>
+        </div>
+        <input id="iv-sold" type="range" class={RANGE} min="0" max="100" step="1" />
+      </div>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="iv-price" class="font-semibold text-[14px]">Selling price each</label>
+          <div class="flex items-center gap-1 shrink-0"><span class={NUM_UNIT}>$</span><input id="iv-price-n" type="number" step="1" min="0" inputmode="decimal" aria-label="Selling price per unit in dollars" class:list={[NUM_INPUT, "w-[100px]"]} /></div>
+        </div>
+        <input id="iv-price" type="range" class={RANGE} min="0" max="1000" step="1" />
+        <span class={HINT}>What each customer pays.</span>
+      </div>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="iv-tax" class="font-semibold text-[14px]">Tax rate</label>
+          <div class="flex items-center gap-1 shrink-0"><input id="iv-tax-n" type="number" step="1" min="0" max="60" inputmode="decimal" aria-label="Tax rate in percent" class:list={[NUM_INPUT, "w-[100px]"]} /><span class={NUM_UNIT}>%</span></div>
+        </div>
+        <input id="iv-tax" type="range" class={RANGE} min="0" max="50" step="1" />
+        <span class={HINT}>Income tax on gross profit (other expenses left out).</span>
+      </div>
+    </div>
+
+    <div class={PANEL}>
+      <div class={CHART_KEY} aria-hidden="true">
+        <span><i class={SWATCH} style="background:var(--accent)"></i>Sold: cost of goods sold</span>
+        <span><i class={SWATCH} style="background:var(--warn)"></i>Still on the shelf: ending inventory</span>
+      </div>
+      <div class="w-full min-w-0"><svg class={SVG} data-chart viewBox="0 0 640 300" role="img" aria-label="Which costs each method puts in COGS"></svg></div>
+      <div class={TABLE_BOX}>
+        <table class:list={[TABLE, '[&_thead_th:first-child]:text-left']}>
+          <thead><tr><th scope="col">Method</th><th scope="col">COGS</th><th scope="col">Ending inventory</th><th scope="col">Gross profit</th><th scope="col">Tax</th></tr></thead>
+          <tbody data-r="rows"></tbody>
+        </table>
+      </div>
+      <p class:list={[HINT, PROSE]} data-r="sales"></p>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}>The store sells the same sneakers no matter what. The methods are different rules for <strong>which costs</strong> count as sold. <strong>FIFO</strong> assumes the oldest units sold first. <strong>LIFO</strong> assumes the newest sold first. <strong>Weighted average</strong> gives every unit the same average cost.</p>
+    </div>
+    <div class={PANEL}>
+      <h2 class={H2}>Try it</h2>
+      <ol class={QS}>
+        <li>With the sneakers, which method shows the most profit? Which one pays the least tax? Why would a business choose LIFO? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>FIFO shows the most profit because the oldest, cheapest pairs go to COGS. LIFO shows the least profit and the least tax, which is why some U.S. companies choose it when prices rise.</span></li>
+        <li>Load the TVs. What flipped, and why? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Prices are falling, so the newest TVs are the cheapest. Now LIFO puts the cheap costs in COGS and shows the most profit.</span></li>
+        <li>Load the coffee beans. Why do all three methods agree? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Every bag cost the same, so it doesn't matter which bags count as sold.</span></li>
+        <li>Slide units sold all the way up. What happens to the three methods, and why? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Everything is sold, so COGS equals all the goods available under every method. The methods only differ in what's left on the shelf.</span></li>
+      </ol>
+    </div>
+  </section>
+</div>
+
+<script>
+  import { initInventoryMethods } from '../../scripts/tools/inventory-methods.js';
+  document.querySelectorAll('[data-tool="inventory-methods"]').forEach(initInventoryMethods);
+</script>

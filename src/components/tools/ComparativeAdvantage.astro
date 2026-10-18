@@ -1,0 +1,83 @@
+---
+// Comparative Advantage Sim: markup only. Behavior lives in src/scripts/tools/comparative-advantage.js
+import { ANS, CHART_KEY, FORMULA, H2, HINT, LEGEND, LOWER, PANEL, PRESETS, PROSE, QS, RANGE, REVEAL, SR, SVG, TABLE, TABLE_BOX, TOOL, VERDICT } from '../../scripts/lib/ui.js';
+---
+<div class={TOOL} data-tool="comparative-advantage">
+  <section class="grid grid-cols-[360px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Country inputs">
+      <h2 class={H2}>Two countries, two goods</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example scenarios"></div>
+      <fieldset class="border border-line rounded-lg pt-2.5 px-3 pb-3 m-0 grid gap-2 min-w-0">
+        <legend class={LEGEND} data-r="name-0">Country</legend>
+        <div class="flex flex-wrap gap-x-3.5 gap-y-2 text-[13.5px] [&_label]:inline-flex [&_label]:items-center [&_label]:gap-1.5 [&_input]:w-[70px] [&_input]:font-mono [&_input]:font-medium [&_input]:text-[14px] [&_input]:leading-[normal] [&_input]:text-ink [&_input]:bg-bg [&_input]:border [&_input]:border-line [&_input]:rounded-md [&_input]:py-[3px] [&_input]:px-1.5 [&_input]:text-right" data-r="max-0"></div>
+        <label class="text-[13px] font-semibold" for="ca-share-0" data-r="sl-0">Workers making the first good</label>
+        <input id="ca-share-0" type="range" class={RANGE} min="0" max="100" step="5" />
+        <span class={HINT} data-r="split-0"></span>
+      </fieldset>
+      <fieldset class="border border-line rounded-lg pt-2.5 px-3 pb-3 m-0 grid gap-2 min-w-0">
+        <legend class={LEGEND} data-r="name-1">Country</legend>
+        <div class="flex flex-wrap gap-x-3.5 gap-y-2 text-[13.5px] [&_label]:inline-flex [&_label]:items-center [&_label]:gap-1.5 [&_input]:w-[70px] [&_input]:font-mono [&_input]:font-medium [&_input]:text-[14px] [&_input]:leading-[normal] [&_input]:text-ink [&_input]:bg-bg [&_input]:border [&_input]:border-line [&_input]:rounded-md [&_input]:py-[3px] [&_input]:px-1.5 [&_input]:text-right" data-r="max-1"></div>
+        <label class="text-[13px] font-semibold" for="ca-share-1" data-r="sl-1">Workers making the first good</label>
+        <input id="ca-share-1" type="range" class={RANGE} min="0" max="100" step="5" />
+        <span class={HINT} data-r="split-1"></span>
+      </fieldset>
+      <div class="flex flex-wrap gap-2">
+        <button type="button" class="font-sans font-semibold text-[13px] leading-[normal] text-panel bg-accent border border-accent rounded-lg py-1.5 px-[11px] cursor-pointer" data-specialize>Specialize</button>
+        <button type="button" class="font-sans font-medium text-[13px] leading-[normal] text-ink bg-transparent border border-line rounded-lg py-1.5 px-[11px] cursor-pointer hover:border-accent" data-reset>Undo trade</button>
+        <button type="button" class="font-sans font-medium text-[13px] leading-[normal] text-ink bg-transparent border border-line rounded-lg py-1.5 px-[11px] cursor-pointer hover:border-accent" data-save-base>Set as &quot;before trade&quot;</button>
+      </div>
+      <fieldset class="border border-line rounded-lg pt-2.5 px-3 pb-3 m-0 grid gap-2 min-w-0">
+        <legend class={LEGEND}>The trade</legend>
+        <p class="flex flex-wrap items-center gap-1.5 text-[14px]"><span data-r="trade-txt">A sends B</span>
+          <span class="flex items-center gap-1 shrink-0"><input type="number" min="0" step="1" inputmode="decimal" class="w-[70px] font-mono font-medium text-[14px] leading-[normal] text-ink bg-bg border border-line rounded-md py-[3px] px-1.5 text-right" data-trade="send" aria-label="Amount sent" /></span>
+          <select class="font-sans font-medium text-[14px] leading-[normal] text-ink bg-bg border border-line rounded-md py-1 px-1.5" data-send-good aria-label="Good sent"></select></p>
+        <p class="flex flex-wrap items-center gap-1.5 text-[14px]">and gets
+          <span class="flex items-center gap-1 shrink-0"><input type="number" min="0" step="1" inputmode="decimal" class="w-[70px] font-mono font-medium text-[14px] leading-[normal] text-ink bg-bg border border-line rounded-md py-[3px] px-1.5 text-right" data-trade="get" aria-label="Amount received" /></span>
+          <span data-r="trade-get">back</span></p>
+        <span class={HINT} data-r="price"></span>
+      </fieldset>
+    </div>
+
+    <div class={PANEL}>
+      <div class={CHART_KEY} aria-hidden="true">
+        <span><i class="inline-block w-2.5 h-2.5 rounded-full border-2 border-dashed border-muted"></i>Before trade</span>
+        <span><i class="inline-block w-3 h-3 rounded-full bg-accent"></i>What it makes now</span>
+        <span><i class="not-italic text-[15px] leading-none text-good">★</i>What it has after trading</span>
+      </div>
+      <div class="w-full min-w-0" data-chart-box><svg class={SVG} data-chart viewBox="0 0 640 280" role="img"></svg></div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+      <div class={TABLE_BOX}>
+        <table class={TABLE}><thead data-r="res-h"></thead><tbody data-r="res"></tbody></table>
+      </div>
+      <p class:list={[HINT, PROSE]} data-r="world"></p>
+      <div class={TABLE_BOX}>
+        <table class="w-full border-collapse text-[14px] [&_th]:py-1.5 [&_th]:px-2 [&_td]:py-1.5 [&_td]:px-2 [&_th]:border-b [&_td]:border-b [&_th]:border-line [&_td]:border-line [&_th]:text-right [&_td]:text-right [&_thead_th]:text-[12.5px] [&_thead_th]:text-muted [&_thead_th]:font-semibold [&_thead_th]:border-b-2 [&_tbody_th]:text-left [&_tbody_th]:font-normal [&_tbody_th]:pl-0 [&_tbody_th]:text-[13px] [&_td]:font-mono [&_td]:font-medium [&_td]:text-[13px] [&_td]:leading-[normal] [&_td]:tabular-nums">
+          <thead><tr><th scope="col"><span class={SR}>Measure</span></th><th scope="col" data-r="name-0b"></th><th scope="col" data-r="name-1b"></th></tr></thead>
+          <tbody data-r="adv"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The idea</h2>
+      <div class={FORMULA}>Opportunity cost of 1 unit of good A = Max of good B ÷ Max of good A<span>Lower opportunity cost = comparative advantage</span></div>
+      <p>Making more of one good means making less of the other. That trade-off is the <strong>opportunity cost</strong>. Even if one country is better at making everything, each country should <strong>specialize</strong> in the good it gives up the least to make, then trade. The world makes more, and both sides can end up with more than they could make alone. The blue line is everything a country can make by itself; a green star outside it is only possible through trade.</p>
+    </div>
+    <div class={PANEL}>
+      <h2 class={H2}>Try it</h2>
+      <ol class={QS}>
+        <li>Load the two islands. Who has the absolute advantage in fish? Who has the comparative advantage? Why are those different questions? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Reef Island can catch more fish (absolute advantage). It also gives up fewer coconuts per fish: 1 instead of 4 (comparative advantage). Absolute is about who makes more; comparative is about who gives up less.</span></li>
+        <li>Click Specialize, then find a trade where both islands win. Write down your trade. <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>One that works: Reef Island gets coconuts for fish. Choose Palm Island sends coconuts: send 15 coconuts, get 7 fish back. Palm ends with 7 fish and 25 coconuts (was 5 and 20). Reef ends with 13 fish and 15 coconuts (was 10 and 10).</span></li>
+        <li>Load Portugal and England. Portugal is better at making both goods. Can England still benefit from trade? Find a trade that proves it. <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Yes. Specialize, then have Portugal send about 33 wine for about 34 cloth. Both end up with more of both goods than before. Even the less efficient country gains.</span></li>
+        <li>Load &quot;Same costs, no gain.&quot; Try to find a trade where both countries win. What do you notice? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>You can't. Both give up the same amount of tractors per bushel of corn, so specializing doesn't make the world any bigger.</span></li>
+      </ol>
+    </div>
+  </section>
+</div>
+
+<script>
+  import { initComparativeAdvantage } from '../../scripts/tools/comparative-advantage.js';
+  document.querySelectorAll('[data-tool="comparative-advantage"]').forEach(initComparativeAdvantage);
+</script>

@@ -1,0 +1,107 @@
+---
+// Price and Demand Lab: markup only. Behavior lives in src/scripts/tools/price-demand.js
+import { ANS, CHART_KEY, FIELDSET, FORMULA, H2, HINT, LEGEND, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PRESETS, PROSE, QS, RANGE, RESULTS, REVEAL, STAT, STAT_K, STAT_KEY, STAT_V, SVG, SWATCH, TOOL, VERDICT } from '../../scripts/lib/ui.js';
+---
+<div class={TOOL} data-tool="price-demand">
+  <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Pricing inputs">
+      <h2 class={H2}>Set your price</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example products"></div>
+      <div class="bg-bg rounded-lg py-2.5 px-3 border-l-[3px] border-ink [&_label]:text-[15px]">
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="pd-price" class="font-semibold text-[14px]">Your price</label>
+          <div class="flex items-center gap-1 shrink-0"><span class={NUM_UNIT}>$</span><input id="pd-price-n" type="number" step="0.25" min="0" inputmode="decimal" aria-label="Your price in dollars" class:list={[NUM_INPUT, "w-[100px]"]} /></div>
+        </div>
+        <input id="pd-price" type="range" class={RANGE} min="0" max="100" step="0.25" />
+        <span class={HINT}>Slide it and watch revenue and profit.</span>
+      </div>
+      </div>
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>What you know about customers</legend>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="pd-p0" class="font-semibold text-[14px]">Starting price</label>
+          <div class="flex items-center gap-1 shrink-0"><span class={NUM_UNIT}>$</span><input id="pd-p0-n" type="number" step="0.25" min="0" inputmode="decimal" aria-label="Starting price in dollars" class:list={[NUM_INPUT, "w-[100px]"]} /></div>
+        </div>
+        <input id="pd-p0" type="range" class={RANGE} min="0" max="100" step="0.25" />
+        <span class={HINT}>A price you have tested.</span>
+      </div>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="pd-q0" class="font-semibold text-[14px]">Sold at the starting price</label>
+          <div class="flex items-center gap-1 shrink-0"><input id="pd-q0-n" type="number" step="10" min="0" inputmode="decimal" aria-label="Units sold at the starting price" class:list={[NUM_INPUT, "w-[100px]"]} /></div>
+        </div>
+        <input id="pd-q0" type="range" class={RANGE} min="0" max="3000" step="10" />
+        <span class={HINT}>How many you sell at that price.</span>
+      </div>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="pd-b" class="font-semibold text-[14px]">Lost per $1 increase</label>
+          <div class="flex items-center gap-1 shrink-0"><input id="pd-b-n" type="number" step="1" min="0" inputmode="decimal" aria-label="Customers lost per one dollar price increase" class:list={[NUM_INPUT, "w-[100px]"]} /></div>
+        </div>
+        <input id="pd-b" type="range" class={RANGE} min="0" max="300" step="1" />
+        <span class={HINT}>Customers you lose for each $1 you raise the price.</span>
+      </div>
+      </fieldset>
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>Your costs</legend>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="pd-vc" class="font-semibold text-[14px]">Variable cost each</label>
+          <div class="flex items-center gap-1 shrink-0"><span class={NUM_UNIT}>$</span><input id="pd-vc-n" type="number" step="0.25" min="0" inputmode="decimal" aria-label="Variable cost per unit in dollars" class:list={[NUM_INPUT, "w-[100px]"]} /></div>
+        </div>
+        <input id="pd-vc" type="range" class={RANGE} min="0" max="50" step="0.25" />
+        <span class={HINT}>Cost to make or buy one more.</span>
+      </div>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="pd-fc" class="font-semibold text-[14px]">Fixed costs</label>
+          <div class="flex items-center gap-1 shrink-0"><span class={NUM_UNIT}>$</span><input id="pd-fc-n" type="number" step="50" min="0" inputmode="decimal" aria-label="Fixed costs in dollars" class:list={[NUM_INPUT, "w-[100px]"]} /></div>
+        </div>
+        <input id="pd-fc" type="range" class={RANGE} min="0" max="30000" step="50" />
+        <span class={HINT}>Rent, equipment, permits: paid no matter what.</span>
+      </div>
+      </fieldset>
+    </div>
+
+    <div class={PANEL}>
+      <div class={CHART_KEY} aria-hidden="true">
+        <span><i class={SWATCH} style="background:var(--accent)"></i>Revenue</span>
+        <span><i class={SWATCH} style="background:var(--good)"></i>Profit</span>
+      </div>
+      <label class="inline-flex items-center gap-1.5 text-[13.5px] font-medium cursor-pointer justify-self-start"><input type="checkbox" data-best class="accent-accent w-4 h-4 m-0" /> Show the best prices</label>
+      <div class="w-full min-w-0"><svg class={SVG} data-chart viewBox="0 0 640 320" role="img"></svg></div>
+      <ul class="list-none m-0 p-0 flex flex-wrap gap-x-4 gap-y-1.5 text-[13.5px] [&_i]:inline-block [&_i]:w-2.5 [&_i]:h-2.5 [&_i]:rounded-full [&_i]:mr-1.5" data-r="best" hidden></ul>
+      <div class={RESULTS}>
+        <div class={STAT_KEY}><span class={STAT_K} data-r="units-k">Units sold</span><span class={STAT_V} data-r="units">–</span></div>
+        <div class={STAT}><span class={STAT_K}>Revenue</span><span class={STAT_V} data-r="rev">–</span></div>
+        <div class={STAT} data-r="profit-box"><span class={STAT_K}>Profit</span><span class={STAT_V} data-r="profit">–</span></div>
+        <div class={STAT}><span class={STAT_K} data-r="elas-k">Elasticity</span><span class={STAT_V} data-r="elas">–</span></div>
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}>Raise the price and you earn more on each sale but sell fewer. <strong>Price elasticity</strong> measures how strongly customers react. Above 1 is <strong>elastic</strong> (customers are price-sensitive, so a price cut raises revenue). Below 1 is <strong>inelastic</strong> (customers keep buying, so a price increase raises revenue).</p>
+    </div>
+    <div class={PANEL}>
+      <h2 class={H2}>Try it</h2>
+      <ol class={QS}>
+        <li>Load the concert. Before you touch anything, predict the ticket price that brings in the most revenue. Then find it. <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>$45. Check &quot;Show the best prices&quot; to confirm. Revenue peaks where elasticity equals 1.</span></li>
+        <li>Is the price with the most revenue the same as the price with the most profit? Why not? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>No. Profit also subtracts the cost of each unit. Selling fewer units saves variable cost, so the profit-maximizing price is higher.</span></li>
+        <li>Load the movie popcorn. Is demand elastic or inelastic at $8? What does that tell the theater? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Inelastic (0.30). Moviegoers don't have another option inside the theater, so raising the price raises revenue. That's why popcorn costs so much.</span></li>
+        <li>For the school hoodies, what happens to the best price for profit if the variable cost goes up by $4? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>It rises by $2. The business passes about half of a cost increase on to customers.</span></li>
+      </ol>
+    </div>
+  </section>
+</div>
+
+<script>
+  import { initPriceDemand } from '../../scripts/tools/price-demand.js';
+  document.querySelectorAll('[data-tool="price-demand"]').forEach(initPriceDemand);
+</script>

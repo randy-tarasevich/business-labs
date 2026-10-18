@@ -1,0 +1,19 @@
+---
+// One result number with a small label above it.
+// r: data-r hook on the value. box: data-r hook on the wrapper (setTone it to color the value).
+// keyed: accent top border for the headline stat.
+import { STAT, STAT_KEY, STAT_K, STAT_V } from '../../scripts/lib/ui.js';
+
+interface Props {
+  label: string;
+  r: string;
+  box?: string;
+  labelRef?: string;
+  keyed?: boolean;
+}
+const { label, r, box, labelRef, keyed = false } = Astro.props;
+---
+<div class={keyed ? STAT_KEY : STAT} data-r={box}>
+  <span class={STAT_K} data-r={labelRef}>{label}</span>
+  <span class={STAT_V} data-r={r}>–</span>
+</div>

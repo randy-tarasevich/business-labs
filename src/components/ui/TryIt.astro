@@ -1,0 +1,20 @@
+---
+// "Try it" panel: numbered questions, each with a Hint button that reveals a short answer.
+// Call wireReveals(root) in the tool script. Question and answer text may contain simple HTML.
+import { PANEL, H2, QS, REVEAL, ANS } from '../../scripts/lib/ui.js';
+
+interface Props {
+  items: { q: string; a: string }[];
+  /** Panel classes, for a tool whose panels use different spacing. */
+  panel?: string;
+}
+const { items, panel = PANEL } = Astro.props;
+---
+<div class={panel}>
+  <h2 class={H2}>Try it</h2>
+  <ol class={QS}>
+    {items.map(({ q, a }) => (
+      <li><Fragment set:html={q} /> <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden set:html={a} /></li>
+    ))}
+  </ol>
+</div>

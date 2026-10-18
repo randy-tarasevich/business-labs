@@ -3,7 +3,7 @@ import { glob } from 'astro/loaders';
 
 // One markdown file per tool. Frontmatter = metadata, body = teacher notes.
 // Display order for course sections.
-export const COURSES = ['Intro to Business', 'Personal Finance', 'Accounting', 'Marketing', 'Entrepreneurship'];
+export const COURSES = ['Intro to Business', 'Personal Finance', 'Accounting', 'Marketing', 'Entrepreneurship', 'International Business'];
 
 const tools = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/tools' }),
@@ -15,6 +15,8 @@ const tools = defineCollection({
     courses: z.array(z.enum(COURSES)).min(1),
     unit: z.string(),
     grades: z.string().default('9–12'),
+    // Class time for the activity, [low, high] in minutes. Shown on course pages.
+    minutes: z.tuple([z.number(), z.number()]).optional(),
     // Key into src/components/tools/index.js
     component: z.string(),
     // Optional props passed to the component (e.g. which timer preset to load)

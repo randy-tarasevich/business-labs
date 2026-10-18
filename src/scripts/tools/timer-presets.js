@@ -10,7 +10,7 @@ export const TIMER_PRESETS = {
   'balance-the-budget': [
     {
       id: 'warm', tab: 'Warm-up · 1:30', title: 'Warm-up', secs: 90, kind: 'info',
-      html: "<p>Take-home pay: <b>$2,400 a month</b>. Rent: <b>$800</b>.</p><p>Sketch how you'd spend the rest.</p><p class='muted'>Then 2–3 people share.</p>",
+      html: "<p>Take-home pay: <b>$2,400 a month</b>. Rent: <b>$800</b>.</p><p>Sketch how you'd spend the rest.</p><p class='text-muted text-[0.85em]'>Then 2–3 people share.</p>",
       messages: { ready: 'Get ready.', running: "You've got this.", lastMinute: '1 minute left.', end: 'Time! Eyes up in 3, 2, 1.' },
     },
     {
@@ -33,7 +33,7 @@ export const TIMER_PRESETS = {
     },
     {
       id: 'exit', tab: 'Exit ticket · 3:00', title: 'Exit ticket', secs: 180, kind: 'info',
-      html: "<p>Scan the QR code or go to <b>forms.gle/Za5Q9QmpoCHe74QQ8</b></p><p>Voice level <b>0</b>. Work on your own.</p><p class='muted'>Rate yourself honestly on each \"I can\" statement.</p>",
+      html: "<p>Scan the QR code or go to <b>forms.gle/Za5Q9QmpoCHe74QQ8</b></p><p>Voice level <b>0</b>. Work on your own.</p><p class='text-muted text-[0.85em]'>Rate yourself honestly on each \"I can\" statement.</p>",
       messages: { ready: 'Get ready.', running: 'Work on your own.', lastMinute: '1 minute left.', end: 'Time! Eyes up in 3, 2, 1.' },
     },
   ],

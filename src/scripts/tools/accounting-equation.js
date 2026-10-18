@@ -2,7 +2,7 @@
 // Assets = Liabilities + Owner's Equity. Students predict how each transaction
 // changes the accounts, check their entry, then post it to the balance sheet.
 
-import { money } from '../lib/util.js';
+import { money, setTone, wireReveals } from '../lib/util.js';
 
 const ACCOUNTS = [
   { id: 'cash', name: 'Cash', side: 'A' },
@@ -106,47 +106,59 @@ export function initAccountingEquation(root) {
   let balances = {};
   let journal = [];
 
+  // Entry rows. A checked row gets data-tone="good" (right) or "bad" (wrong); its mark shows ✓ or ✕.
+  const ROW = 'group flex justify-between items-center gap-2.5 py-[5px] px-2 rounded-md border-l-[3px] border-transparent tone-good:bg-good-soft tone-good:border-good tone-bad:bg-bad-soft tone-bad:border-bad';
+  const MARK = "w-4 text-center font-bold group-tone-good:after:content-['✓'] group-tone-good:after:text-good group-tone-bad:after:content-['✕'] group-tone-bad:after:text-bad";
+  const INPUT = 'w-[104px] font-mono font-medium text-[15px] leading-[normal] text-ink bg-bg border border-line rounded-md py-[5px] px-2 text-right tabular-nums disabled:opacity-100 disabled:text-ink disabled:bg-transparent disabled:border-transparent';
+  // Balance sheet lines. A line the last transaction changed gets a warm background and a +/− badge.
+  const LINE = 'flex items-baseline gap-1.5 text-[14px] py-[3px] px-1.5 rounded-[5px]';
+  const LINE_CHANGED = 'flex items-baseline gap-1.5 text-[14px] py-[3px] px-1.5 rounded-[5px] bg-warn-soft';
+
   // Build the entry rows once.
   const entry = r('entry');
   for (const side of ['A', 'L', 'E']) {
     const group = document.createElement('fieldset');
-    group.className = `ae-group ae-side-${side}`;
+    group.className = 'border-0 p-0 m-0 grid gap-1 min-w-0';
     const legend = document.createElement('legend');
+    legend.className = 'text-[12px] tracking-[.06em] uppercase text-muted font-semibold p-0 mb-0.5';
     legend.textContent = SIDES[side];
     group.appendChild(legend);
     for (const a of ACCOUNTS.filter((x) => x.side === side)) {
       const row = document.createElement('div');
-      row.className = 'ae-row';
+      row.className = ROW;
       row.dataset.acct = a.id;
       const label = document.createElement('label');
       label.htmlFor = `ae-in-${a.id}`;
+      label.className = 'font-semibold text-[14.5px] grid min-w-0';
       label.textContent = a.name;
       if (a.hint) {
         const h = document.createElement('span');
-        h.className = 'ae-acct-hint';
+        h.className = 'font-normal text-[12px] text-muted';
         h.textContent = a.hint;
         label.appendChild(h);
       }
       const wrap = document.createElement('div');
-      wrap.className = 'ae-num';
+      wrap.className = 'flex items-center gap-1 shrink-0';
       const dollar = document.createElement('span');
+      dollar.className = 'text-muted font-mono';
       dollar.textContent = '$';
       const input = document.createElement('input');
       input.type = 'number';
+      input.className = INPUT;
       input.step = '1';
       input.inputMode = 'numeric';
       input.id = `ae-in-${a.id}`;
       input.placeholder = '0';
       input.setAttribute('aria-label', `Change in ${a.name}, use a minus sign for a decrease`);
       input.addEventListener('input', () => {
-        row.classList.remove('wrong', 'right');
+        setTone(row, '');
         previewEntry();
       });
       input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') { e.preventDefault(); check(); }
       });
       const mark = document.createElement('span');
-      mark.className = 'ae-mark';
+      mark.className = MARK;
       mark.setAttribute('aria-hidden', 'true');
       wrap.append(dollar, input, mark);
       row.append(label, wrap);
@@ -171,13 +183,8 @@ export function initAccountingEquation(root) {
   q('[data-act="reveal"]').addEventListener('click', () => post(false));
   q('[data-act="next"]').addEventListener('click', next);
   q('[data-act="restart"]').addEventListener('click', reset);
-  root.querySelectorAll('.ae-reveal').forEach((b) =>
-    b.addEventListener('click', () => {
-      const ans = b.nextElementSibling;
-      ans.hidden = !ans.hidden;
-      b.textContent = ans.hidden ? 'Hint' : 'Hide';
-    })
-  );
+  wireReveals(root);
+
 
   function reset() {
     step = 0;
@@ -199,7 +206,7 @@ export function initAccountingEquation(root) {
       el.value = '';
       el.disabled = false;
     }
-    root.querySelectorAll('.ae-row').forEach((row) => row.classList.remove('wrong', 'right', 'changed'));
+    root.querySelectorAll('[data-acct]').forEach((row) => setTone(row, ''));
     setFeedback('', '');
     r('why').hidden = true;
     toggleButtons();
@@ -212,7 +219,7 @@ export function initAccountingEquation(root) {
     q('[data-act="next"]').hidden = phase !== 'posted';
     q('[data-act="next"]').textContent = step === TRANSACTIONS.length - 1 ? 'See the final balance sheet' : 'Next transaction';
     q('[data-act="restart"]').hidden = phase !== 'done';
-    r('card').classList.toggle('is-done', phase === 'done');
+    r('card').toggleAttribute('data-done', phase === 'done');
   }
 
   // Live check of whether the student's entry keeps the equation balanced.
@@ -222,12 +229,12 @@ export function initAccountingEquation(root) {
     const lhs = t.A, rhs = t.L + t.E;
     const el = r('preview');
     if (lhs === 0 && rhs === 0) {
-      el.className = 'ae-preview';
+      setTone(el, '');
       el.textContent = 'Enter the change for each account that moves. Leave the rest blank.';
       return;
     }
     const ok = lhs === rhs;
-    el.className = `ae-preview ${ok ? 'good' : 'bad'}`;
+    setTone(el, ok ? 'good' : 'bad');
     el.textContent = `Your entry: Assets ${signed(lhs)} ${ok ? '=' : '≠'} Liabilities + Equity ${signed(rhs)}${ok ? '. Balanced.' : '. Out of balance.'}`;
   }
 
@@ -237,10 +244,9 @@ export function initAccountingEquation(root) {
     const guess = readEntry();
     let wrong = 0;
     for (const a of ACCOUNTS) {
-      const row = q(`.ae-row[data-acct="${a.id}"]`);
+      const row = q(`[data-acct="${a.id}"]`);
       const ok = (guess[a.id] || 0) === (t.fx[a.id] || 0);
-      row.classList.toggle('wrong', !ok);
-      row.classList.toggle('right', ok && (t.fx[a.id] || 0) !== 0);
+      setTone(row, !ok ? 'bad' : (t.fx[a.id] || 0) !== 0 ? 'good' : '');
       if (!ok) wrong++;
     }
     if (wrong === 0) {
@@ -264,16 +270,14 @@ export function initAccountingEquation(root) {
       const d = t.fx[a.id] || 0;
       el.value = d === 0 ? '' : String(d);
       el.disabled = true;
-      const row = q(`.ae-row[data-acct="${a.id}"]`);
-      row.classList.remove('wrong');
-      row.classList.toggle('right', d !== 0);
+      setTone(q(`[data-acct="${a.id}"]`), d !== 0 ? 'good' : '');
       balances[a.id] += d;
     }
     journal.push({ n: step + 1, text: t.text, fx: t.fx, earned });
     setFeedback(earned ? 'good' : 'neutral', earned ? (tries === 0 ? 'Correct on the first try.' : 'Correct.') : 'Here is the correct entry.');
     r('why').hidden = false;
     r('why').textContent = t.why;
-    r('preview').className = 'ae-preview good';
+    setTone(r('preview'), 'good');
     const s = sideTotals(t.fx);
     r('preview').textContent = `Posted: Assets ${signed(s.A)} = Liabilities + Equity ${signed(s.L + s.E)}. Still balanced.`;
     toggleButtons();
@@ -296,7 +300,7 @@ export function initAccountingEquation(root) {
       r('text').textContent = `Maya's first month is on the books. You got ${firstTry} of ${TRANSACTIONS.length} entries yourself. Notice the equation balanced after every single transaction.`;
       setFeedback('', '');
       r('why').hidden = true;
-      r('preview').className = 'ae-preview';
+      setTone(r('preview'), '');
       r('preview').textContent = '';
       toggleButtons();
       renderSheet({});
@@ -305,7 +309,7 @@ export function initAccountingEquation(root) {
 
   function setFeedback(kind, msg) {
     const el = r('feedback');
-    el.className = `ae-feedback ${kind}`;
+    setTone(el, kind === 'neutral' ? 'info' : kind);
     el.textContent = msg;
     el.hidden = !msg;
   }
@@ -324,16 +328,17 @@ export function initAccountingEquation(root) {
       for (const a of ACCOUNTS.filter((x) => x.side === side)) {
         const li = document.createElement('li');
         const d = fx[a.id] || 0;
-        if (d) li.className = 'changed';
+        li.className = d ? LINE_CHANGED : LINE;
         const name = document.createElement('span');
+        name.className = 'flex-1 min-w-0';
         name.textContent = a.name;
         const val = document.createElement('span');
-        val.className = 'v';
+        val.className = 'font-mono font-medium text-[14px] leading-[normal] tabular-nums';
         val.textContent = fmt(balances[a.id]);
         li.append(name);
         if (d) {
           const badge = document.createElement('span');
-          badge.className = `ae-delta ${d > 0 ? 'up' : 'down'}`;
+          badge.className = d > 0 ? 'font-mono font-semibold text-[11.5px] leading-[normal] py-px px-[5px] rounded-[4px] text-good' : 'font-mono font-semibold text-[11.5px] leading-[normal] py-px px-[5px] rounded-[4px] text-bad';
           badge.textContent = signed(d);
           li.append(badge);
         }
@@ -356,7 +361,7 @@ export function initAccountingEquation(root) {
       const d = document.createElement('td');
       d.textContent = j.text;
       const e = document.createElement('td');
-      e.className = 'fx';
+      e.className = 'font-mono text-[12.5px] whitespace-pre-line min-w-[11em]';
       e.textContent = ACCOUNTS.filter((a) => j.fx[a.id])
         // Word joiner keeps the sign attached to its amount when the line wraps.
         .map((a) => `${a.name} ${signed(j.fx[a.id]).replace(/^([+−])/, '$1\u2060')}`)

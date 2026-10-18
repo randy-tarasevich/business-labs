@@ -1,9 +1,10 @@
 ---
 title: Break-Even Lab
 summary: Move price, costs, and sales forecasts and watch where revenue crosses cost.
-courses: [Intro to Business, Accounting, Entrepreneurship]
+courses: [Intro to Business, Accounting, Entrepreneurship, Marketing]
 unit: Pricing and Costs
 grades: 9–12
+minutes: [10, 15]
 component: BreakEven
 order: 10
 # Indicators left empty on purpose: add codes only after verifying them

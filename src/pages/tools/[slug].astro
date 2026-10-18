@@ -4,13 +4,17 @@
 import Base from '../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 import { TOOL_COMPONENTS } from '../../components/tools/index.js';
+import { MIN_TOOLS, courseSlug } from '../../data/courses.js';
 
 export async function getStaticPaths() {
   const tools = await getCollection('tools', ({ data }) => !data.draft);
-  return tools.map((tool) => ({ params: { slug: tool.id }, props: { tool } }));
+  const counts = {};
+  tools.forEach((t) => t.data.courses.forEach((c) => (counts[c] = (counts[c] || 0) + 1)));
+  const withPages = Object.keys(counts).filter((c) => counts[c] >= MIN_TOOLS);
+  return tools.map((tool) => ({ params: { slug: tool.id }, props: { tool, withPages } }));
 }
 
-const { tool } = Astro.props;
+const { tool, withPages } = Astro.props;
 const Tool = TOOL_COMPONENTS[tool.data.component];
 if (!Tool) throw new Error(`No component "${tool.data.component}" registered in src/components/tools/index.js`);
 ---
@@ -18,7 +22,11 @@ if (!Tool) throw new Error(`No component "${tool.data.component}" registered in 
   <div class="site-chrome mb-6 grid gap-1">
     <a href="/" class="text-sm text-muted hover:text-ink">← All tools</a>
     <h1 class="text-3xl sm:text-4xl font-extrabold">{tool.data.title}</h1>
-    <p class="text-muted">{tool.data.courses.join(', ')} · {tool.data.unit} · Grades {tool.data.grades}</p>
+    <p class="text-muted">
+      {tool.data.courses.map((c, i) => (
+        <>{i > 0 && ', '}{withPages.includes(c) ? <a href={`/courses/${courseSlug(c)}/`} class="hover:text-ink underline decoration-line underline-offset-2">{c}</a> : c}</>
+      ))} · {tool.data.unit} · Grades {tool.data.grades}
+    </p>
   </div>
 
   <Tool {...tool.data.props} />

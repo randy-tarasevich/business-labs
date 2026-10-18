@@ -1,0 +1,73 @@
+---
+// Startup Runway: markup only. Behavior lives in src/scripts/tools/startup-runway.js
+import RangeField from '../ui/RangeField.astro';
+import Stat from '../ui/Stat.astro';
+import TryIt from '../ui/TryIt.astro';
+import { TOOL, PANEL, PANEL_TIGHT, LOWER, H2, HINT, PROSE, PRESETS, CHART_KEY, SWATCH, RESULTS, VERDICT, FORMULA } from '../../scripts/lib/ui.js';
+
+// Collapsible list of editable cost lines. The script fills [data-items].
+const GROUP = 'group border border-line rounded-lg py-2.5 px-3 grid gap-2';
+const SUMMARY = 'flex justify-between items-baseline gap-2 cursor-pointer font-semibold text-[14px] list-none [&::-webkit-details-marker]:hidden';
+const CARET = "before:content-['▸'] before:inline-block before:w-[1em] before:text-muted before:transition-transform group-open:before:rotate-90";
+const TOTAL = 'font-mono font-semibold text-[15px] leading-[normal] tabular-nums';
+const NOTE = 'not-italic font-normal text-muted text-[13px]';
+---
+<div class={TOOL} data-tool="startup-runway">
+  <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Business inputs">
+      <h2 class={H2}>Your startup</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example businesses"></div>
+      <RangeField id="rw-cash" label="Starting cash" unit="$" step="500" max={100000} width="w-[96px]" aria="Starting cash in dollars" hint="Savings, loans, and investor money you start with." />
+
+      <details class={GROUP} open>
+        <summary class={SUMMARY}><span class={CARET}>Startup costs <em class={NOTE}>(one time)</em></span><strong class={TOTAL} data-r="startup-total">–</strong></summary>
+        <div class="grid gap-1.5 pt-1" data-items="startup"></div>
+        <span class={HINT}>Paid once, before you open.</span>
+      </details>
+
+      <details class={GROUP} open>
+        <summary class={SUMMARY}><span class={CARET}>Fixed costs <em class={NOTE}>(every month)</em></span><strong class={TOTAL} data-r="fixed-total">–</strong></summary>
+        <div class="grid gap-1.5 pt-1" data-items="fixed"></div>
+        <span class={HINT}>Paid every month, even if you sell nothing.</span>
+      </details>
+
+      <RangeField id="rw-sales" label="Sales in month 1" unit="$" step="100" max={20000} width="w-[96px]" aria="Sales in month 1 in dollars" hint="Money customers pay you in your first month." />
+      <RangeField id="rw-growth" label="Sales growth per month" unit="%" step="1" max={40} width="w-[96px]" aria="Sales growth per month in percent" hint="How much sales grow each month as word spreads." />
+      <RangeField id="rw-vc" label="Variable costs" unit="%" step="1" max={100} numMax={100} width="w-[96px]" aria="Variable costs as a percent of sales" hint="Percent of each sale that goes to materials, ingredients, and shipping." />
+    </div>
+
+    <div class={PANEL_TIGHT}>
+      <div class={CHART_KEY} aria-hidden="true">
+        <span><i class:list={[SWATCH, 'bg-good']}></i>Cash in the bank</span>
+        <span><i class:list={[SWATCH, 'bg-bad']}></i>Below zero (out of cash)</span>
+        <span><i class="w-3 h-3 rounded-full inline-block bg-accent"></i>Lowest point</span>
+      </div>
+      <div class="w-full overflow-x-auto"><svg data-chart viewBox="0 0 640 360" role="img" aria-label="Cash in the bank over 24 months" class="block w-full h-auto min-w-[340px] [&_text]:font-mono [&_text]:text-[11px] [&_text]:fill-muted max-[620px]:[&_text]:text-[14px]"></svg></div>
+      <div class={RESULTS}>
+        <Stat label="Cash runs out" r="runout" box="runout-box" keyed />
+        <Stat label="Cash on opening day" r="opening" />
+        <Stat label="Lowest cash" r="low" box="low-box" labelRef="low-k" />
+        <Stat label="First month in the black" r="profit" />
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}><strong>Burn</strong> is how much cash you lose in a month when sales don't cover costs. <strong>Runway</strong> is how many months your cash lasts at that burn. Growing sales shrink the burn each month, so the chart can last longer than the simple formula says.</p>
+    </div>
+    <TryIt items={[
+      { q: 'Load the food truck. When does it run out of cash? Find the smallest change to one input that gets it through month 24.', a: 'Try each lever by itself: more starting cash, a cheaper truck, lower monthly costs, or faster growth. Then compare how big a change each one needs.' },
+      { q: 'Set growth to 0%. Why does the cash line become a straight ramp?', a: 'With no growth, every month has the same sales and the same costs, so you lose the same amount every month.' },
+      { q: 'The phone case startup can save $2,000 on startup costs or $200 a month on fixed costs. Which helps more? Does your answer change if the business runs longer?', a: 'A one-time saving helps once. A monthly saving keeps adding up. Count how many months it takes for $200 a month to pass $2,000.' },
+    ]} />
+  </section>
+</div>
+
+<script>
+  import { initStartupRunway } from '../../scripts/tools/startup-runway.js';
+  document.querySelectorAll('[data-tool="startup-runway"]').forEach(initStartupRunway);
+</script>

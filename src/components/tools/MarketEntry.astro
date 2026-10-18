@@ -1,0 +1,93 @@
+---
+// Market Entry Lab: markup only. Behavior lives in src/scripts/tools/market-entry.js
+import { ANS, FIELDSET, FORMULA, H2, H3, HINT, LEGEND, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PRESETS, PROSE, QS, RANGE, REVEAL, SVG, TABLE, TABLE_BOX, TOOL, VERDICT } from '../../scripts/lib/ui.js';
+---
+<div class={TOOL} data-tool="market-entry">
+  <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Market inputs">
+      <h2 class={H2}>The market</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example markets"></div>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="me-sales" class="font-semibold text-[14px]">Year 1 sales in that market</label>
+          <div class="flex items-center gap-1 shrink-0"><span class={NUM_UNIT}>$</span><input id="me-sales-n" type="number" step="10000" min="0" inputmode="decimal" aria-label="Year 1 sales in dollars" class:list={[NUM_INPUT, "w-[100px]"]} /></div>
+        </div>
+        <input id="me-sales" type="range" class={RANGE} min="0" max="5000000" step="10000" />
+        <span class={HINT}>What the company expects to sell there in the first year.</span>
+      </div>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="me-growth" class="font-semibold text-[14px]">Sales growth per year</label>
+          <div class="flex items-center gap-1 shrink-0"><input id="me-growth-n" type="number" step="1" min="0" inputmode="decimal" aria-label="Sales growth per year in percent" class:list={[NUM_INPUT, "w-[100px]"]} /><span class={NUM_UNIT}>%</span></div>
+        </div>
+        <input id="me-growth" type="range" class={RANGE} min="0" max="40" step="1" />
+        <span class={HINT}>How fast sales grow after year 1.</span>
+      </div>
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>What could go wrong</legend>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="me-shortfall" class="font-semibold text-[14px]">Sales miss the forecast by</label>
+          <div class="flex items-center gap-1 shrink-0"><input id="me-shortfall-n" type="number" step="5" min="0" max="100" inputmode="decimal" aria-label="Sales shortfall in percent" class:list={[NUM_INPUT, "w-[100px]"]} /><span class={NUM_UNIT}>%</span></div>
+        </div>
+        <input id="me-shortfall" type="range" class={RANGE} min="0" max="80" step="5" />
+        <span class={HINT}>What if customers don't show up as planned?</span>
+      </div>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="me-tariff" class="font-semibold text-[14px]">Tariff on your exports</label>
+          <div class="flex items-center gap-1 shrink-0"><input id="me-tariff-n" type="number" step="1" min="0" inputmode="decimal" aria-label="Tariff in percent" class:list={[NUM_INPUT, "w-[100px]"]} /><span class={NUM_UNIT}>%</span></div>
+        </div>
+        <input id="me-tariff" type="range" class={RANGE} min="0" max="50" step="1" />
+        <span class={HINT}>A tax the other country puts on goods shipped in. Only hurts exporting.</span>
+      </div>
+        <label class="flex gap-2 items-start text-[13.5px] cursor-pointer"><input type="checkbox" data-political class="accent-bad w-4 h-4 mt-0.5 mx-0 mb-0 shrink-0" /> Political trouble: the government forces foreign-owned businesses out after year 2</label>
+      </fieldset>
+    </div>
+
+    <div class={PANEL}>
+      <h3 class={H3}>Total profit so far, year by year</h3>
+      <div class="w-full min-w-0"><svg class={SVG} data-chart viewBox="0 0 640 300" role="img"></svg></div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+      <div class={TABLE_BOX}>
+        <table class:list={[TABLE, '[&_thead_th:first-child]:text-left [&_thead_th:first-child]:pl-0']}>
+          <thead><tr><th scope="col">Ranked by 5-year profit</th><th scope="col">5-year profit</th><th scope="col">Pays back</th></tr></thead>
+          <tbody data-r="results"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <div class={PANEL}>
+    <h2 class={H2}>Five ways in</h2>
+    <p class:list={[HINT, PROSE]}>Upfront cost and the share of foreign sales the company keeps as profit. Change any number to test your own business.</p>
+    <div class={TABLE_BOX}>
+      <table class:list={[TABLE, '[&_thead_th:first-child]:text-left [&_thead_th:first-child]:pl-0 [&_tbody_th]:whitespace-normal [&_tbody_th]:min-w-[200px] [&_td]:align-top max-[620px]:min-w-[600px] [&_th_i]:inline-block [&_th_i]:w-2.5 [&_th_i]:h-2.5 [&_th_i]:rounded-[2px] [&_th_i]:mr-[7px] [&_th_i]:align-[0]']}>
+        <thead><tr><th scope="col">Entry mode</th><th scope="col">Upfront cost</th><th scope="col">Share kept</th><th scope="col">Control</th><th scope="col">Risk</th></tr></thead>
+        <tbody data-r="modes"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}>Going global is a trade-off between <strong>investment, control, and risk</strong>. Cheap ways in (licensing, exporting) risk little but give away profit and control. Owning your own operation keeps every dollar of profit and every decision, but costs the most and has the most to lose.</p>
+    </div>
+    <div class={PANEL}>
+      <h2 class={H2}>Try it</h2>
+      <ol class={QS}>
+        <li>Load the small test market. Why do the joint venture and the subsidiary lose money, even though they keep the biggest share of sales? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Their upfront costs are huge compared to a small market. Five years of sales never pays back $250,000 or $600,000.</span></li>
+        <li>Slowly raise year 1 sales. At about what market size does owning a subsidiary beat exporting? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Around $730,000 a year. Below that, the low-cost options win. Above it, keeping 25% of every sale is worth the big investment.</span></li>
+        <li>Load the big but risky market. Which option wins now, and which risk hurt the subsidiary most? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Franchising wins. Being forced out after year 2 wipes out three years of subsidiary profit, and the 30% sales miss hurts everyone.</span></li>
+        <li>Licensing almost never earns the most. Why might a company still choose it? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>It costs almost nothing and risks almost nothing. It's a cheap way to test a market, but you give up control of how your product is made and sold.</span></li>
+      </ol>
+    </div>
+  </section>
+</div>
+
+<script>
+  import { initMarketEntry } from '../../scripts/tools/market-entry.js';
+  document.querySelectorAll('[data-tool="market-entry"]').forEach(initMarketEntry);
+</script>

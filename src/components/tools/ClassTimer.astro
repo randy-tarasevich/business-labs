@@ -1,35 +1,38 @@
 ---
 // Projector-ready class timer. Segments come from a preset in src/scripts/tools/timer-presets.js
-import '../../styles/tools/class-timer.css';
 const { preset = 'balance-the-budget' } = Astro.props;
+// Timer tabs are created by the script, so the wrapper styles its children.
+const TABS = 'flex flex-wrap gap-1.5 *:font-sans *:font-semibold *:text-[14px] *:leading-[normal] *:text-ink *:bg-panel *:border *:border-line *:rounded-full *:py-[7px] *:px-3.5 *:cursor-pointer *:aria-pressed:bg-ink *:aria-pressed:text-bg *:aria-pressed:border-ink';
+const BTN = 'font-sans font-semibold text-[16px] leading-[normal] rounded-lg py-2.5 px-[18px] cursor-pointer border border-line bg-panel text-ink';
+const BTN_GO = 'font-sans font-semibold text-[16px] leading-[normal] rounded-lg py-2.5 px-[18px] cursor-pointer border border-good bg-good text-panel min-w-[120px]';
 ---
-<div class="ct" data-tool="class-timer" data-preset={preset}>
-  <div class="ct-top">
-    <h2 class="ct-title" data-title>Timer</h2>
-    <div class="ct-tabs" data-tabs role="group" aria-label="Choose a timer"></div>
+<div class="grid gap-[18px]" data-tool="class-timer" data-preset={preset}>
+  <div class="flex flex-wrap justify-between items-center gap-3">
+    <h2 class="font-display font-extrabold text-[clamp(22px,3vw,34px)]" data-title>Timer</h2>
+    <div class={TABS} data-tabs role="group" aria-label="Choose a timer"></div>
   </div>
 
-  <div class="ct-stage">
-    <div class="ct-clock">
-      <svg viewBox="0 0 200 200" aria-hidden="true">
-        <circle class="ct-ring-bg" cx="100" cy="100" r="88" stroke-width="12"></circle>
-        <circle class="ct-ring" data-ring cx="100" cy="100" r="88" stroke-width="12"></circle>
-        <line class="ct-half" data-half x1="100" y1="4" x2="100" y2="20" transform="rotate(90 100 100)"></line>
+  <div class="grid grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] gap-[22px] items-center max-[820px]:grid-cols-1">
+    <div class="@container relative w-[min(100%,62vh,560px)] aspect-square mx-auto max-w-full">
+      <svg viewBox="0 0 200 200" aria-hidden="true" class="w-full h-full block -rotate-90">
+        <circle class="fill-none stroke-line" cx="100" cy="100" r="88" stroke-width="12"></circle>
+        <circle class="fill-none stroke-good [stroke-linecap:round] transition-[stroke] duration-300" data-ring cx="100" cy="100" r="88" stroke-width="12"></circle>
+        <line class="stroke-ink stroke-3" data-half x1="100" y1="4" x2="100" y2="20" transform="rotate(90 100 100)"></line>
       </svg>
-      <div class="ct-clock-text">
-        <div class="ct-time" data-time role="timer" aria-live="off">0:00</div>
-        <div class="ct-sub" data-sub>Ready</div>
+      <div class="absolute inset-0 grid place-content-center text-center gap-1">
+        <div class="font-mono font-semibold text-[21cqi] leading-none tabular-nums tracking-[-0.02em]" data-time role="timer" aria-live="off">0:00</div>
+        <div class="text-[max(14px,4cqi)] text-muted font-semibold" data-sub>Ready</div>
       </div>
     </div>
-    <div class="ct-side" data-side></div>
+    <div class="grid gap-3.5 min-w-0" data-side></div>
   </div>
 
-  <div class="ct-controls">
-    <button class="primary" data-go type="button">Start</button>
-    <button data-plus type="button">+1 min</button>
-    <button data-reset type="button">Reset</button>
-    <button data-sound type="button" aria-pressed="true">Chime on</button>
-    <span class="ct-hint">Space = start/pause · R = reset</span>
+  <div class="flex flex-wrap gap-2 justify-center items-center">
+    <button class={BTN_GO} data-go type="button">Start</button>
+    <button class={BTN} data-plus type="button">+1 min</button>
+    <button class={BTN} data-reset type="button">Reset</button>
+    <button class={BTN} data-sound type="button" aria-pressed="true">Chime on</button>
+    <span class="text-[13px] text-muted">Space = start/pause · R = reset</span>
   </div>
 </div>
 

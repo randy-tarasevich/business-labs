@@ -1,0 +1,87 @@
+---
+// Depreciation Comparer: markup only. Behavior lives in src/scripts/tools/depreciation.js
+import { ANS, CHART_KEY, FORMULA, H2, H3, HINT, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PRESETS, PROSE, QS, RANGE, REVEAL, STAT, STAT_KEY, SVG, SWATCH, TABLE_BOX, TOOL, VERDICT } from '../../scripts/lib/ui.js';
+---
+<div class={TOOL} data-tool="depreciation">
+  <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Asset inputs">
+      <h2 class={H2}>The asset</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example assets"></div>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="dp-cost" class="font-semibold text-[14px]">Cost</label>
+          <div class="flex items-center gap-1 shrink-0"><span class={NUM_UNIT}>$</span><input id="dp-cost-n" type="number" step="100" min="0" inputmode="decimal" aria-label="Cost in dollars" class:list={[NUM_INPUT, "w-[100px]"]} /></div>
+        </div>
+        <input id="dp-cost" type="range" class={RANGE} min="0" max="100000" step="100" />
+        <span class={HINT}>What the business paid, including delivery and setup.</span>
+      </div>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="dp-salvage" class="font-semibold text-[14px]">Salvage value</label>
+          <div class="flex items-center gap-1 shrink-0"><span class={NUM_UNIT}>$</span><input id="dp-salvage-n" type="number" step="100" min="0" inputmode="decimal" aria-label="Salvage value in dollars" class:list={[NUM_INPUT, "w-[100px]"]} /></div>
+        </div>
+        <input id="dp-salvage" type="range" class={RANGE} min="0" max="20000" step="100" />
+        <span class={HINT}>What it should be worth when the business is done with it.</span>
+      </div>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="dp-life" class="font-semibold text-[14px]">Useful life</label>
+          <div class="flex items-center gap-1 shrink-0"><input id="dp-life-n" type="number" step="1" min="1" max="40" inputmode="decimal" aria-label="Useful life in years" class:list={[NUM_INPUT, "w-[100px]"]} /><span class={NUM_UNIT}> years</span></div>
+        </div>
+        <input id="dp-life" type="range" class={RANGE} min="1" max="15" step="1" />
+        <span class={HINT}>How many years the business expects to use it.</span>
+      </div>
+      <div class="grid grid-cols-2 gap-2.5">
+        <div class={STAT}><span class="text-[12px] text-muted [&_i]:inline-block [&_i]:w-[9px] [&_i]:h-[9px] [&_i]:rounded-[2px] [&_i]:mr-[5px]"><i style="background:var(--accent)"></i>Year 1, straight-line</span><span class="font-mono font-medium text-[18px] leading-[normal] tabular-nums wrap-anywhere" data-r="y1-sl">–</span></div>
+        <div class={STAT}><span class="text-[12px] text-muted [&_i]:inline-block [&_i]:w-[9px] [&_i]:h-[9px] [&_i]:rounded-[2px] [&_i]:mr-[5px]"><i style="background:var(--warn)"></i>Year 1, double-declining</span><span class="font-mono font-medium text-[18px] leading-[normal] tabular-nums wrap-anywhere" data-r="y1-ddb">–</span></div>
+        <div class={STAT}><span class="text-[12px] text-muted [&_i]:inline-block [&_i]:w-[9px] [&_i]:h-[9px] [&_i]:rounded-[2px] [&_i]:mr-[5px]"><i style="background:var(--good)"></i>Year 1, sum-of-years</span><span class="font-mono font-medium text-[18px] leading-[normal] tabular-nums wrap-anywhere" data-r="y1-syd">–</span></div>
+        <div class={STAT_KEY}><span class="text-[12px] text-muted [&_i]:inline-block [&_i]:w-[9px] [&_i]:h-[9px] [&_i]:rounded-[2px] [&_i]:mr-[5px]">Total, every method</span><span class="font-mono font-medium text-[18px] leading-[normal] tabular-nums wrap-anywhere" data-r="total">–</span></div>
+      </div>
+    </div>
+
+    <div class={PANEL}>
+      <div class={CHART_KEY} aria-hidden="true">
+        <span><i class={SWATCH} style="background:var(--accent)"></i>Straight-line</span>
+        <span><i class={SWATCH} style="background:var(--warn)"></i>Double-declining balance</span>
+        <span><i class={SWATCH} style="background:var(--good)"></i>Sum-of-the-years-digits</span>
+      </div>
+      <div class="w-full min-w-0 grid gap-1.5" data-chart-box>
+        <h3 class="font-display font-semibold text-[14px] mt-1.5">Depreciation expense each year</h3>
+        <svg class={SVG} data-bars viewBox="0 0 640 220" role="img"></svg>
+        <h3 class="font-display font-semibold text-[14px] mt-1.5">Book value at the end of each year</h3>
+        <svg class={SVG} data-lines viewBox="0 0 640 220" role="img"></svg>
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+      <div class="flex flex-wrap gap-1.5 *:font-sans *:font-medium *:text-[13px] *:leading-[normal] *:text-ink *:bg-transparent *:border *:border-line *:rounded-full *:py-[5px] *:px-[11px] *:cursor-pointer *:inline-flex *:items-center *:gap-1.5 *:aria-pressed:border-ink *:aria-pressed:bg-bg *:aria-pressed:font-semibold [&_i]:w-[9px] [&_i]:h-[9px] [&_i]:rounded-[2px]" data-tabs role="group" aria-label="Choose a schedule"></div>
+      <h3 class={H3} data-r="sched-h"></h3>
+      <div class={TABLE_BOX}>
+        <table class="w-full border-collapse text-[14px] [&_th]:py-1.5 [&_th]:px-2 [&_td]:py-1.5 [&_td]:px-2 [&_th]:border-b [&_td]:border-b [&_th]:border-line [&_td]:border-line [&_th]:text-right [&_td]:text-right [&_thead_th]:text-[12.5px] [&_thead_th]:text-muted [&_thead_th]:font-semibold [&_thead_th]:border-b-2 [&_thead_th:first-child]:text-center [&_thead_th:first-child]:pl-1 [&_tbody_th]:text-center [&_tbody_th]:font-normal [&_tbody_th]:pl-1 [&_td]:font-mono [&_td]:font-medium [&_td]:leading-[normal] [&_td]:tabular-nums [&_td]:whitespace-nowrap">
+          <thead><tr><th scope="col">Year</th><th scope="col">Book value, start</th><th scope="col">Depreciation</th><th scope="col">Accumulated</th><th scope="col">Book value, end</th></tr></thead>
+          <tbody data-r="sched"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}><strong>Depreciation</strong> spreads the cost of an asset over the years it helps earn money. It's an expense, but no cash leaves the business when you record it. <strong>Book value</strong> is cost minus all the depreciation so far. Double-declining never lets book value drop below salvage, so its last year is whatever is left.</p>
+    </div>
+    <div class={PANEL}>
+      <h2 class={H2}>Try it</h2>
+      <ol class={QS}>
+        <li>Load the food truck. Which method gives the biggest expense in year 1? In the last year? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Double-declining is biggest in year 1. In the last years, straight-line is biggest, because the faster methods already wrote off most of the cost.</span></li>
+        <li>Add up each method's depreciation over all the years. What do you notice? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>They all total cost minus salvage. The methods only change when the expense shows up, not how much.</span></li>
+        <li>Why might a business that wants to lower its taxes now choose double-declining? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Bigger depreciation in the early years means lower reported profit, and lower taxes, in those years.</span></li>
+        <li>Laptops lose value fast. Which method's book value line best matches what a used laptop is really worth after one year? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Double-declining. It drops the most in year 1, like real resale value for technology.</span></li>
+      </ol>
+    </div>
+  </section>
+</div>
+
+<script>
+  import { initDepreciation } from '../../scripts/tools/depreciation.js';
+  document.querySelectorAll('[data-tool="depreciation"]').forEach(initDepreciation);
+</script>

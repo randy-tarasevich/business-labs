@@ -1,0 +1,105 @@
+---
+// Currency and Trade Lab: markup only. Behavior lives in src/scripts/tools/currency-trade.js
+import { ANS, FORMULA, H2, H3, HINT, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PRESETS, PROSE, QS, RANGE, RESULTS, REVEAL, SELECT, SR, STAT, STAT_K, STAT_KEY, SVG, TOOL, VERDICT } from '../../scripts/lib/ui.js';
+---
+<div class={TOOL} data-tool="currency-trade">
+  <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Trade inputs">
+      <h2 class={H2}>The deal</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example deals"></div>
+      <fieldset class="border-0 m-0 p-0 grid grid-cols-2 gap-1.5 [&_label]:relative [&_input]:absolute [&_input]:opacity-0 [&_input]:inset-0 [&_input]:m-0 [&_input]:cursor-pointer [&_label>span]:block [&_label>span]:text-center [&_label>span]:font-sans [&_label>span]:font-medium [&_label>span]:text-[13px] [&_label>span]:leading-[normal] [&_label>span]:border [&_label>span]:border-line [&_label>span]:rounded-lg [&_label>span]:py-2 [&_label>span]:px-1.5 [&_label>span]:cursor-pointer [&_input:checked+span]:bg-ink [&_input:checked+span]:border-ink [&_input:checked+span]:text-panel [&_input:focus-visible+span]:outline-2 [&_input:focus-visible+span]:outline-accent [&_input:focus-visible+span]:outline-offset-2">
+        <legend class={SR}>Direction of trade</legend>
+        <label><input type="radio" name="fx-mode" value="import" /><span>Importing into the U.S.</span></label>
+        <label><input type="radio" name="fx-mode" value="export" /><span>Exporting from the U.S.</span></label>
+      </fieldset>
+      <div class="grid gap-1.5">
+        <label for="fx-cur" class="font-semibold text-[14px]">Other country's currency</label>
+        <select class:list={[SELECT, "w-full"]} id="fx-cur" data-cur></select>
+      </div>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="fx-price" data-r="price-l" class="font-semibold text-[14px]"></label>
+          <div class="flex items-center gap-1 shrink-0"><span class={NUM_UNIT} data-unit-cur>$</span><input id="fx-price-n" type="number" step="0.5" min="0" inputmode="decimal" aria-label="Product price" class:list={[NUM_INPUT, "w-[100px]"]} /></div>
+        </div>
+        <input id="fx-price" type="range" class={RANGE} min="0" max="100" step="0.5" />
+        <span class={HINT} data-r="price-h"></span>
+      </div>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="fx-rate" data-r="rate-l" class="font-semibold text-[14px]"></label>
+          <div class="flex items-center gap-1 shrink-0"><input id="fx-rate-n" type="number" step="0.01" min="0" inputmode="decimal" aria-label="Exchange rate: other currency per one U.S. dollar" class:list={[NUM_INPUT, "w-[100px]"]} /></div>
+        </div>
+        <input id="fx-rate" type="range" class={RANGE} min="0" max="2" step="0.01" />
+        <span class={HINT} data-r="rate-h"></span>
+      </div>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="fx-ship" data-r="ship-l" class="font-semibold text-[14px]">Shipping per unit</label>
+          <div class="flex items-center gap-1 shrink-0"><span class={NUM_UNIT}>$</span><input id="fx-ship-n" type="number" step="0.5" min="0" inputmode="decimal" aria-label="Shipping per unit in dollars" class:list={[NUM_INPUT, "w-[100px]"]} /></div>
+        </div>
+        <input id="fx-ship" type="range" class={RANGE} min="0" max="100" step="0.5" />
+        <span class={HINT} data-r="ship-h"></span>
+      </div>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="fx-tariff" data-r="tariff-l" class="font-semibold text-[14px]">Tariff</label>
+          <div class="flex items-center gap-1 shrink-0"><input id="fx-tariff-n" type="number" step="1" min="0" inputmode="decimal" aria-label="Tariff in percent" class:list={[NUM_INPUT, "w-[100px]"]} /><span class={NUM_UNIT}>%</span></div>
+        </div>
+        <input id="fx-tariff" type="range" class={RANGE} min="0" max="60" step="1" />
+        <span class={HINT} data-r="tariff-h"></span>
+      </div>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="fx-markup" data-r="markup-l" class="font-semibold text-[14px]">Store markup</label>
+          <div class="flex items-center gap-1 shrink-0"><input id="fx-markup-n" type="number" step="1" min="0" inputmode="decimal" aria-label="Store markup in percent" class:list={[NUM_INPUT, "w-[100px]"]} /><span class={NUM_UNIT}>%</span></div>
+        </div>
+        <input id="fx-markup" type="range" class={RANGE} min="0" max="150" step="1" />
+        <span class={HINT} data-r="markup-h"></span>
+      </div>
+      <div class="grid gap-1.5">
+        <div class="flex justify-between items-baseline gap-2">
+          <label for="fx-rival" data-r="rival-l" class="font-semibold text-[14px]"></label>
+          <div class="flex items-center gap-1 shrink-0"><span class={NUM_UNIT} data-unit-buyer>$</span><input id="fx-rival-n" type="number" step="0.5" min="0" inputmode="decimal" aria-label="Competitor's price" class:list={[NUM_INPUT, "w-[100px]"]} /></div>
+        </div>
+        <input id="fx-rival" type="range" class={RANGE} min="0" max="100" step="0.5" />
+        <span class={HINT} data-r="rival-h"></span>
+      </div>
+    </div>
+
+    <div class={PANEL}>
+      <h3 class={H3}>What makes up the shelf price</h3>
+      <div class="w-full min-w-0"><svg class={SVG} data-stack viewBox="0 0 640 92" role="img"></svg></div>
+      <div class={RESULTS}>
+        <div class={STAT_KEY} data-r="shelf-box"><span class={STAT_K}>Shelf price</span><span class="font-mono font-medium text-[18px] leading-[normal] tabular-nums wrap-anywhere group-tone-good:text-good group-tone-bad:text-bad group-tone-warn:text-warn" data-r="shelf">–</span></div>
+        <div class={STAT}><span class={STAT_K}>Competitor's price</span><span class="font-mono font-medium text-[18px] leading-[normal] tabular-nums wrap-anywhere group-tone-good:text-good group-tone-bad:text-bad group-tone-warn:text-warn" data-r="rival">–</span></div>
+        <div class={STAT}><span class={STAT_K}>Product cost after exchange</span><span class="font-mono font-medium text-[18px] leading-[normal] tabular-nums wrap-anywhere group-tone-good:text-good group-tone-bad:text-bad group-tone-warn:text-warn" data-r="cost">–</span></div>
+        <div class={STAT}><span class={STAT_K}>Tariff's effect on price</span><span class="font-mono font-medium text-[18px] leading-[normal] tabular-nums wrap-anywhere group-tone-good:text-good group-tone-bad:text-bad group-tone-warn:text-warn" data-r="tariff">–</span></div>
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+      <h3 class={H3}>If the dollar gets weaker or stronger</h3>
+      <div class="w-full min-w-0"><svg class={SVG} data-sweep viewBox="0 0 640 240" role="img"></svg></div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}>An <strong>exchange rate</strong> is the price of one currency in another. When the dollar gets <strong>stronger</strong>, it buys more foreign currency: imports get cheaper for Americans, and U.S. exports get more expensive for buyers in other countries. A <strong>tariff</strong> is a tax on imported goods. The importing business pays it to its own government, then usually passes the cost on through higher prices.</p>
+    </div>
+    <div class={PANEL}>
+      <h2 class={H2}>Try it</h2>
+      <ol class={QS}>
+        <li>Load the olive oil. Slide the exchange rate up (a stronger dollar). What happens to the shelf price, and why? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>It drops. Each dollar buys more euros, so the same €6 bottle costs fewer dollars.</span></li>
+        <li>Now load the guitars to Japan. Make the dollar stronger. Why is that bad news for this U.S. company? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Each guitar now costs Japanese buyers more yen, so it's harder to compete with Japanese-made guitars.</span></li>
+        <li>For the sneakers, how much does the 20% tariff raise the shelf price? Who sends the tariff money to the government, and who ends up paying it? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>It adds $4 per pair, and $8 after the store's 100% markup. The importer pays the government, but the cost is passed to shoppers through the higher price.</span></li>
+        <li>Find the tariff rate that makes the imported sneakers cost the same as the U.S.-made pair. <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>About 40%. Slide the tariff until the shelf price reaches $60.</span></li>
+      </ol>
+    </div>
+  </section>
+</div>
+
+<script>
+  import { initCurrencyTrade } from '../../scripts/tools/currency-trade.js';
+  document.querySelectorAll('[data-tool="currency-trade"]').forEach(initCurrencyTrade);
+</script>

@@ -1,8 +1,18 @@
 // Class Timer: a projector countdown with optional on-screen steps.
-import { beep } from '../lib/util.js';
+import { beep, setTone } from '../lib/util.js';
 import { TIMER_PRESETS } from './timer-presets.js';
 
 const CIRC = 2 * Math.PI * 88;
+
+// Banner over the steps: green while running, warn in the last minute or after halftime, bad at time's up.
+const BANNER = 'rounded-xl py-3.5 px-[18px] text-[clamp(18px,2.2vw,26px)] font-bold bg-good-soft tone-warn:bg-warn-soft tone-bad:bg-bad tone-bad:text-panel';
+// Numbered steps. The current step gets data-step="now", finished ones data-step="past".
+const STEPS = 'list-none m-0 p-0 grid gap-2 [counter-reset:s]';
+const STEP =
+  'grid grid-cols-[44px_minmax(0,1fr)] gap-3 items-center bg-panel border border-line rounded-[10px] py-2.5 px-3.5 text-[clamp(16px,1.8vw,22px)] transition-[border-color,opacity] duration-300 [counter-increment:s] ' +
+  'before:content-[counter(s)] before:w-9 before:h-9 before:rounded-full before:grid before:place-items-center before:font-mono before:font-semibold before:text-[18px] before:leading-[normal] before:bg-bg before:border before:border-line ' +
+  'data-[step=now]:border-2 data-[step=now]:border-good data-[step=now]:before:bg-good data-[step=now]:before:text-panel data-[step=now]:before:border-good data-[step=past]:opacity-55';
+const INFO = 'bg-panel border border-line rounded-xl py-4 px-[18px] text-[clamp(17px,2vw,24px)] leading-[1.4] grid gap-2';
 
 export function initClassTimer(root) {
   const $ = (sel) => root.querySelector(sel);
@@ -37,23 +47,24 @@ export function initClassTimer(root) {
     const side = $('[data-side]');
     side.replaceChildren();
     const banner = document.createElement('div');
-    banner.className = 'ct-banner';
+    banner.className = BANNER;
     banner.dataset.banner = '';
     side.appendChild(banner);
 
     if (s.kind === 'steps') {
       const ol = document.createElement('ol');
-      ol.className = 'ct-steps';
+      ol.className = STEPS;
       ol.dataset.steps = '';
       s.steps.forEach(([title, detail]) => {
         const li = document.createElement('li');
-        li.innerHTML = `<div><b>${title}</b><span>${detail}</span></div>`;
+        li.className = STEP;
+        li.innerHTML = `<div><b class="block">${title}</b><span class="text-muted text-[0.8em]">${detail}</span></div>`;
         ol.appendChild(li);
       });
       side.appendChild(ol);
     } else {
       const info = document.createElement('div');
-      info.className = 'ct-info';
+      info.className = INFO;
       info.innerHTML = s.html;
       side.appendChild(info);
     }
@@ -76,13 +87,13 @@ export function initClassTimer(root) {
     ring.style.stroke = remaining <= 0 ? 'var(--bad)' : remaining <= 60 ? 'var(--warn)' : 'var(--good)';
     $('[data-time]').textContent = fmt(remaining);
 
-    let text, cls = 'ct-banner', sub = running ? 'remaining' : 'Paused';
-    if (remaining <= 0) { text = m.end; cls += ' end'; sub = 'Time'; }
+    let text, tone = '', sub = running ? 'remaining' : 'Paused';
+    if (remaining <= 0) { text = m.end; tone = 'bad'; sub = 'Time'; }
     else if (!started) { text = m.ready; sub = 'Ready'; }
-    else if (remaining <= 60) { text = m.lastMinute; cls += ' warn'; }
-    else if (seg.kind === 'steps' && elapsed >= total / 2 && m.half) { text = m.half; cls += ' warn'; }
+    else if (remaining <= 60) { text = m.lastMinute; tone = 'warn'; }
+    else if (seg.kind === 'steps' && elapsed >= total / 2 && m.half) { text = m.half; tone = 'warn'; }
     else { text = m.running; }
-    banner.className = cls;
+    setTone(banner, tone);
     banner.textContent = text;
     $('[data-sub]').textContent = sub;
 
@@ -90,7 +101,7 @@ export function initClassTimer(root) {
       let cur = 0;
       seg.stepStarts.forEach((t, i) => { if (elapsed >= t) cur = i; });
       [...$('[data-steps]').children].forEach((li, i) => {
-        li.className = started ? (i === cur ? 'now' : i < cur ? 'past' : '') : '';
+        li.dataset.step = started ? (i === cur ? 'now' : i < cur ? 'past' : '') : '';
       });
     }
   }

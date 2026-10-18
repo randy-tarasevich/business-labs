@@ -4,6 +4,7 @@ summary: Post a food truck's first month, one transaction at a time, and watch A
 courses: [Accounting, Intro to Business, Entrepreneurship]
 unit: The Accounting Equation
 grades: 9–12
+minutes: [20, 25]
 component: AccountingEquation
 order: 30
 indicators:

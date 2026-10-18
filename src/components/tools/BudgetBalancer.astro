@@ -1,64 +1,75 @@
 ---
 // Budget Balancer: digital version of the Balance the Budget scenario cards.
 // Behavior lives in src/scripts/tools/budget-balancer.js, card data in budget-cards.js
-import '../../styles/tools/budget-balancer.css';
+
+// Needs, wants, and savings use the accent, warn, and good colors (see CATS in the script).
+const PANEL = 'bg-panel border border-line rounded-xl p-[18px] grid gap-3 min-w-0';
+const H2 = 'font-display font-semibold text-[20px]';
+const TEXTAREA = 'w-full font-sans text-[15px] leading-[1.4] text-ink bg-bg border border-line rounded-lg py-2 px-2.5 resize-y';
+const BTN = 'font-sans font-semibold text-[14px] leading-[normal] rounded-lg py-2 px-3.5 cursor-pointer border border-line bg-panel text-ink';
+const BTN_PRIMARY = 'font-sans font-semibold text-[14px] leading-[normal] rounded-lg py-2 px-3.5 cursor-pointer border border-accent bg-accent text-panel';
+const NOTE = 'text-[12.5px] text-muted';
+// Card buttons are created by the script, so the wrapper styles its children.
+const CARDS = 'flex flex-wrap gap-1.5 *:font-sans *:font-semibold *:text-[14px] *:leading-[normal] *:text-ink *:bg-panel *:border *:border-line *:rounded-full *:py-[7px] *:px-3.5 *:cursor-pointer *:aria-pressed:bg-ink *:aria-pressed:text-bg *:aria-pressed:border-ink [&_span]:font-normal [&_span]:text-muted [&_[aria-pressed=true]_span]:text-inherit [&_[aria-pressed=true]_span]:opacity-80';
+const TH = 'text-left text-[12px] font-semibold text-muted py-1.5 px-2 border-b border-line';
+const TH_NUM = 'text-right tabular-nums text-[12px] font-semibold text-muted py-1.5 px-2 border-b border-line';
 ---
-<div class="bb" data-tool="budget-balancer">
-  <div class="bb-top">
-    <div class="bb-cards" data-cards role="group" aria-label="Choose a scenario card"></div>
-    <label class="bb-pay">
+<div class="grid gap-4" data-tool="budget-balancer">
+  <div class="flex flex-wrap justify-between items-center gap-3">
+    <div class={CARDS} data-cards role="group" aria-label="Choose a scenario card"></div>
+    <label class="flex items-center gap-2 font-semibold text-[14px]">
       <span>Take-home pay</span>
-      <span class="bb-money-input">$<input data-pay type="number" min="0" step="50" value="2400" aria-label="Monthly take-home pay in dollars" /></span>
-      <span class="bb-per">/ month</span>
+      <span class="inline-flex items-center gap-0.5 font-mono text-muted">$<input data-pay type="number" min="0" step="50" value="2400" aria-label="Monthly take-home pay in dollars" class="w-[90px] font-mono font-medium text-[15px] leading-[normal] text-ink bg-panel border border-line rounded-md py-[5px] px-2 text-right" /></span>
+      <span class="font-normal text-muted">/ month</span>
     </label>
   </div>
 
-  <div class="bb-main">
-    <section class="bb-panel bb-card" aria-label="Scenario card">
-      <h2 data-card-title>Card</h2>
-      <p class="bb-blurb" data-blurb></p>
-      <div class="bb-housing" data-housing hidden>
+  <div class="grid grid-cols-[minmax(0,1.6fr)_minmax(280px,1fr)] gap-4 items-start max-[900px]:grid-cols-1">
+    <section class={PANEL} aria-label="Scenario card">
+      <h2 class={H2} data-card-title>Card</h2>
+      <p class="text-muted max-w-[70ch]" data-blurb></p>
+      <div class="border border-dashed border-line rounded-lg py-3 px-3.5 grid gap-2 bg-bg [&_p]:text-[14px]" data-housing hidden>
         <p data-housing-text></p>
-        <label class="bb-switch"><input type="checkbox" data-housing-toggle /> <span>Use this housing option</span></label>
+        <label class="inline-flex items-center gap-2 font-semibold text-[14px] cursor-pointer"><input type="checkbox" data-housing-toggle class="w-[18px] h-[18px] accent-accent" /> <span>Use this housing option</span></label>
       </div>
 
-      <div class="bb-table-wrap">
-        <table class="bb-table">
-          <thead>
-            <tr><th scope="col">Line</th><th scope="col" class="num">Planned</th><th scope="col">Need, want, or savings?</th><th scope="col" class="num">New $</th></tr>
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse text-[15px] min-w-[520px] max-[640px]:min-w-0">
+          <thead class="max-[640px]:hidden">
+            <tr><th scope="col" class={TH}>Line</th><th scope="col" class={TH_NUM}>Planned</th><th scope="col" class={TH}>Need, want, or savings?</th><th scope="col" class={TH_NUM}>New $</th></tr>
           </thead>
-          <tbody data-lines></tbody>
+          <tbody data-lines class="max-[640px]:grid max-[640px]:gap-2"></tbody>
         </table>
       </div>
-      <p class="bb-tip">A <b>need</b> keeps you housed, fed, healthy, and able to work. Some lines could go either way. Pick one and be ready to defend it.</p>
+      <p class="text-[13.5px] text-muted">A <b>need</b> keeps you housed, fed, healthy, and able to work. Some lines could go either way. Pick one and be ready to defend it.</p>
     </section>
 
-    <aside class="bb-side">
-      <section class="bb-panel bb-status" aria-live="polite">
-        <div class="bb-gap" data-gap>
-          <span class="bb-gap-k" data-gap-k>Over by</span>
-          <span class="bb-gap-v" data-gap-v>$0</span>
+    <aside class="grid gap-4 sticky top-4 max-[900px]:static">
+      <section class={PANEL} aria-live="polite">
+        <div class="group grid gap-0.5 rounded-[10px] py-3 px-3.5 bg-bad-soft tone-good:bg-good-soft tone-warn:bg-warn-soft" data-gap>
+          <span class="text-[13px] font-semibold text-muted" data-gap-k>Over by</span>
+          <span class="font-mono font-semibold text-[34px] leading-[1.1] tabular-nums text-bad group-tone-good:text-good group-tone-warn:text-warn" data-gap-v>$0</span>
         </div>
-        <div class="bb-total">Total <b data-total>$0</b> of <b data-pay-label>$2,400</b></div>
-        <div class="bb-unlabeled" data-unlabeled></div>
+        <div class="text-[14px] text-muted [&_b]:text-ink [&_b]:font-mono [&_b]:font-medium">Total <b data-total>$0</b> of <b data-pay-label>$2,400</b></div>
+        <div class="text-[13.5px] text-warn font-semibold min-h-[1.2em]" data-unlabeled></div>
 
-        <div class="bb-bars" data-bars></div>
-        <p class="bb-note">Line on each bar = the 50/30/20 target. It's a starting point, not a law.</p>
+        <div class="grid gap-3" data-bars></div>
+        <p class={NOTE}>Line on each bar = the 50/30/20 target. It's a starting point, not a law.</p>
       </section>
 
-      <section class="bb-panel bb-tradeoffs">
-        <h2>Your two hardest trade-offs</h2>
+      <section class:list={[PANEL, '[&_label]:text-[13px] [&_label]:font-semibold']}>
+        <h2 class={H2}>Your two hardest trade-offs</h2>
         <label for="bb-t1">Trade-off 1</label>
-        <textarea id="bb-t1" data-trade="0" rows="2" placeholder="We cut eating out to $100 because rent already takes 61% of Sofia's pay."></textarea>
+        <textarea id="bb-t1" data-trade="0" rows="2" class={TEXTAREA} placeholder="We cut eating out to $100 because rent already takes 61% of Sofia's pay."></textarea>
         <label for="bb-t2">Trade-off 2</label>
-        <textarea id="bb-t2" data-trade="1" rows="2" placeholder="We kept the car because there's no bus to his job sites."></textarea>
-        <div class="bb-actions">
-          <button type="button" class="primary" data-copy>Copy my budget</button>
-          <button type="button" data-reset>Reset this card</button>
+        <textarea id="bb-t2" data-trade="1" rows="2" class={TEXTAREA} placeholder="We kept the car because there's no bus to his job sites."></textarea>
+        <div class="flex flex-wrap gap-2">
+          <button type="button" class={BTN_PRIMARY} data-copy>Copy my budget</button>
+          <button type="button" class={BTN} data-reset>Reset this card</button>
         </div>
-        <p class="bb-copy-status" data-copy-status role="status"></p>
-        <textarea class="bb-copy-fallback" data-copy-fallback rows="8" readonly hidden aria-label="Budget summary to copy"></textarea>
-        <p class="bb-note">Nothing you type is saved or sent anywhere. Copy your budget and paste it where your teacher asks.</p>
+        <p class="text-[13.5px] text-good min-h-[1.2em]" data-copy-status role="status"></p>
+        <textarea class="w-full font-mono text-[12.5px] leading-[1.4] text-ink bg-bg border border-line rounded-lg py-2 px-2.5 resize-y" data-copy-fallback rows="8" readonly hidden aria-label="Budget summary to copy"></textarea>
+        <p class={NOTE}>Nothing you type is saved or sent anywhere. Copy your budget and paste it where your teacher asks.</p>
       </section>
     </aside>
   </div>

@@ -1,12 +1,22 @@
 // Budget Balancer: label each line N/W/S, change amounts until the budget balances.
-import { money } from '../lib/util.js';
+import { money, setTone } from '../lib/util.js';
 import { CARDS, TAKE_HOME } from './budget-cards.js';
 
+// on: the pressed color for that category's button, written out in full so Tailwind generates it.
 const CATS = [
-  { key: 'N', label: 'Need', name: 'Needs', target: 0.5, color: 'var(--need)' },
-  { key: 'W', label: 'Want', name: 'Wants', target: 0.3, color: 'var(--want)' },
-  { key: 'S', label: 'Savings', name: 'Savings', target: 0.2, color: 'var(--save)' },
+  { key: 'N', label: 'Need', name: 'Needs', target: 0.5, color: 'var(--accent)', on: 'aria-pressed:bg-accent' },
+  { key: 'W', label: 'Want', name: 'Wants', target: 0.3, color: 'var(--warn)', on: 'aria-pressed:bg-warn' },
+  { key: 'S', label: 'Savings', name: 'Savings', target: 0.2, color: 'var(--good)', on: 'aria-pressed:bg-good' },
 ];
+
+// Budget table. On phones each row becomes a two-line card: name and planned amount, then label buttons and new amount.
+// Rows carry data-changed and data-missing (no label yet); cells style themselves with group-data-* variants.
+const ROW = 'group max-[640px]:grid max-[640px]:grid-cols-[minmax(0,1fr)_auto] max-[640px]:[grid-template-areas:"name_planned"_"cat_new"] max-[640px]:gap-x-2.5 max-[640px]:gap-y-1.5 max-[640px]:py-2.5 max-[640px]:border-b max-[640px]:border-line';
+const TD = 'py-1.5 px-2 border-b border-line align-middle max-[640px]:border-0 max-[640px]:p-0';
+const NUM = 'text-right font-mono tabular-nums';
+const SEG = 'inline-flex border border-line rounded-lg overflow-hidden group-data-missing:border-warn';
+const SEG_BTN = 'font-sans font-semibold text-[13px] leading-[normal] bg-transparent text-muted border-0 not-first:border-l not-first:border-line py-[5px] px-2.5 min-w-16 cursor-pointer aria-pressed:text-panel max-[640px]:min-w-0 max-[640px]:py-1.5 max-[640px]:px-[9px]';
+const NEW = 'w-[84px] font-mono font-medium text-[15px] leading-[normal] text-ink bg-bg border border-line rounded-md py-1 px-2 text-right tabular-nums group-data-changed:border-accent';
 const fmt = (n) => money(n, 0);
 
 export function initBudgetBalancer(root) {
@@ -108,17 +118,18 @@ export function initBudgetBalancer(root) {
     st.lines.forEach((line, i) => {
       const tr = document.createElement('tr');
       const id = `bb-${card.id}-${i}`;
+      tr.className = ROW;
       tr.innerHTML = `
-        <td class="c-name"><label for="${id}">${line.name}</label></td>
-        <td class="num planned c-planned">${fmt(line.planned)}</td>
-        <td class="c-cat"><div class="bb-seg" role="group" aria-label="Category for ${line.name}">
-          ${CATS.map((c) => `<button type="button" data-cat="${c.key}" aria-pressed="${line.cat === c.key}">${c.label}</button>`).join('')}
+        <td class="${TD} max-[640px]:[grid-area:name] max-[640px]:font-semibold"><label for="${id}">${line.name}</label></td>
+        <td class="${TD} ${NUM} max-[640px]:[grid-area:planned] group-data-changed:line-through group-data-changed:text-muted">${fmt(line.planned)}</td>
+        <td class="${TD} max-[640px]:[grid-area:cat]"><div class="${SEG}" role="group" aria-label="Category for ${line.name}">
+          ${CATS.map((c) => `<button type="button" class="${SEG_BTN} ${c.on}" data-cat="${c.key}" aria-pressed="${line.cat === c.key}">${c.label}</button>`).join('')}
         </div></td>
-        <td class="num c-new"><input class="bb-new" id="${id}" type="number" min="0" step="5" value="${line.value}" aria-label="New amount for ${line.name}" /></td>`;
-      tr.querySelectorAll('.bb-seg button').forEach((b) => {
+        <td class="${TD} ${NUM} max-[640px]:[grid-area:new]"><input class="${NEW}" id="${id}" type="number" min="0" step="5" value="${line.value}" aria-label="New amount for ${line.name}" /></td>`;
+      tr.querySelectorAll('[data-cat]').forEach((b) => {
         b.addEventListener('click', () => {
           line.cat = line.cat === b.dataset.cat ? null : b.dataset.cat;
-          tr.querySelectorAll('.bb-seg button').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.cat === line.cat)));
+          tr.querySelectorAll('[data-cat]').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.cat === line.cat)));
           paintRow(tr, line);
           renderSummary();
         });
@@ -135,8 +146,8 @@ export function initBudgetBalancer(root) {
   }
 
   function paintRow(tr, line) {
-    tr.classList.toggle('unlabeled', !line.cat);
-    tr.classList.toggle('changed', line.value !== line.planned);
+    tr.toggleAttribute('data-missing', !line.cat);
+    tr.toggleAttribute('data-changed', line.value !== line.planned);
   }
 
   function totals() {
@@ -157,15 +168,15 @@ export function initBudgetBalancer(root) {
     const diff = total - pay;
     const gap = $('[data-gap]');
     if (Math.abs(diff) < 0.005) {
-      gap.className = 'bb-gap ok';
+      setTone(gap, 'good');
       $('[data-gap-k]').textContent = 'Balanced';
       $('[data-gap-v]').textContent = fmt(0) + ' left';
     } else if (diff > 0) {
-      gap.className = 'bb-gap';
+      setTone(gap, '');
       $('[data-gap-k]').textContent = 'Over by';
       $('[data-gap-v]').textContent = fmt(diff);
     } else {
-      gap.className = 'bb-gap under';
+      setTone(gap, 'warn');
       $('[data-gap-k]').textContent = 'Not yet assigned';
       $('[data-gap-v]').textContent = fmt(-diff);
     }
@@ -179,12 +190,12 @@ export function initBudgetBalancer(root) {
       const amt = by[c.key];
       const pct = pay > 0 ? amt / pay : 0;
       const el = document.createElement('div');
-      el.className = 'bb-bar';
+      el.className = 'grid gap-1';
       el.innerHTML = `
-        <div class="bb-bar-top"><span class="bb-cat-name" style="color:${c.color}">${c.name}</span><span><b>${fmt(amt)}</b> · ${Math.round(pct * 100)}% (target ${c.target * 100}% = ${fmt(pay * c.target)})</span></div>
-        <div class="bb-track" role="img" aria-label="${c.name}: ${Math.round(pct * 100)} percent of take-home pay, target ${c.target * 100} percent">
-          <div class="bb-fill" style="width:${Math.min(100, pct * 100)}%;background:${c.color}"></div>
-          <div class="bb-target" style="left:calc(${c.target * 100}% - 1px)"></div>
+        <div class="flex justify-between gap-2 text-[14px]"><span class="text-[14px] font-bold" style="color:${c.color}">${c.name}</span><span class="text-muted text-[12.5px]"><b class="font-mono font-medium tabular-nums">${fmt(amt)}</b> · ${Math.round(pct * 100)}% (target ${c.target * 100}% = ${fmt(pay * c.target)})</span></div>
+        <div class="relative h-3 bg-bg border border-line rounded-md overflow-hidden" role="img" aria-label="${c.name}: ${Math.round(pct * 100)} percent of take-home pay, target ${c.target * 100} percent">
+          <div class="h-full rounded-l-md transition-[width] duration-250" style="width:${Math.min(100, pct * 100)}%;background:${c.color}"></div>
+          <div class="absolute -top-0.5 -bottom-0.5 w-0.5 bg-ink" style="left:calc(${c.target * 100}% - 1px)"></div>
         </div>`;
       bars.appendChild(el);
     });

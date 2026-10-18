@@ -51,10 +51,21 @@
   --color-good: var(--good);
   --color-bad: var(--bad);
   --color-warn: var(--warn);
+  --color-good-soft: var(--good-soft);
+  --color-bad-soft: var(--bad-soft);
+  --color-warn-soft: var(--warn-soft);
+  --color-grid: var(--grid);
   --font-display: "Bricolage Grotesque Variable", "Segoe UI", system-ui, sans-serif;
   --font-sans: "Public Sans Variable", "Segoe UI", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
 }
+
+/* State variants. Scripts set data-tone="good|bad|warn|info" on an element instead of swapping
+   class names, and the markup styles each state: tone-good:bg-good-soft, group-tone-bad:text-bad. */
+@custom-variant tone-good (&[data-tone="good"]);
+@custom-variant tone-bad (&[data-tone="bad"]);
+@custom-variant tone-warn (&[data-tone="warn"]);
+@custom-variant tone-info (&[data-tone="info"]);
 
 @layer base {
   body { @apply bg-bg text-ink font-sans antialiased; }

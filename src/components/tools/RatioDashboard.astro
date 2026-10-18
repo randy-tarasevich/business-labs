@@ -1,0 +1,47 @@
+---
+// Ratio Dashboard: markup only. Behavior lives in src/scripts/tools/ratio-dashboard.js
+import { ANS, CHART_KEY, H2, LOWER, PANEL, PRESETS, QS, REVEAL, SWATCH, TOOL, VERDICT } from '../../scripts/lib/ui.js';
+---
+<div class={TOOL} data-tool="ratio-dashboard">
+  <section class="grid grid-cols-[330px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Financial statement inputs">
+      <h2 class={H2}>The business</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example businesses"></div>
+      <div class="grid grid-cols-1 gap-2.5" data-r="inputs"></div>
+      <p class="text-[14px] border-t border-line pt-2.5">Owner's equity (assets − liabilities): <strong class="font-mono tone-bad:text-bad" data-r="eq"></strong></p>
+    </div>
+
+    <div class={PANEL}>
+      <div class={CHART_KEY} aria-hidden="true">
+        <span><i class={SWATCH} style="background:var(--good)"></i>Healthy</span>
+        <span><i class={SWATCH} style="background:var(--warn)"></i>Watch</span>
+        <span><i class={SWATCH} style="background:var(--bad)"></i>Danger</span>
+        <span>Rough guides only. Good numbers depend on the industry.</span>
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+      <div class="grid gap-4" data-r="cards"></div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>Why ratios?</h2>
+      <p>A $50,000 profit is great for a food truck and terrible for a car dealer. <strong>Ratios</strong> turn dollar amounts into comparisons, so you can judge businesses of different sizes. Banks look at the bill-paying ratios before they lend. Owners and investors watch the profit ratios.</p>
+      <p>The colored zones are rough rules of thumb. A grocery store with a 2% profit margin is normal; a software company with 2% would be in trouble. Always compare a business to others in its industry.</p>
+    </div>
+    <div class={PANEL}>
+      <h2 class={H2}>Try it</h2>
+      <ol class={QS}>
+        <li>Compare the hardware store and the grocery store. The grocery store's net margin looks weak. Is the grocery store actually a bad business? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Not necessarily. Grocery stores have thin margins but sell a huge volume. Its inventory turns over about 16 times a year, and its return on equity is strong.</span></li>
+        <li>The software startup is losing money but has great bill-paying ratios. How can both be true? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>It probably raised a lot of investor cash. It can pay its bills for now, but losses will use up that cash if it doesn't become profitable.</span></li>
+        <li>Load the struggling furniture store. You're the bank. Which two ratios worry you most, and why? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>The quick ratio (it can't pay bills without selling furniture) and debt-to-equity (lenders already have far more in the business than the owners).</span></li>
+        <li>For the furniture store, what change to the numbers would fix the quick ratio fastest? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Turn inventory into cash: a big sale lowers inventory and raises cash, which raises the quick ratio. Paying down current liabilities also helps.</span></li>
+      </ol>
+    </div>
+  </section>
+</div>
+
+<script>
+  import { initRatioDashboard } from '../../scripts/tools/ratio-dashboard.js';
+  document.querySelectorAll('[data-tool="ratio-dashboard"]').forEach(initRatioDashboard);
+</script>

@@ -57,3 +57,88 @@ export function beep(times = 1) {
     /* audio blocked; the timer still works silently */
   }
 }
+
+/** Format a plain number with commas. */
+export function num(n, decimals = 0) {
+  return n.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+}
+
+/**
+ * Link a range slider (#id) and its number box (#id-n) to one value.
+ * set(v) runs on every edit. Returns sync(), which pushes the current value back into both inputs.
+ */
+export function linkRange(root, id, { get, set, max, allowNegative = false }) {
+  const range = root.querySelector(`#${id}`);
+  const box = root.querySelector(`#${id}-n`);
+  range.addEventListener('input', () => {
+    const v = parseFloat(range.value) || 0;
+    box.value = v;
+    set(v);
+  });
+  box.addEventListener('input', () => {
+    let v = parseFloat(box.value);
+    if (Number.isNaN(v) || (!allowNegative && v < 0)) return;
+    if (max != null) v = Math.min(v, max);
+    if (v > parseFloat(range.max)) range.max = Math.ceil(v * 1.5);
+    if (v < parseFloat(range.min)) range.min = Math.floor(v * 1.5);
+    range.value = v;
+    set(v);
+  });
+  return () => {
+    const v = get();
+    if (v > parseFloat(range.max)) range.max = Math.ceil(v * 1.5);
+    if (v < parseFloat(range.min)) range.min = Math.floor(v * 1.5);
+    range.value = v;
+    box.value = v;
+  };
+}
+
+/** Fill a [data-presets] group with buttons. Returns setActive(i); pass -1 to clear. */
+export function presetButtons(wrap, presets, onPick) {
+  const setActive = (i) => [...wrap.children].forEach((b, j) => b.setAttribute('aria-pressed', String(i === j)));
+  presets.forEach((p, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = p.name;
+    b.addEventListener('click', () => {
+      setActive(i);
+      onPick(p, i);
+    });
+    wrap.appendChild(b);
+  });
+  return setActive;
+}
+
+/** Hint buttons: each toggles the answer element right after it. Defaults to buttons marked data-reveal. */
+export function wireReveals(root, selector = '[data-reveal]') {
+  root.querySelectorAll(selector).forEach((b) => {
+    b.addEventListener('click', () => {
+      const ans = b.nextElementSibling;
+      ans.hidden = !ans.hidden;
+      b.textContent = ans.hidden ? 'Hint' : 'Hide';
+    });
+  });
+}
+
+/** Set an element's state color. Markup styles it with tone-good:, tone-bad:, tone-warn:, tone-info: variants. Pass '' to clear. */
+export function setTone(el, tone) {
+  if (tone) el.dataset.tone = tone;
+  else delete el.dataset.tone;
+}
+
+/** On-screen width of an element, clamped, so charts can draw at real size and stay readable on phones. */
+export function fitWidth(el, min = 300, max = 760) {
+  return Math.round(Math.min(Math.max(el.clientWidth || max, min), max));
+}
+
+/** Call fn when an element's width changes (not on every height change). */
+export function onWidthChange(el, fn) {
+  let last = 0;
+  new ResizeObserver(([entry]) => {
+    const w = Math.round(entry.contentRect.width);
+    if (w && w !== last) {
+      last = w;
+      fn(w);
+    }
+  }).observe(el);
+}

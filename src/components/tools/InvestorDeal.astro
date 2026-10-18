@@ -1,0 +1,82 @@
+---
+// Investor Deal Lab: markup only. Behavior lives in src/scripts/tools/investor-deal.js
+import RangeField from '../ui/RangeField.astro';
+import TryIt from '../ui/TryIt.astro';
+import { TOOL, PANEL, PANEL_TIGHT, LOWER, H2, PROSE, PRESETS, LEGEND, CHART_KEY, SWATCH, VERDICT, FORMULA, TABLE_BOX, SR } from '../../scripts/lib/ui.js';
+
+// Input groups get a colored left edge: blue for the founder's ask, orange for the investor.
+const ASK = 'border border-line border-l-[3px] border-l-accent rounded-lg pt-2.5 px-3 pb-3 m-0 grid gap-3.5 min-w-0';
+const OFFER = 'border border-line border-l-[3px] border-l-warn rounded-lg pt-2.5 px-3 pb-3 m-0 grid gap-3.5 min-w-0 [&_input[type=range]]:accent-warn';
+const TABLE = 'w-full border-collapse text-[14px] [&_th]:py-[7px] [&_th]:px-2 [&_td]:py-[7px] [&_td]:px-2 [&_th]:border-b [&_td]:border-b [&_th]:border-line [&_td]:border-line [&_th]:text-right [&_td]:text-right [&_thead_th]:text-[12.5px] [&_thead_th]:text-muted [&_thead_th]:font-semibold [&_thead_th]:border-b-2 [&_thead_th:nth-child(2)]:border-b-accent [&_thead_th:nth-child(3)]:border-b-warn [&_tbody_th]:text-left [&_tbody_th]:font-normal [&_tbody_th]:text-muted [&_tbody_th]:pl-0 [&_td]:font-mono [&_td]:font-medium [&_td]:text-[15px] [&_td]:leading-[normal] [&_td]:tabular-nums [&_td]:whitespace-nowrap';
+const rows = [
+  ['post', 'Valuation (after the money)'],
+  ['pre', 'Value before the money'],
+  ['keep', 'You keep'],
+  ['mult', 'Valuation ÷ yearly sales'],
+  ['founder', 'You get at the sale'],
+  ['investor', 'Investor gets at the sale'],
+  ['return', "Investor's return"],
+];
+---
+<div class={TOOL} data-tool="investor-deal">
+  <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Deal inputs">
+      <h2 class={H2}>The pitch</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example businesses"></div>
+
+      <fieldset class={ASK}>
+        <legend class={LEGEND}>Your ask</legend>
+        <RangeField id="dl-askAmt" label="Investment you want" unit="$" step="5000" max={500000} width="w-[104px]" aria="Investment you ask for in dollars" hint="The money you ask the investor for." />
+        <RangeField id="dl-askPct" label="Equity you offer" unit="%" step="1" max={60} numMax={99} width="w-[104px]" aria="Equity you offer in percent" hint="Percent of the company the investor gets." />
+      </fieldset>
+
+      <fieldset class={OFFER}>
+        <legend class={LEGEND}>Their counteroffer</legend>
+        <RangeField id="dl-offAmt" label="Investment they offer" unit="$" step="5000" max={500000} width="w-[104px]" aria="Investment the investor offers in dollars" hint="What the investor is willing to put in." />
+        <RangeField id="dl-offPct" label="Equity they want" unit="%" step="1" max={60} numMax={99} width="w-[104px]" aria="Equity the investor wants in percent" hint="Percent of the company the investor wants back." />
+      </fieldset>
+
+      <fieldset class={ASK}>
+        <legend class={LEGEND}>The business</legend>
+        <RangeField id="dl-sales" label="Sales last year" unit="$" step="5000" max={1000000} width="w-[104px]" aria="Sales last year in dollars" hint="Used to check if a valuation is realistic." />
+        <RangeField id="dl-exit" label="Someday it sells for" unit="$" step="50000" max={10000000} width="w-[104px]" aria="Future sale price in dollars" hint="Imagine a bigger company buys the business. What do owners get?" />
+      </fieldset>
+    </div>
+
+    <div class={PANEL_TIGHT}>
+      <div class={CHART_KEY} aria-hidden="true">
+        <span><i class:list={[SWATCH, 'bg-accent']}></i>You (the founder)</span>
+        <span><i class:list={[SWATCH, 'bg-warn']}></i>The investor</span>
+      </div>
+      <div class="w-full"><svg data-chart viewBox="0 0 640 230" role="img" aria-label="Who gets what when the business sells" class="block w-full h-auto [&_text]:font-mono [&_text]:text-[12.5px] [&_text]:fill-muted"></svg></div>
+      <div class={TABLE_BOX}>
+        <table class={TABLE}>
+          <thead><tr><th scope="col"><span class={SR}>Measure</span></th><th scope="col">Your ask</th><th scope="col">Their offer</th></tr></thead>
+          <tbody>
+            {rows.map(([k, label]) => <tr><th scope="row">{label}</th><td data-r={`ask-${k}`}>–</td><td data-r={`off-${k}`}>–</td></tr>)}
+          </tbody>
+        </table>
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}>When an investor buys part of your company, the price tells you what the <strong>whole company</strong> is worth. $50,000 for 10% means each 1% costs $5,000, so all 100% is worth $500,000. That number is the <strong>valuation</strong>. Asking for more money or giving up less equity both raise it.</p>
+    </div>
+    <TryIt items={[
+      { q: 'Load the smoothie truck. The investor offers the same $50,000 but wants 25% instead of 10%. What happened to the valuation, and why did it drop so much?', a: 'Same money, bigger slice. If $50,000 buys 25%, each 1% costs only $2,000, so the whole company is valued at $200,000 instead of $500,000.' },
+      { q: 'Find a counteroffer that gives the investor 20% but keeps your $500,000 valuation. How much money would they have to put in?', a: 'Investment = Valuation × Equity %. Try $100,000 for 20%.' },
+      { q: 'Load the gaming headset brand. Compare its "Valuation ÷ yearly sales" to the dog treat bakery\'s. Then look at the investor\'s return on your ask. Why would an investor push back?', a: 'At $15 million, the valuation is almost 17 times sales, and the business would have to sell for more than $15 million just for the investor to get their money back. A high multiple needs a strong reason, like fast growth or loyal customers.' },
+      { q: 'An investor with a big network might help the business sell for twice as much. Would you rather keep 90% of $1 million or 75% of $2 million?', a: 'Change the sale price and compare "You get at the sale." A smaller slice of a bigger pie can be worth more.' },
+    ]} />
+  </section>
+</div>
+
+<script>
+  import { initInvestorDeal } from '../../scripts/tools/investor-deal.js';
+  document.querySelectorAll('[data-tool="investor-deal"]').forEach(initInvestorDeal);
+</script>

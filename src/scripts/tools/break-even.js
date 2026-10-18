@@ -1,7 +1,7 @@
 // Break-Even Lab
 // Break-even units = Fixed costs / (Price - Variable cost per unit)
 
-import { money, niceMax, svgEl, cssVar, onThemeChange } from '../lib/util.js';
+import { money, niceMax, svgEl, cssVar, onThemeChange, setTone, wireReveals } from '../lib/util.js';
 
 const PRESETS = [
   { name: 'Lemonade stand', price: 2, vc: 0.5, fc: 150, q: 140 },
@@ -79,24 +79,24 @@ export function initBreakEven(root) {
     r('cm').textContent = money(cm, 2);
     r('profit-k').textContent = `${profit >= 0 ? 'Profit' : 'Loss'} at ${n(Q)} units`;
     r('profit').textContent = money(profit, 0);
-    r('profit-box').className = `be-stat ${profit >= 0 ? 'good' : 'bad'}`;
+    setTone(r('profit-box'), profit >= 0 ? 'good' : 'bad');
 
     const verdict = r('verdict');
     if (!Number.isFinite(be)) {
-      verdict.className = 'be-verdict bad';
+      setTone(verdict, 'bad');
       verdict.textContent = 'Each sale costs as much as (or more than) you charge for it, so you can never break even. Raise the price or cut the variable cost.';
     } else if (Q >= beUnits) {
-      verdict.className = 'be-verdict good';
+      setTone(verdict, 'good');
       verdict.textContent = `At ${n(Q)} units you're past break-even by ${n(Q - beUnits)} units, for a profit of ${money(profit, 0)}.`;
     } else {
-      verdict.className = 'be-verdict bad';
+      setTone(verdict, 'bad');
       verdict.textContent = `At ${n(Q)} units you're still ${n(beUnits - Q)} units short of break-even, for a loss of ${money(-profit, 0)}.`;
     }
 
     const head = 'Break-even units = Fixed costs ÷ (Price − Variable cost)';
     r('formula').innerHTML = Number.isFinite(be)
-      ? `${head}<span class="work">= ${money(F, 0)} ÷ (${money(P, 2)} − ${money(V, 2)}) = ${money(F, 0)} ÷ ${money(cm, 2)} = ${n(Math.round(be * 100) / 100)} → round up to ${n(beUnits)}</span>`
-      : `${head}<span class="work">= ${money(F, 0)} ÷ ${money(cm, 2)} → no break-even (margin is zero or negative)</span>`;
+      ? `${head}<span>= ${money(F, 0)} ÷ (${money(P, 2)} − ${money(V, 2)}) = ${money(F, 0)} ÷ ${money(cm, 2)} = ${n(Math.round(be * 100) / 100)} → round up to ${n(beUnits)}</span>`
+      : `${head}<span>= ${money(F, 0)} ÷ ${money(cm, 2)} → no break-even (margin is zero or negative)</span>`;
 
     drawChart({ P, V, F, Q, be });
   }
@@ -146,14 +146,7 @@ export function initBreakEven(root) {
     }
   }
 
-  root.querySelectorAll('.be-reveal').forEach((b) => {
-    b.addEventListener('click', () => {
-      const ans = b.nextElementSibling;
-      ans.hidden = !ans.hidden;
-      b.textContent = ans.hidden ? 'Hint' : 'Hide';
-    });
-  });
-
+  wireReveals(root);
   onThemeChange(render);
   syncInputs();
   render();
