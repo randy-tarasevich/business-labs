@@ -1,6 +1,7 @@
 ---
 // Price and Demand Lab: markup only. Behavior lives in src/scripts/tools/price-demand.js
-import { ANS, CHART_KEY, FIELDSET, FORMULA, H2, HINT, LEGEND, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PRESETS, PROSE, QS, RANGE, RESULTS, REVEAL, STAT, STAT_K, STAT_KEY, STAT_V, SVG, SWATCH, TOOL, VERDICT } from '../../scripts/lib/ui.js';
+import TryIt from '../ui/TryIt.astro';
+import { CHART_KEY, FIELDSET, FORMULA, H2, HINT, LEGEND, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PRESETS, PROSE, RANGE, RESULTS, STAT, STAT_K, STAT_KEY, STAT_V, SVG, SWATCH, TOOL, VERDICT } from '../../scripts/lib/ui.js';
 ---
 <div class={TOOL} data-tool="price-demand">
   <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
@@ -89,15 +90,12 @@ import { ANS, CHART_KEY, FIELDSET, FORMULA, H2, HINT, LEGEND, LOWER, NUM_INPUT, 
       <div class={FORMULA} data-r="formula"></div>
       <p class={PROSE}>Raise the price and you earn more on each sale but sell fewer. <strong>Price elasticity</strong> measures how strongly customers react. Above 1 is <strong>elastic</strong> (customers are price-sensitive, so a price cut raises revenue). Below 1 is <strong>inelastic</strong> (customers keep buying, so a price increase raises revenue).</p>
     </div>
-    <div class={PANEL}>
-      <h2 class={H2}>Try it</h2>
-      <ol class={QS}>
-        <li>Load the concert. Before you touch anything, predict the ticket price that brings in the most revenue. Then find it. <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>$45. Check &quot;Show the best prices&quot; to confirm. Revenue peaks where elasticity equals 1.</span></li>
-        <li>Is the price with the most revenue the same as the price with the most profit? Why not? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>No. Profit also subtracts the cost of each unit. Selling fewer units saves variable cost, so the profit-maximizing price is higher.</span></li>
-        <li>Load the movie popcorn. Is demand elastic or inelastic at $8? What does that tell the theater? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Inelastic (0.30). Moviegoers don't have another option inside the theater, so raising the price raises revenue. That's why popcorn costs so much.</span></li>
-        <li>For the school hoodies, what happens to the best price for profit if the variable cost goes up by $4? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>It rises by $2. The business passes about half of a cost increase on to customers.</span></li>
-      </ol>
-    </div>
+    <TryIt items={[
+      { q: "Load the concert. Before you touch anything, predict the ticket price that brings in the most revenue. Then find it.", hint: "Revenue is price times tickets sold. Too high and few people buy. Too low and each ticket earns little.", a: "$45. Check &quot;Show the best prices&quot; to confirm. Revenue peaks where elasticity equals 1." },
+      { q: "Is the price with the most revenue the same as the price with the most profit? Why not?", hint: "Profit also subtracts the cost of each unit. Turn on \"Show the best prices\" and compare.", a: "No. Profit also subtracts the cost of each unit. Selling fewer units saves variable cost, so the profit-maximizing price is higher." },
+      { q: "Load the movie popcorn. Is demand elastic or inelastic at $8? What does that tell the theater?", hint: "Once moviegoers are inside, where else can they buy popcorn?", a: "Inelastic (0.30). Moviegoers don't have another option inside the theater, so raising the price raises revenue. That's why popcorn costs so much." },
+      { q: "For the school hoodies, what happens to the best price for profit if the variable cost goes up by $4?", hint: "Change the variable cost by $4 and watch the best price for profit.", a: "It rises by $2. The business passes about half of a cost increase on to customers." },
+    ]} />
   </section>
 </div>
 

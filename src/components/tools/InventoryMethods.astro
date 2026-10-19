@@ -1,6 +1,7 @@
 ---
 // Inventory Methods Lab: markup only. Behavior lives in src/scripts/tools/inventory-methods.js
-import { ANS, CHART_KEY, FORMULA, H2, HINT, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PRESETS, PROSE, QS, RANGE, REVEAL, SR, SVG, SWATCH, TABLE, TABLE_BOX, TOOL, VERDICT } from '../../scripts/lib/ui.js';
+import TryIt from '../ui/TryIt.astro';
+import { CHART_KEY, FORMULA, H2, HINT, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PRESETS, PROSE, RANGE, SR, SVG, SWATCH, TABLE, TABLE_BOX, TOOL, VERDICT } from '../../scripts/lib/ui.js';
 ---
 <div class={TOOL} data-tool="inventory-methods">
   <section class="grid grid-cols-[380px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
@@ -62,15 +63,12 @@ import { ANS, CHART_KEY, FORMULA, H2, HINT, LOWER, NUM_INPUT, NUM_UNIT, PANEL, P
       <div class={FORMULA} data-r="formula"></div>
       <p class={PROSE}>The store sells the same sneakers no matter what. The methods are different rules for <strong>which costs</strong> count as sold. <strong>FIFO</strong> assumes the oldest units sold first. <strong>LIFO</strong> assumes the newest sold first. <strong>Weighted average</strong> gives every unit the same average cost.</p>
     </div>
-    <div class={PANEL}>
-      <h2 class={H2}>Try it</h2>
-      <ol class={QS}>
-        <li>With the sneakers, which method shows the most profit? Which one pays the least tax? Why would a business choose LIFO? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>FIFO shows the most profit because the oldest, cheapest pairs go to COGS. LIFO shows the least profit and the least tax, which is why some U.S. companies choose it when prices rise.</span></li>
-        <li>Load the TVs. What flipped, and why? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Prices are falling, so the newest TVs are the cheapest. Now LIFO puts the cheap costs in COGS and shows the most profit.</span></li>
-        <li>Load the coffee beans. Why do all three methods agree? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Every bag cost the same, so it doesn't matter which bags count as sold.</span></li>
-        <li>Slide units sold all the way up. What happens to the three methods, and why? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Everything is sold, so COGS equals all the goods available under every method. The methods only differ in what's left on the shelf.</span></li>
-      </ol>
-    </div>
+    <TryIt items={[
+      { q: "With the sneakers, which method shows the most profit? Which one pays the least tax? Why would a business choose LIFO?", hint: "Prices are rising. Under each method, which pairs count as sold first?", a: "FIFO shows the most profit because the oldest, cheapest pairs go to COGS. LIFO shows the least profit and the least tax, which is why some U.S. companies choose it when prices rise." },
+      { q: "Load the TVs. What flipped, and why?", hint: "Compare the TV purchase prices to the sneakers. Which way are they moving?", a: "Prices are falling, so the newest TVs are the cheapest. Now LIFO puts the cheap costs in COGS and shows the most profit." },
+      { q: "Load the coffee beans. Why do all three methods agree?", hint: "Look at the cost per bag in each purchase.", a: "Every bag cost the same, so it doesn't matter which bags count as sold." },
+      { q: "Slide units sold all the way up. What happens to the three methods, and why?", hint: "If every unit is sold, what is left on the shelf?", a: "Everything is sold, so COGS equals all the goods available under every method. The methods only differ in what's left on the shelf." },
+    ]} />
   </section>
 </div>
 

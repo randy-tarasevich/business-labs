@@ -1,6 +1,7 @@
 ---
 // Currency and Trade Lab: markup only. Behavior lives in src/scripts/tools/currency-trade.js
-import { ANS, FORMULA, H2, H3, HINT, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PRESETS, PROSE, QS, RANGE, RESULTS, REVEAL, SELECT, SR, STAT, STAT_K, STAT_KEY, SVG, TOOL, VERDICT } from '../../scripts/lib/ui.js';
+import TryIt from '../ui/TryIt.astro';
+import { FORMULA, H2, H3, HINT, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PRESETS, PROSE, RANGE, RESULTS, SELECT, SR, STAT, STAT_K, STAT_KEY, SVG, TOOL, VERDICT } from '../../scripts/lib/ui.js';
 ---
 <div class={TOOL} data-tool="currency-trade">
   <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
@@ -87,15 +88,12 @@ import { ANS, FORMULA, H2, H3, HINT, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PRESETS,
       <div class={FORMULA} data-r="formula"></div>
       <p class={PROSE}>An <strong>exchange rate</strong> is the price of one currency in another. When the dollar gets <strong>stronger</strong>, it buys more foreign currency: imports get cheaper for Americans, and U.S. exports get more expensive for buyers in other countries. A <strong>tariff</strong> is a tax on imported goods. The importing business pays it to its own government, then usually passes the cost on through higher prices.</p>
     </div>
-    <div class={PANEL}>
-      <h2 class={H2}>Try it</h2>
-      <ol class={QS}>
-        <li>Load the olive oil. Slide the exchange rate up (a stronger dollar). What happens to the shelf price, and why? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>It drops. Each dollar buys more euros, so the same €6 bottle costs fewer dollars.</span></li>
-        <li>Now load the guitars to Japan. Make the dollar stronger. Why is that bad news for this U.S. company? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Each guitar now costs Japanese buyers more yen, so it's harder to compete with Japanese-made guitars.</span></li>
-        <li>For the sneakers, how much does the 20% tariff raise the shelf price? Who sends the tariff money to the government, and who ends up paying it? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>It adds $4 per pair, and $8 after the store's 100% markup. The importer pays the government, but the cost is passed to shoppers through the higher price.</span></li>
-        <li>Find the tariff rate that makes the imported sneakers cost the same as the U.S.-made pair. <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>About 40%. Slide the tariff until the shelf price reaches $60.</span></li>
-      </ol>
-    </div>
+    <TryIt items={[
+      { q: "Load the olive oil. Slide the exchange rate up (a stronger dollar). What happens to the shelf price, and why?", hint: "If one dollar buys more euros, how many dollars does a €6 bottle take?", a: "It drops. Each dollar buys more euros, so the same €6 bottle costs fewer dollars." },
+      { q: "Now load the guitars to Japan. Make the dollar stronger. Why is that bad news for this U.S. company?", hint: "Think about it from a buyer in Japan who pays in yen.", a: "Each guitar now costs Japanese buyers more yen, so it's harder to compete with Japanese-made guitars." },
+      { q: "For the sneakers, how much does the 20% tariff raise the shelf price? Who sends the tariff money to the government, and who ends up paying it?", hint: "Set the tariff to 0% and back to 20%, and compare the shelf price. Then ask who hands the money to the government.", a: "It adds $4 per pair, and $8 after the store's 100% markup. The importer pays the government, but the cost is passed to shoppers through the higher price." },
+      { q: "Find the tariff rate that makes the imported sneakers cost the same as the U.S.-made pair.", hint: "The U.S.-made pair costs $60. Slide the tariff until the shelf prices match.", a: "About 40%. Slide the tariff until the shelf price reaches $60." },
+    ]} />
   </section>
 </div>
 

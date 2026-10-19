@@ -77,9 +77,9 @@ const LIST = 'list-none mb-2 p-0 grid gap-0.5';
       </div>
     </div>
     <TryIt panel={PANEL} items={[
-      { q: 'Transaction 3 traded $20,000 of cash for a truck. Did Maya get richer, poorer, or neither? How does the balance sheet prove it?', a: 'Neither. Total assets did not change and equity did not move. One asset turned into another.' },
-      { q: 'Transactions 5 and 9 both brought in cash. Why did only one of them change owner\'s equity?', a: 'Transaction 5 was new revenue. Transaction 9 collected money already earned in transaction 6, so it just turned receivables into cash.' },
-      { q: 'Can a transaction change only one account? Try to invent one, then explain what goes wrong.', a: "No. If one account changes and nothing else does, one side of the equation moves and the other doesn't. Every transaction touches at least two accounts." },
+      { q: "Transaction 3 traded $20,000 of cash for a truck. Did Maya get richer, poorer, or neither? How does the balance sheet prove it?", hint: "Compare total assets before and after transaction 3. Then look at equity.", a: "Neither. Total assets did not change and equity did not move. One asset turned into another." },
+      { q: "Transactions 5 and 9 both brought in cash. Why did only one of them change owner's equity?", hint: "Look back at transaction 6. Was that money already earned?", a: "Transaction 5 was new revenue. Transaction 9 collected money already earned in transaction 6, so it just turned receivables into cash." },
+      { q: "Can a transaction change only one account? Try to invent one, then explain what goes wrong.", hint: "Change just one account. What would have to happen to keep both sides equal?", a: "No. If one account changes and nothing else does, one side of the equation moves and the other doesn't. Every transaction touches at least two accounts." },
     ]} />
   </section>
 </div>

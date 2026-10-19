@@ -1,6 +1,7 @@
 ---
 // Marketing Funnel and Ad ROI: markup only. Behavior lives in src/scripts/tools/marketing-funnel.js
-import { ANS, FORMULA, H2, H3, HINT, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PRESETS, PROSE, QS, RANGE, RESULTS, REVEAL, STAT, STAT_K, STAT_KEY, STAT_V, SVG, TOOL, VERDICT } from '../../scripts/lib/ui.js';
+import TryIt from '../ui/TryIt.astro';
+import { FORMULA, H2, H3, HINT, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PRESETS, PROSE, RANGE, RESULTS, STAT, STAT_K, STAT_KEY, STAT_V, SVG, TOOL, VERDICT } from '../../scripts/lib/ui.js';
 ---
 <div class={TOOL} data-tool="marketing-funnel">
   <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
@@ -78,15 +79,12 @@ import { ANS, FORMULA, H2, H3, HINT, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PRESETS,
       <div class={FORMULA} data-r="formula"></div>
       <p class={PROSE}>Most people who see an ad never click, and most who click never buy. Each step of the <strong>funnel</strong> loses people. <strong>Sales per $1 of ads</strong> (marketers call it ROAS) can look good while the campaign still loses money, because the business also has to pay for the products it sold. That's why profit margin matters.</p>
     </div>
-    <div class={PANEL}>
-      <h2 class={H2}>Try it</h2>
-      <ol class={QS}>
-        <li>Load the bakery. Did the ads pay off? Which single number would you try to improve first, and why? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Barely: about $4 of profit. Conversion rate is the strongest lever. Going from 4% to 5% adds 7 or 8 customers without spending more on ads.</span></li>
-        <li>Load the T-shirts. The ads lost money. What conversion rate would make them break even? Test it. <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>About 5.6%. The verdict tells you, then slide conversion to check.</span></li>
-        <li>Double the bakery's budget. Does profit double too? Why might that not happen in real life? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>In the tool, yes. In real life, the cheapest, most interested viewers are reached first, so extra spending usually gets worse results.</span></li>
-        <li>Tutoring ads cost five times more per view than the bakery's. Why are they still the best deal? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>People searching for tutoring already want it, so more of them click and buy, and each sale is worth $300. Cost per view matters less than cost per customer.</span></li>
-      </ol>
-    </div>
+    <TryIt items={[
+      { q: "Load the bakery. Did the ads pay off? Which single number would you try to improve first, and why?", hint: "Read the profit number. Then nudge each rate a little. Which one moves profit the most without spending more?", a: "Barely: about $4 of profit. Conversion rate is the strongest lever. Going from 4% to 5% adds 7 or 8 customers without spending more on ads." },
+      { q: "Load the T-shirts. The ads lost money. What conversion rate would make them break even? Test it.", hint: "The verdict shows the conversion rate you need. Slide conversion to check it.", a: "About 5.6%." },
+      { q: "Double the bakery's budget. Does profit double too? Why might that not happen in real life?", hint: "In real life, who sees your ad first? Who sees it after you double the budget?", a: "In the tool, yes. In real life, the cheapest, most interested viewers are reached first, so extra spending usually gets worse results." },
+      { q: "Tutoring ads cost five times more per view than the bakery's. Why are they still the best deal?", hint: "Compare cost per customer, not cost per view.", a: "People searching for tutoring already want it, so more of them click and buy, and each sale is worth $300. Cost per view matters less than cost per customer." },
+    ]} />
   </section>
 </div>
 

@@ -1,6 +1,7 @@
 ---
 // Financial Statements Lab: markup only. Behavior lives in src/scripts/tools/financial-statements.js
-import { ANS, FORMULA, H2, H3, HINT, LOWER, PANEL, PRESETS, PROSE, QS, REVEAL, TOOL, VERDICT } from '../../scripts/lib/ui.js';
+import TryIt from '../ui/TryIt.astro';
+import { FORMULA, H2, H3, HINT, LOWER, PANEL, PRESETS, PROSE, TOOL, VERDICT } from '../../scripts/lib/ui.js';
 ---
 <div class={TOOL} data-tool="financial-statements">
   <section class="grid grid-cols-[400px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
@@ -39,15 +40,12 @@ import { ANS, FORMULA, H2, H3, HINT, LOWER, PANEL, PRESETS, PROSE, QS, REVEAL, T
       <div class={FORMULA}>Revenue − Expenses = Net income<span>Start capital + Investments + Net income − Withdrawals = End capital</span><span>Assets = Liabilities + End capital</span></div>
       <p>Build them in order. The <span class="bg-accent/14 rounded px-1 font-semibold">net income</span> from the income statement moves to the statement of owner's equity. The <span class="bg-good/16 rounded px-1 font-semibold">ending capital</span> from that statement moves to the balance sheet. That's why the balance sheet always balances.</p>
     </div>
-    <div class={PANEL}>
-      <h2 class={H2}>Try it</h2>
-      <ol class={QS}>
-        <li>Uncheck the owner's withdrawal. Which statements change, and which one doesn't? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>The statement of owner's equity and the balance sheet change. The income statement doesn't, because a withdrawal is not an expense.</span></li>
-        <li>Uncheck the supplier payment. Why doesn't net income change, even though cash went up? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Paying a bill isn't an expense. It lowers cash and accounts payable by the same amount, so only the balance sheet changes.</span></li>
-        <li>Raise the rent until the business shows a net loss. Does the balance sheet still balance? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Yes. A net loss lowers capital, and the extra cash paid lowers assets by the same amount.</span></li>
-        <li>Which transactions change cash but not net income? Which change net income but not cash? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Loans, supplier payments, investments, and withdrawals change cash only. Sales on account and using up supplies change net income without touching cash.</span></li>
-      </ol>
-    </div>
+    <TryIt items={[
+      { q: "Uncheck the owner's withdrawal. Which statements change, and which one doesn't?", hint: "Is a withdrawal an expense? Check which statement it shows up on.", a: "The statement of owner's equity and the balance sheet change. The income statement doesn't, because a withdrawal is not an expense." },
+      { q: "Uncheck the supplier payment. Why doesn't net income change, even though cash went up?", hint: "Paying a bill you already owed: did the business use anything up this month?", a: "Paying a bill isn't an expense. It lowers cash and accounts payable by the same amount, so only the balance sheet changes." },
+      { q: "Raise the rent until the business shows a net loss. Does the balance sheet still balance?", hint: "Watch both totals on the balance sheet as you raise the rent.", a: "Yes. A net loss lowers capital, and the extra cash paid lowers assets by the same amount." },
+      { q: "Which transactions change cash but not net income? Which change net income but not cash?", hint: "Turn transactions off one at a time. Watch cash and net income.", a: "Loans, supplier payments, investments, and withdrawals change cash only. Sales on account and using up supplies change net income without touching cash." },
+    ]} />
   </section>
 </div>
 

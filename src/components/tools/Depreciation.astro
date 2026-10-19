@@ -1,6 +1,7 @@
 ---
 // Depreciation Comparer: markup only. Behavior lives in src/scripts/tools/depreciation.js
-import { ANS, CHART_KEY, FORMULA, H2, H3, HINT, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PRESETS, PROSE, QS, RANGE, REVEAL, STAT, STAT_KEY, SVG, SWATCH, TABLE_BOX, TOOL, VERDICT } from '../../scripts/lib/ui.js';
+import TryIt from '../ui/TryIt.astro';
+import { CHART_KEY, FORMULA, H2, H3, HINT, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PRESETS, PROSE, RANGE, STAT, STAT_KEY, SVG, SWATCH, TABLE_BOX, TOOL, VERDICT } from '../../scripts/lib/ui.js';
 ---
 <div class={TOOL} data-tool="depreciation">
   <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
@@ -69,15 +70,12 @@ import { ANS, CHART_KEY, FORMULA, H2, H3, HINT, LOWER, NUM_INPUT, NUM_UNIT, PANE
       <div class={FORMULA} data-r="formula"></div>
       <p class={PROSE}><strong>Depreciation</strong> spreads the cost of an asset over the years it helps earn money. It's an expense, but no cash leaves the business when you record it. <strong>Book value</strong> is cost minus all the depreciation so far. Double-declining never lets book value drop below salvage, so its last year is whatever is left.</p>
     </div>
-    <div class={PANEL}>
-      <h2 class={H2}>Try it</h2>
-      <ol class={QS}>
-        <li>Load the food truck. Which method gives the biggest expense in year 1? In the last year? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Double-declining is biggest in year 1. In the last years, straight-line is biggest, because the faster methods already wrote off most of the cost.</span></li>
-        <li>Add up each method's depreciation over all the years. What do you notice? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>They all total cost minus salvage. The methods only change when the expense shows up, not how much.</span></li>
-        <li>Why might a business that wants to lower its taxes now choose double-declining? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Bigger depreciation in the early years means lower reported profit, and lower taxes, in those years.</span></li>
-        <li>Laptops lose value fast. Which method's book value line best matches what a used laptop is really worth after one year? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Double-declining. It drops the most in year 1, like real resale value for technology.</span></li>
-      </ol>
-    </div>
+    <TryIt items={[
+      { q: "Load the food truck. Which method gives the biggest expense in year 1? In the last year?", hint: "Compare the bars for year 1, then the bars for the last year.", a: "Double-declining is biggest in year 1. In the last years, straight-line is biggest, because the faster methods already wrote off most of the cost." },
+      { q: "Add up each method's depreciation over all the years. What do you notice?", hint: "Add the depreciation for every year under each method. Then compare to cost minus salvage.", a: "They all total cost minus salvage. The methods only change when the expense shows up, not how much." },
+      { q: "Why might a business that wants to lower its taxes now choose double-declining?", hint: "A bigger expense means lower profit. What happens to the tax on lower profit?", a: "Bigger depreciation in the early years means lower reported profit, and lower taxes, in those years." },
+      { q: "Laptops lose value fast. Which method's book value line best matches what a used laptop is really worth after one year?", hint: "Think about what a one-year-old laptop sells for compared to a new one.", a: "Double-declining. It drops the most in year 1, like real resale value for technology." },
+    ]} />
   </section>
 </div>
 

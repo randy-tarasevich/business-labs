@@ -144,14 +144,48 @@ export function presetButtons(wrap, presets, onPick) {
   return setActive;
 }
 
-/** Hint buttons: each toggles the answer element right after it. Defaults to buttons marked data-reveal. */
-export function wireReveals(root, selector = '[data-reveal]') {
-  root.querySelectorAll(selector).forEach((b) => {
-    b.addEventListener('click', () => {
-      const ans = b.nextElementSibling;
-      ans.hidden = !ans.hidden;
-      b.textContent = ans.hidden ? 'Hint' : 'Hide';
+/** Words needed in a Try it answer box before Check unlocks. A speed bump for thinking, not a test. */
+const TRY_MIN_WORDS = 3;
+
+/**
+ * Try it questions (TryIt.astro). The Hint button toggles a nudge. Check stays locked until the
+ * student types a few words, then shows the answer to compare against. In projector view
+ * (?embed=1) there's no box: the teacher shows the answer directly. Nothing typed is stored.
+ */
+export function wireReveals(root) {
+  const projector = document.documentElement.classList.contains('embed');
+
+  root.querySelectorAll('[data-tryit]').forEach((item) => {
+    const hintBtn = item.querySelector('[data-hint]');
+    const input = item.querySelector('[data-try-input]');
+    const check = item.querySelector('[data-check]');
+    const gate = item.querySelector('[data-gate]');
+    const answer = document.getElementById(check.getAttribute('aria-controls'));
+
+    if (hintBtn) {
+      const hint = document.getElementById(hintBtn.getAttribute('aria-controls'));
+      hintBtn.addEventListener('click', () => {
+        hint.hidden = !hint.hidden;
+        hintBtn.setAttribute('aria-expanded', String(!hint.hidden));
+        hintBtn.textContent = hint.hidden ? 'Hint' : 'Hide hint';
+      });
+    }
+
+    const label = () => (projector ? 'Show answer' : 'Check my answer');
+    const unlock = () => {
+      const ready = projector || input.value.trim().split(/\s+/).filter(Boolean).length >= TRY_MIN_WORDS;
+      check.disabled = !ready && answer.hidden;
+      gate.hidden = ready || !answer.hidden;
+    };
+    check.textContent = label();
+    input.addEventListener('input', unlock);
+    check.addEventListener('click', () => {
+      answer.hidden = !answer.hidden;
+      check.setAttribute('aria-expanded', String(!answer.hidden));
+      check.textContent = answer.hidden ? label() : 'Hide answer';
+      unlock();
     });
+    unlock();
   });
 }
 

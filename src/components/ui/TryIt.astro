@@ -1,20 +1,43 @@
 ---
-// "Try it" panel: numbered questions, each with a Hint button that reveals a short answer.
-// Call wireReveals(root) in the tool script. Question and answer text may contain simple HTML.
-import { PANEL, H2, QS, REVEAL, ANS } from '../../scripts/lib/ui.js';
+// "Try it" panel: numbered questions that make students think before they see an answer.
+//   hint: a nudge toward the idea. Never the answer. Optional, always available.
+//   a:    the answer to compare against. Unlocks only after the student types an answer
+//         of their own (a few words). In projector view (?embed=1) the box is hidden and the
+//         teacher can show the answer directly.
+// Nothing typed is saved or sent anywhere. Call wireReveals(root) in the tool script.
+// Question, hint, and answer text may contain simple HTML.
+import { PANEL, H2, HINT, QS, REVEAL, ANS, TRY_INPUT, TRY_CHECK, TRY_ANS } from '../../scripts/lib/ui.js';
 
 interface Props {
-  items: { q: string; a: string }[];
+  items: { q: string; a: string; hint?: string }[];
   /** Panel classes, for a tool whose panels use different spacing. */
   panel?: string;
 }
 const { items, panel = PANEL } = Astro.props;
+const uid = `try-${Math.random().toString(36).slice(2, 8)}`;
 ---
 <div class={panel} data-projector-collapse>
   <h2 class={H2}>Try it</h2>
+  <p class={`${HINT} m-0 -mt-2 embed:hidden`}>Write your answer first, then check it. Nothing you type is saved.</p>
   <ol class={QS}>
-    {items.map(({ q, a }) => (
-      <li><Fragment set:html={q} /> <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden set:html={a} /></li>
+    {items.map(({ q, a, hint }, i) => (
+      <li data-tryit>
+        <span set:html={q} />
+        {hint && (
+          <>
+            {' '}<button type="button" class={REVEAL} data-hint aria-expanded="false" aria-controls={`${uid}-h${i}`}>Hint</button>
+            <span id={`${uid}-h${i}`} class={ANS} hidden set:html={hint} />
+          </>
+        )}
+        <div class="grid gap-2 mt-2">
+          <textarea class={TRY_INPUT} rows="2" data-try-input aria-label={`Your answer to question ${i + 1}`} placeholder="Your answer"></textarea>
+          <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <button type="button" class={TRY_CHECK} data-check disabled aria-expanded="false" aria-controls={`${uid}-a${i}`}>Check my answer</button>
+            <span class={`${HINT} embed:hidden`} data-gate>Write a few words to unlock.</span>
+          </div>
+          <p id={`${uid}-a${i}`} class={TRY_ANS} hidden><strong>Compare:</strong> <Fragment set:html={a} /></p>
+        </div>
+      </li>
     ))}
   </ol>
 </div>

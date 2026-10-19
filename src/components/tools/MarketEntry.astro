@@ -1,6 +1,7 @@
 ---
 // Market Entry Lab: markup only. Behavior lives in src/scripts/tools/market-entry.js
-import { ANS, FIELDSET, FORMULA, H2, H3, HINT, LEGEND, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PRESETS, PROSE, QS, RANGE, REVEAL, SVG, TABLE, TABLE_BOX, TOOL, VERDICT } from '../../scripts/lib/ui.js';
+import TryIt from '../ui/TryIt.astro';
+import { FIELDSET, FORMULA, H2, H3, HINT, LEGEND, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PRESETS, PROSE, RANGE, SVG, TABLE, TABLE_BOX, TOOL, VERDICT } from '../../scripts/lib/ui.js';
 ---
 <div class={TOOL} data-tool="market-entry">
   <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
@@ -75,15 +76,12 @@ import { ANS, FIELDSET, FORMULA, H2, H3, HINT, LEGEND, LOWER, NUM_INPUT, NUM_UNI
       <div class={FORMULA} data-r="formula"></div>
       <p class={PROSE}>Going global is a trade-off between <strong>investment, control, and risk</strong>. Cheap ways in (licensing, exporting) risk little but give away profit and control. Owning your own operation keeps every dollar of profit and every decision, but costs the most and has the most to lose.</p>
     </div>
-    <div class={PANEL}>
-      <h2 class={H2}>Try it</h2>
-      <ol class={QS}>
-        <li>Load the small test market. Why do the joint venture and the subsidiary lose money, even though they keep the biggest share of sales? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Their upfront costs are huge compared to a small market. Five years of sales never pays back $250,000 or $600,000.</span></li>
-        <li>Slowly raise year 1 sales. At about what market size does owning a subsidiary beat exporting? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Around $730,000 a year. Below that, the low-cost options win. Above it, keeping 25% of every sale is worth the big investment.</span></li>
-        <li>Load the big but risky market. Which option wins now, and which risk hurt the subsidiary most? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Franchising wins. Being forced out after year 2 wipes out three years of subsidiary profit, and the 30% sales miss hurts everyone.</span></li>
-        <li>Licensing almost never earns the most. Why might a company still choose it? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>It costs almost nothing and risks almost nothing. It's a cheap way to test a market, but you give up control of how your product is made and sold.</span></li>
-      </ol>
-    </div>
+    <TryIt items={[
+      { q: "Load the small test market. Why do the joint venture and the subsidiary lose money, even though they keep the biggest share of sales?", hint: "Compare each option's upfront cost to the size of the market.", a: "Their upfront costs are huge compared to a small market. Five years of sales never pays back $250,000 or $600,000." },
+      { q: "Slowly raise year 1 sales. At about what market size does owning a subsidiary beat exporting?", hint: "Raise sales a little at a time. Watch for the point where the subsidiary passes exporting.", a: "Around $730,000 a year. Below that, the low-cost options win. Above it, keeping 25% of every sale is worth the big investment." },
+      { q: "Load the big but risky market. Which option wins now, and which risk hurt the subsidiary most?", hint: "Under \"What could go wrong,\" undo one risk at a time. Which one changes the subsidiary the most?", a: "Franchising wins. Being forced out after year 2 wipes out three years of subsidiary profit, and the 30% sales miss hurts everyone." },
+      { q: "Licensing almost never earns the most. Why might a company still choose it?", hint: "Think about cost, risk, and control, not just profit.", a: "It costs almost nothing and risks almost nothing. It's a cheap way to test a market, but you give up control of how your product is made and sold." },
+    ]} />
   </section>
 </div>
 

@@ -1,6 +1,7 @@
 ---
 // Ratio Dashboard: markup only. Behavior lives in src/scripts/tools/ratio-dashboard.js
-import { ANS, CHART_KEY, H2, LOWER, PANEL, PRESETS, QS, REVEAL, SWATCH, TOOL, VERDICT } from '../../scripts/lib/ui.js';
+import TryIt from '../ui/TryIt.astro';
+import { CHART_KEY, H2, LOWER, PANEL, PRESETS, SWATCH, TOOL, VERDICT } from '../../scripts/lib/ui.js';
 ---
 <div class={TOOL} data-tool="ratio-dashboard">
   <section class="grid grid-cols-[330px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
@@ -29,15 +30,12 @@ import { ANS, CHART_KEY, H2, LOWER, PANEL, PRESETS, QS, REVEAL, SWATCH, TOOL, VE
       <p>A $50,000 profit is great for a food truck and terrible for a car dealer. <strong>Ratios</strong> turn dollar amounts into comparisons, so you can judge businesses of different sizes. Banks look at the bill-paying ratios before they lend. Owners and investors watch the profit ratios.</p>
       <p>The colored zones are rough rules of thumb. A grocery store with a 2% profit margin is normal; a software company with 2% would be in trouble. Always compare a business to others in its industry.</p>
     </div>
-    <div class={PANEL}>
-      <h2 class={H2}>Try it</h2>
-      <ol class={QS}>
-        <li>Compare the hardware store and the grocery store. The grocery store's net margin looks weak. Is the grocery store actually a bad business? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Not necessarily. Grocery stores have thin margins but sell a huge volume. Its inventory turns over about 16 times a year, and its return on equity is strong.</span></li>
-        <li>The software startup is losing money but has great bill-paying ratios. How can both be true? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>It probably raised a lot of investor cash. It can pay its bills for now, but losses will use up that cash if it doesn't become profitable.</span></li>
-        <li>Load the struggling furniture store. You're the bank. Which two ratios worry you most, and why? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>The quick ratio (it can't pay bills without selling furniture) and debt-to-equity (lenders already have far more in the business than the owners).</span></li>
-        <li>For the furniture store, what change to the numbers would fix the quick ratio fastest? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Turn inventory into cash: a big sale lowers inventory and raises cash, which raises the quick ratio. Paying down current liabilities also helps.</span></li>
-      </ol>
-    </div>
+    <TryIt items={[
+      { q: "Compare the hardware store and the grocery store. The grocery store's net margin looks weak. Is the grocery store actually a bad business?", hint: "Don't stop at one ratio. Check inventory turnover and return on equity.", a: "Not necessarily. Grocery stores have thin margins but sell a huge volume. Its inventory turns over about 16 times a year, and its return on equity is strong." },
+      { q: "The software startup is losing money but has great bill-paying ratios. How can both be true?", hint: "Losing money is about profit. Paying bills is about cash. Where could the cash have come from?", a: "It probably raised a lot of investor cash. It can pay its bills for now, but losses will use up that cash if it doesn't become profitable." },
+      { q: "Load the struggling furniture store. You're the bank. Which two ratios worry you most, and why?", hint: "A bank asks two things: can you pay your bills now, and how much of the business do lenders already fund?", a: "The quick ratio (it can't pay bills without selling furniture) and debt-to-equity (lenders already have far more in the business than the owners)." },
+      { q: "For the furniture store, what change to the numbers would fix the quick ratio fastest?", hint: "The quick ratio leaves out inventory. How could the store turn inventory into cash?", a: "Turn inventory into cash: a big sale lowers inventory and raises cash, which raises the quick ratio. Paying down current liabilities also helps." },
+    ]} />
   </section>
 </div>
 

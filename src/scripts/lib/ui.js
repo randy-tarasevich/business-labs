@@ -75,12 +75,18 @@ export const BTN =
 export const BTN_GHOST =
   'font-sans font-medium text-[14px] leading-[normal] text-ink bg-transparent border border-line rounded-lg py-2 px-3.5 cursor-pointer hover:border-accent';
 
-/** "Try it" questions. Hint buttons carry data-reveal (see wireReveals in util.js). */
+/** "Try it" questions (see TryIt.astro and wireReveals in util.js). */
 export const QS = 'm-0 pl-5 grid gap-2.5 list-decimal';
 /** Hint button: 32px tall for trackpads and phones, with a hover state so it reads as clickable. */
 export const REVEAL =
   'font-sans font-semibold text-[13.5px] leading-[normal] bg-transparent border border-line text-accent rounded-md min-h-8 py-[6px] px-3 my-0.5 cursor-pointer ml-1 hover:border-accent hover:bg-accent/8';
 export const ANS = 'block mt-1 text-muted text-[14px]';
+/** Try it: the student's answer box, the Check button, and the answer they compare against. */
+export const TRY_INPUT =
+  'w-full font-sans text-[15px] leading-[1.4] text-ink bg-bg border border-line rounded-lg py-2 px-2.5 resize-y min-h-[2.75rem] embed:hidden';
+export const TRY_CHECK =
+  'font-sans font-semibold text-[13.5px] leading-[normal] bg-transparent border border-line text-accent rounded-md min-h-8 py-[6px] px-3 cursor-pointer hover:border-accent hover:bg-accent/8 disabled:opacity-45 disabled:cursor-default disabled:hover:border-line disabled:hover:bg-transparent';
+export const TRY_ANS = 'm-0 rounded-lg bg-bg py-2 px-3 text-[14px] border-l-[3px] border-accent';
 
 /** Data table: headers muted, numbers right-aligned in mono, row labels on the left. */
 export const TABLE_BOX = 'overflow-x-auto';

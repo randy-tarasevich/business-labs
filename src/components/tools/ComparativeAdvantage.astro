@@ -1,6 +1,7 @@
 ---
 // Comparative Advantage Sim: markup only. Behavior lives in src/scripts/tools/comparative-advantage.js
-import { ANS, CHART_KEY, FORMULA, H2, HINT, LEGEND, LOWER, PANEL, PRESETS, PROSE, QS, RANGE, REVEAL, SR, SVG, TABLE, TABLE_BOX, TOOL, VERDICT } from '../../scripts/lib/ui.js';
+import TryIt from '../ui/TryIt.astro';
+import { CHART_KEY, FORMULA, H2, HINT, LEGEND, LOWER, PANEL, PRESETS, PROSE, RANGE, SR, SVG, TABLE, TABLE_BOX, TOOL, VERDICT } from '../../scripts/lib/ui.js';
 ---
 <div class={TOOL} data-tool="comparative-advantage">
   <section class="grid grid-cols-[360px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
@@ -65,15 +66,12 @@ import { ANS, CHART_KEY, FORMULA, H2, HINT, LEGEND, LOWER, PANEL, PRESETS, PROSE
       <div class={FORMULA}>Opportunity cost of 1 unit of good A = Max of good B ÷ Max of good A<span>Lower opportunity cost = comparative advantage</span></div>
       <p>Making more of one good means making less of the other. That trade-off is the <strong>opportunity cost</strong>. Even if one country is better at making everything, each country should <strong>specialize</strong> in the good it gives up the least to make, then trade. The world makes more, and both sides can end up with more than they could make alone. The blue line is everything a country can make by itself; a green star outside it is only possible through trade.</p>
     </div>
-    <div class={PANEL}>
-      <h2 class={H2}>Try it</h2>
-      <ol class={QS}>
-        <li>Load the two islands. Who has the absolute advantage in fish? Who has the comparative advantage? Why are those different questions? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Reef Island can catch more fish (absolute advantage). It also gives up fewer coconuts per fish: 1 instead of 4 (comparative advantage). Absolute is about who makes more; comparative is about who gives up less.</span></li>
-        <li>Click Specialize, then find a trade where both islands win. Write down your trade. <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>One that works: Reef Island gets coconuts for fish. Choose Palm Island sends coconuts: send 15 coconuts, get 7 fish back. Palm ends with 7 fish and 25 coconuts (was 5 and 20). Reef ends with 13 fish and 15 coconuts (was 10 and 10).</span></li>
-        <li>Load Portugal and England. Portugal is better at making both goods. Can England still benefit from trade? Find a trade that proves it. <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>Yes. Specialize, then have Portugal send about 33 wine for about 34 cloth. Both end up with more of both goods than before. Even the less efficient country gains.</span></li>
-        <li>Load &quot;Same costs, no gain.&quot; Try to find a trade where both countries win. What do you notice? <button type="button" class={REVEAL} data-reveal>Hint</button><span class={ANS} hidden>You can't. Both give up the same amount of tractors per bushel of corn, so specializing doesn't make the world any bigger.</span></li>
-      </ol>
-    </div>
+    <TryIt items={[
+      { q: "Load the two islands. Who has the absolute advantage in fish? Who has the comparative advantage? Why are those different questions?", hint: "Absolute: who catches more fish? Comparative: who gives up fewer coconuts for each fish? Check the table.", a: "Reef Island can catch more fish (absolute advantage). It also gives up fewer coconuts per fish: 1 instead of 4 (comparative advantage). Absolute is about who makes more; comparative is about who gives up less." },
+      { q: "Click Specialize, then find a trade where both islands win. Write down your trade.", hint: "Each island has to end with at least as much of both goods as it had before trade.", a: "One that works: Reef Island gets coconuts for fish. Choose Palm Island sends coconuts: send 15 coconuts, get 7 fish back. Palm ends with 7 fish and 25 coconuts (was 5 and 20). Reef ends with 13 fish and 15 coconuts (was 10 and 10)." },
+      { q: "Load Portugal and England. Portugal is better at making both goods. Can England still benefit from trade? Find a trade that proves it.", hint: "Look at what each country gives up to make one more unit, not how much it makes.", a: "Yes. Specialize, then have Portugal send about 33 wine for about 34 cloth. Both end up with more of both goods than before. Even the less efficient country gains." },
+      { q: "Load &quot;Same costs, no gain.&quot; Try to find a trade where both countries win. What do you notice?", hint: "Compare the opportunity costs in the table. What happens when they match?", a: "You can't. Both give up the same amount of tractors per bushel of corn, so specializing doesn't make the world any bigger." },
+    ]} />
   </section>
 </div>
 
