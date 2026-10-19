@@ -23,6 +23,19 @@ alsoAligned: []
 
 Demand is a straight line built from three facts students can reason about: a price you've tested, how many sold at that price, and how many customers you lose per $1 increase. For an entrepreneurship project, students can plug in survey results from their own product idea.
 
+## Question levels
+
+Rough Webb's Depth of Knowledge (DOK) levels for the student page, so you can pick questions to match your goal.
+
+- **Try it 1:** DOK 2 (explain a cause or compare)
+- **Try it 2:** DOK 2 (explain a cause or compare)
+- **Try it 3:** DOK 2 (explain a cause or compare)
+- **Try it 4:** DOK 2 (explain a cause or compare)
+- **Decide and defend:** DOK 3 (no single answer; students take a position and back it with numbers). The student page lists what a strong answer includes, which doubles as a quick rubric.
+- **Your turn:** DOK 3 (students write their own what-if question and test it). Good for an exit ticket: collect one question per pair and use the best ones as tomorrow's warm-up.
+
+Students must type a few words before an answer unlocks. In embed mode the boxes are hidden and you can show any answer directly.
+
 ## Answer notes
 
 | Preset | Starting price | Elasticity there | Best revenue | Best profit |

@@ -95,7 +95,16 @@ import { CHART_KEY, FIELDSET, FORMULA, H2, HINT, LEGEND, LOWER, NUM_INPUT, NUM_U
       { q: "Is the price with the most revenue the same as the price with the most profit? Why not?", hint: "Profit also subtracts the cost of each unit. Turn on \"Show the best prices\" and compare.", a: "No. Profit also subtracts the cost of each unit. Selling fewer units saves variable cost, so the profit-maximizing price is higher." },
       { q: "Load the movie popcorn. Is demand elastic or inelastic at $8? What does that tell the theater?", hint: "Once moviegoers are inside, where else can they buy popcorn?", a: "Inelastic (0.30). Moviegoers don't have another option inside the theater, so raising the price raises revenue. That's why popcorn costs so much." },
       { q: "For the school hoodies, what happens to the best price for profit if the variable cost goes up by $4?", hint: "Change the variable cost by $4 and watch the best price for profit.", a: "It rises by $2. The business passes about half of a cost increase on to customers." },
-    ]} />
+    ]} defend={{
+      q: "The school store wants to sell lots of hoodies so the whole school wears them. The treasurer wants the most profit. What price would you set, and how would you explain it to both of them?",
+      hint: "Load the school hoodies. Find the best price for profit, then lower the price and watch units sold and profit.",
+      look: [
+        "Finds the best price for profit and compares it to a lower price",
+        "Shows how many hoodies sell at each price",
+        "Names what each side gives up",
+        "Picks a price and justifies it",
+      ],
+    }} />
   </section>
 </div>
 

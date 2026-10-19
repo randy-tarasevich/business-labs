@@ -84,7 +84,16 @@ import { FORMULA, H2, H3, HINT, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PRESETS, PROS
       { q: "Load the T-shirts. The ads lost money. What conversion rate would make them break even? Test it.", hint: "The verdict shows the conversion rate you need. Slide conversion to check it.", a: "About 5.6%." },
       { q: "Double the bakery's budget. Does profit double too? Why might that not happen in real life?", hint: "In real life, who sees your ad first? Who sees it after you double the budget?", a: "In the tool, yes. In real life, the cheapest, most interested viewers are reached first, so extra spending usually gets worse results." },
       { q: "Tutoring ads cost five times more per view than the bakery's. Why are they still the best deal?", hint: "Compare cost per customer, not cost per view.", a: "People searching for tutoring already want it, so more of them click and buy, and each sale is worth $300. Cost per view matters less than cost per customer." },
-    ]} />
+    ]} defend={{
+      q: "The T-shirt ads lost money. The owner can stop the ads, cut the budget in half, or improve the website so more clickers buy. What do you recommend? Cite at least one number.",
+      hint: "Try each option in the tool. Then ask which one you'd trust in real life.",
+      look: [
+        "Explains why the ads lost money using the funnel",
+        "Tests at least two options in the tool",
+        "Asks whether the change is realistic, not just whether it works on screen",
+        "Makes a recommendation that cites a number",
+      ],
+    }} />
   </section>
 </div>
 

@@ -23,6 +23,18 @@ A 15–20 minute **predict, test, explain** activity. Works well right after Bre
 
 For business plan projects, students replace the preset line items with their own estimates. Every line item can be edited. Nothing is saved, so have them screenshot the chart for their plan.
 
+## Question levels
+
+Rough Webb's Depth of Knowledge (DOK) levels for the student page, so you can pick questions to match your goal.
+
+- **Try it 1:** DOK 3 (reason with evidence and decide)
+- **Try it 2:** DOK 2 (explain a cause or compare)
+- **Try it 3:** DOK 3 (reason with evidence and decide)
+- **Decide and defend:** DOK 3 (no single answer; students take a position and back it with numbers). The student page lists what a strong answer includes, which doubles as a quick rubric.
+- **Your turn:** DOK 3 (students write their own what-if question and test it). Good for an exit ticket: collect one question per pair and use the best ones as tomorrow's warm-up.
+
+Students must type a few words before an answer unlocks. In embed mode the boxes are hidden and you can show any answer directly.
+
 ## Answer notes
 
 - **Food truck:** runs out in month 7. Cash bottoms out at about −$2,990 in month 10, and month 11 is the first month in the black. Any of these gets it through month 24: about $3,000 more starting cash, a truck about $3,000 cheaper, cutting part-time help by $500 a month, $500 more in month 1 sales, or 10% growth instead of 8%. The point: the business works, it just needs a cushion.

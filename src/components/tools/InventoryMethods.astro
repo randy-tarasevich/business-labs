@@ -68,7 +68,16 @@ import { CHART_KEY, FORMULA, H2, HINT, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PRESET
       { q: "Load the TVs. What flipped, and why?", hint: "Compare the TV purchase prices to the sneakers. Which way are they moving?", a: "Prices are falling, so the newest TVs are the cheapest. Now LIFO puts the cheap costs in COGS and shows the most profit." },
       { q: "Load the coffee beans. Why do all three methods agree?", hint: "Look at the cost per bag in each purchase.", a: "Every bag cost the same, so it doesn't matter which bags count as sold." },
       { q: "Slide units sold all the way up. What happens to the three methods, and why?", hint: "If every unit is sold, what is left on the shelf?", a: "Everything is sold, so COGS equals all the goods available under every method. The methods only differ in what's left on the shelf." },
-    ]} />
+    ]} defend={{
+      q: "You own the sneaker store and prices keep rising. Your banker wants to see strong profits, but you also want to pay less tax. Which method do you pick, and why?",
+      hint: "Compare the gross profit and tax for FIFO and LIFO with the sneakers loaded.",
+      look: [
+        "Compares gross profit and tax under FIFO and LIFO",
+        "Names the tradeoff: higher reported profit or lower tax",
+        "Notes that goods available stay the same; only the split changes",
+        "Picks one and defends it",
+      ],
+    }} />
   </section>
 </div>
 

@@ -25,6 +25,19 @@ alsoAligned: []
 
 The tool sticks to the mechanics: how rates convert prices, who pays a tariff to the government, and how it reaches shoppers. That keeps discussion of current trade policy grounded in the numbers rather than opinions. Tariffs are figured on the product's cost, not shipping.
 
+## Question levels
+
+Rough Webb's Depth of Knowledge (DOK) levels for the student page, so you can pick questions to match your goal.
+
+- **Try it 1:** DOK 2 (explain a cause or compare)
+- **Try it 2:** DOK 2 (explain a cause or compare)
+- **Try it 3:** DOK 2 (explain a cause or compare)
+- **Try it 4:** DOK 1 (recall or find a number)
+- **Decide and defend:** DOK 3 (no single answer; students take a position and back it with numbers). The student page lists what a strong answer includes, which doubles as a quick rubric.
+- **Your turn:** DOK 3 (students write their own what-if question and test it). Good for an exit ticket: collect one question per pair and use the best ones as tomorrow's warm-up.
+
+Students must type a few words before an answer unlocks. In embed mode the boxes are hidden and you can show any answer directly.
+
 ## Answer notes
 
 - **Olive oil:** €6 ÷ 0.90 = $6.67. Landed cost $8.83 (with $0.67 tariff), shelf price $14.13 vs. $16.00 for U.S.-made. The tariff raises the shelf price by $1.07 after markup.

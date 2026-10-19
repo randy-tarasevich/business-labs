@@ -43,7 +43,16 @@ import { TOOL, PANEL, PANEL_TIGHT, LOWER, H2, PROSE, PRESETS, CHART_KEY, RESULTS
       { q: "With the lemonade stand, what happens to break-even if you raise the price by $1? Why does such a small change matter so much?", hint: "Watch the contribution margin. How much more of the fixed costs does each cup cover now?", a: "Raising price raises contribution margin. Every cup now covers more of the fixed costs, so you need fewer cups." },
       { q: "Set the variable cost equal to the price. What does the chart show, and why?", hint: "Contribution margin is price minus variable cost. What is it now?", a: "Contribution margin is $0. Each sale only pays for itself, so nothing is left to cover fixed costs. The lines never cross." },
       { q: "The food truck owner can cut rent by $1,000 or cut variable cost by $1 per meal. Which lowers break-even more? Test both.", hint: "Test one change at a time, and write down each break-even number.", a: "Which one wins depends on the numbers, and choosing is the business decision. Be ready to defend your pick with both break-even numbers." },
-    ]} />
+    ]} defend={{
+      q: "A friend is running the lemonade stand at a one-day school event with about 120 customers. Would you charge $2 or $3? Defend your pick.",
+      hint: "Find break-even at each price. Then set the units you expect to sell. How many of the 120 would still buy at $3?",
+      look: [
+        "Finds break-even at each price (100 cups at $2, 60 at $3)",
+        "Asks whether 120 people will really buy at the higher price",
+        "Uses the profit at forecast number to compare",
+        "Picks a price and says what would change their mind",
+      ],
+    }} />
   </section>
 </div>
 

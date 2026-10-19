@@ -72,7 +72,16 @@ const rows = [
       { q: "Find a counteroffer that gives the investor 20% but keeps your $500,000 valuation. How much money would they have to put in?", hint: "Investment = Valuation × Equity %.", a: "$100,000 for 20% keeps the $500,000 valuation." },
       { q: "Load the gaming headset brand. Compare its \"Valuation ÷ yearly sales\" to the dog treat bakery's. Then look at the investor's return on your ask. Why would an investor push back?", hint: "Compare the two \"Valuation ÷ yearly sales\" numbers. How much would the company have to sell for before the investor just gets their money back?", a: "At $15 million, the valuation is almost 17 times sales, and the business would have to sell for more than $15 million just for the investor to get their money back. A high multiple needs a strong reason, like fast growth or loyal customers." },
       { q: "An investor with a big network might help the business sell for twice as much. Would you rather keep 90% of $1 million or 75% of $2 million?", hint: "Change the sale price and compare \"You get at the sale.\"", a: "75% of $2 million is $1.5 million, which beats 90% of $1 million by $600,000. A smaller slice of a bigger pie can be worth more." },
-    ]} />
+    ]} defend={{
+      q: "The smoothie truck founder has two offers: $50,000 for 10% from a stranger, or $50,000 for 20% from someone who owns 30 smoothie shops. Which should she take? Defend your choice.",
+      hint: "Compare the valuation each offer implies. Then ask what each investor could do for the business besides write a check.",
+      look: [
+        "Finds the valuation each offer implies ($500,000 vs. $250,000)",
+        "Explains what the second investor might add besides money",
+        "Tests a higher sale price to see when the bigger slice pays off",
+        "Picks one and names the risk in that choice",
+      ],
+    }} />
   </section>
 </div>
 

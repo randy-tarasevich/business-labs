@@ -71,7 +71,15 @@ import { CHART_KEY, FORMULA, H2, HINT, LEGEND, LOWER, PANEL, PRESETS, PROSE, RAN
       { q: "Click Specialize, then find a trade where both islands win. Write down your trade.", hint: "Each island has to end with at least as much of both goods as it had before trade.", a: "One that works: Reef Island gets coconuts for fish. Choose Palm Island sends coconuts: send 15 coconuts, get 7 fish back. Palm ends with 7 fish and 25 coconuts (was 5 and 20). Reef ends with 13 fish and 15 coconuts (was 10 and 10)." },
       { q: "Load Portugal and England. Portugal is better at making both goods. Can England still benefit from trade? Find a trade that proves it.", hint: "Look at what each country gives up to make one more unit, not how much it makes.", a: "Yes. Specialize, then have Portugal send about 33 wine for about 34 cloth. Both end up with more of both goods than before. Even the less efficient country gains." },
       { q: "Load &quot;Same costs, no gain.&quot; Try to find a trade where both countries win. What do you notice?", hint: "Compare the opportunity costs in the table. What happens when they match?", a: "You can't. Both give up the same amount of tractors per bushel of corn, so specializing doesn't make the world any bigger." },
-    ]} />
+    ]} defend={{
+      q: "Reef Island's leader says, \"Trading with Palm Island makes us depend on them. We should make everything ourselves.\" Do you agree? Use numbers from the tool.",
+      hint: "Run a trade, then compare what Reef Island has before and after.",
+      look: [
+        "Compares Reef Island with trade and without (for example, 13 fish and 15 coconuts vs. 10 and 10)",
+        "Takes the worry seriously: what happens if trade suddenly stops?",
+        "Takes a clear position and explains the tradeoff",
+      ],
+    }} />
   </section>
 </div>
 

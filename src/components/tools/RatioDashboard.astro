@@ -35,7 +35,16 @@ import { CHART_KEY, H2, LOWER, PANEL, PRESETS, SWATCH, TOOL, VERDICT } from '../
       { q: "The software startup is losing money but has great bill-paying ratios. How can both be true?", hint: "Losing money is about profit. Paying bills is about cash. Where could the cash have come from?", a: "It probably raised a lot of investor cash. It can pay its bills for now, but losses will use up that cash if it doesn't become profitable." },
       { q: "Load the struggling furniture store. You're the bank. Which two ratios worry you most, and why?", hint: "A bank asks two things: can you pay your bills now, and how much of the business do lenders already fund?", a: "The quick ratio (it can't pay bills without selling furniture) and debt-to-equity (lenders already have far more in the business than the owners)." },
       { q: "For the furniture store, what change to the numbers would fix the quick ratio fastest?", hint: "The quick ratio leaves out inventory. How could the store turn inventory into cash?", a: "Turn inventory into cash: a big sale lowers inventory and raises cash, which raises the quick ratio. Paying down current liabilities also helps." },
-    ]} />
+    ]} defend={{
+      q: "You're a bank with money for one loan: the grocery store or the software startup. Which do you lend to, and why? Use at least two ratios.",
+      hint: "A lender cares most about getting paid back. Which ratios tell you that?",
+      look: [
+        "Uses at least two ratios correctly",
+        "Notes the software startup can pay its bills now but is losing money",
+        "Notes the grocery store's thin margins but high turnover and return on equity",
+        "Makes a choice and names the biggest risk",
+      ],
+    }} />
   </section>
 </div>
 

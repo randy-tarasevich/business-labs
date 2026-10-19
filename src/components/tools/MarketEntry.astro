@@ -81,7 +81,16 @@ import { FIELDSET, FORMULA, H2, H3, HINT, LEGEND, LOWER, NUM_INPUT, NUM_UNIT, PA
       { q: "Slowly raise year 1 sales. At about what market size does owning a subsidiary beat exporting?", hint: "Raise sales a little at a time. Watch for the point where the subsidiary passes exporting.", a: "Around $730,000 a year. Below that, the low-cost options win. Above it, keeping 25% of every sale is worth the big investment." },
       { q: "Load the big but risky market. Which option wins now, and which risk hurt the subsidiary most?", hint: "Under \"What could go wrong,\" undo one risk at a time. Which one changes the subsidiary the most?", a: "Franchising wins. Being forced out after year 2 wipes out three years of subsidiary profit, and the 30% sales miss hurts everyone." },
       { q: "Licensing almost never earns the most. Why might a company still choose it?", hint: "Think about cost, risk, and control, not just profit.", a: "It costs almost nothing and risks almost nothing. It's a cheap way to test a market, but you give up control of how your product is made and sold." },
-    ]} />
+    ]} defend={{
+      q: "Load the big but risky market. The board is split between franchising and owning a subsidiary. Which would you recommend? Cover profit, control, and risk.",
+      hint: "Compare the two options' profit. Then undo one risk at a time. Which option does each risk hurt?",
+      look: [
+        "Uses the tool's profit numbers for both options",
+        "Explains which risks hit each option",
+        "Weighs control against risk, not just profit",
+        "Gives a clear recommendation",
+      ],
+    }} />
   </section>
 </div>
 

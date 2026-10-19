@@ -1,0 +1,42 @@
+---
+// One Try it question: question text, optional hint, an answer box, and a Check button that
+// unlocks after the student writes a few words (see wireReveals in util.js).
+// Pass `a` for an answer to compare against, or `look` for an open question with no single
+// answer: a list of what a strong answer includes. Used only by TryIt.astro.
+import { ANS, REVEAL, HINT, TRY_INPUT, TRY_CHECK, TRY_ANS } from '../../scripts/lib/ui.js';
+
+interface Props {
+  id: string;
+  n: number;
+  q: string;
+  hint?: string;
+  a?: string;
+  look?: string[];
+}
+const { id, n, q, hint, a, look } = Astro.props;
+const checkLabel = look ? 'See what a strong answer has' : 'Check my answer';
+---
+<div data-tryit>
+  <span set:html={q} />
+  {hint && (
+    <>
+      {' '}<button type="button" class={REVEAL} data-hint aria-expanded="false" aria-controls={`${id}-h`}>Hint</button>
+      <span id={`${id}-h`} class={ANS} hidden set:html={hint} />
+    </>
+  )}
+  <div class="grid gap-2 mt-2">
+    <textarea class={TRY_INPUT} rows="2" data-try-input aria-label={`Your answer to question ${n}`} placeholder="Your answer"></textarea>
+    <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+      <button type="button" class={TRY_CHECK} data-check data-label={checkLabel} data-proj-label={look ? 'Show a strong answer' : 'Show answer'} disabled aria-expanded="false" aria-controls={`${id}-a`}>{checkLabel}</button>
+      <span class={`${HINT} embed:hidden`} data-gate>Write a few words to unlock.</span>
+    </div>
+    {look ? (
+      <div id={`${id}-a`} class={TRY_ANS} hidden>
+        <strong>A strong answer:</strong>
+        <ul class="m-0 mt-1 pl-5 list-disc grid gap-0.5">{look.map((l) => <li set:html={l} />)}</ul>
+      </div>
+    ) : (
+      <p id={`${id}-a`} class={TRY_ANS} hidden><strong>Compare:</strong> <Fragment set:html={a} /></p>
+    )}
+  </div>
+</div>

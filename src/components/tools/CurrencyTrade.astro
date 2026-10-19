@@ -93,7 +93,16 @@ import { FORMULA, H2, H3, HINT, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PRESETS, PROS
       { q: "Now load the guitars to Japan. Make the dollar stronger. Why is that bad news for this U.S. company?", hint: "Think about it from a buyer in Japan who pays in yen.", a: "Each guitar now costs Japanese buyers more yen, so it's harder to compete with Japanese-made guitars." },
       { q: "For the sneakers, how much does the 20% tariff raise the shelf price? Who sends the tariff money to the government, and who ends up paying it?", hint: "Set the tariff to 0% and back to 20%, and compare the shelf price. Then ask who hands the money to the government.", a: "It adds $4 per pair, and $8 after the store's 100% markup. The importer pays the government, but the cost is passed to shoppers through the higher price." },
       { q: "Find the tariff rate that makes the imported sneakers cost the same as the U.S.-made pair.", hint: "The U.S.-made pair costs $60. Slide the tariff until the shelf prices match.", a: "About 40%. Slide the tariff until the shelf price reaches $60." },
-    ]} />
+    ]} defend={{
+      q: "The dollar just got stronger. The guitar company can keep its dollar price and charge Japanese buyers more yen, or cut its dollar price to keep the yen price the same. Which would you recommend, and why?",
+      hint: "Load the guitars and make the dollar stronger. Compare the shelf price to the ¥170,000 Japanese guitar.",
+      look: [
+        "Explains what a stronger dollar does to the yen price",
+        "Compares the U.S. guitar's shelf price to the Japanese guitar",
+        "Weighs profit on each guitar against how many guitars will sell",
+        "Makes a recommendation and says what would change it",
+      ],
+    }} />
   </section>
 </div>
 

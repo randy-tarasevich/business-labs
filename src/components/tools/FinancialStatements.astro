@@ -45,7 +45,16 @@ import { FORMULA, H2, H3, HINT, LOWER, PANEL, PRESETS, PROSE, TOOL, VERDICT } fr
       { q: "Uncheck the supplier payment. Why doesn't net income change, even though cash went up?", hint: "Paying a bill you already owed: did the business use anything up this month?", a: "Paying a bill isn't an expense. It lowers cash and accounts payable by the same amount, so only the balance sheet changes." },
       { q: "Raise the rent until the business shows a net loss. Does the balance sheet still balance?", hint: "Watch both totals on the balance sheet as you raise the rent.", a: "Yes. A net loss lowers capital, and the extra cash paid lowers assets by the same amount." },
       { q: "Which transactions change cash but not net income? Which change net income but not cash?", hint: "Turn transactions off one at a time. Watch cash and net income.", a: "Loans, supplier payments, investments, and withdrawals change cash only. Sales on account and using up supplies change net income without touching cash." },
-    ]} />
+    ]} defend={{
+      q: "The bakery owner wants to take out $2,000 this month instead of $800. Her friend says it's fine because the bakery made a profit. Is the friend right? Use the statements to decide.",
+      hint: "Change the withdrawal amount. Which statements move, and does capital go up or down?",
+      look: [
+        "Changes the withdrawal and traces it to owner's equity and the balance sheet",
+        "Notes that net income doesn't change",
+        "Points out that $2,000 is more than the $950 profit, so capital shrinks",
+        "Takes a position on whether that's a problem for the business",
+      ],
+    }} />
   </section>
 </div>
 

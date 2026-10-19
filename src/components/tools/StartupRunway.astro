@@ -63,7 +63,16 @@ const NOTE = 'not-italic font-normal text-muted text-[13px]';
       { q: "Load the food truck. When does it run out of cash? Find the smallest change to one input that gets it through month 24.", hint: "Try each lever by itself: more starting cash, a cheaper truck, lower monthly costs, or faster growth.", a: "Several single changes work. Compare how big a change each lever needed. The smallest change is easiest, but is it one the owner can actually control?" },
       { q: "Set growth to 0%. Why does the cash line become a straight ramp?", hint: "With 0% growth, how do this month's sales compare to last month's?", a: "With no growth, every month has the same sales and the same costs, so you lose the same amount every month." },
       { q: "The phone case startup can save $2,000 on startup costs or $200 a month on fixed costs. Which helps more? Does your answer change if the business runs longer?", hint: "Count how many months it takes for $200 a month to pass $2,000.", a: "A one-time saving helps once. A monthly saving keeps adding up, so the longer the business runs, the better the monthly saving looks." },
-    ]} />
+    ]} defend={{
+      q: "The food truck owner can borrow $3,000 more from family, or cut part-time help by $500 a month. Both get the truck through month 24. Which would you choose, and why?",
+      hint: "Try each change by itself. Then lower the growth rate and see which one still works.",
+      look: [
+        "Tests both in the tool and compares the lowest cash point",
+        "Thinks about costs beyond money, like owing family or working more hours",
+        "Checks which one holds up if sales grow slower than planned",
+        "Picks one and defends it",
+      ],
+    }} />
   </section>
 </div>
 

@@ -149,7 +149,8 @@ const TRY_MIN_WORDS = 3;
 
 /**
  * Try it questions (TryIt.astro). The Hint button toggles a nudge. Check stays locked until the
- * student types a few words, then shows the answer to compare against. In projector view
+ * student types a few words, then shows the answer to compare against (or, for an
+ * open question, what a strong answer includes). In projector view
  * (?embed=1) there's no box: the teacher shows the answer directly. Nothing typed is stored.
  */
 export function wireReveals(root) {
@@ -171,7 +172,7 @@ export function wireReveals(root) {
       });
     }
 
-    const label = () => (projector ? 'Show answer' : 'Check my answer');
+    const label = () => (projector ? check.dataset.projLabel || 'Show answer' : check.dataset.label || 'Check my answer');
     const unlock = () => {
       const ready = projector || input.value.trim().split(/\s+/).filter(Boolean).length >= TRY_MIN_WORDS;
       check.disabled = !ready && answer.hidden;

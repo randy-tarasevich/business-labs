@@ -1,43 +1,42 @@
 ---
-// "Try it" panel: numbered questions that make students think before they see an answer.
-//   hint: a nudge toward the idea. Never the answer. Optional, always available.
-//   a:    the answer to compare against. Unlocks only after the student types an answer
-//         of their own (a few words). In projector view (?embed=1) the box is hidden and the
-//         teacher can show the answer directly.
-// Nothing typed is saved or sent anywhere. Call wireReveals(root) in the tool script.
-// Question, hint, and answer text may contain simple HTML.
-import { PANEL, H2, HINT, QS, REVEAL, ANS, TRY_INPUT, TRY_CHECK, TRY_ANS } from '../../scripts/lib/ui.js';
+// "Try it" panel: questions that make students think before they see an answer.
+//   items:  numbered questions. Each has q, an optional hint (a nudge, never the answer), and
+//           a (the answer to compare against). The answer unlocks only after the student types
+//           a few words of their own.
+//   defend: one "Decide and defend" question with no single right answer. Instead of an answer,
+//           look lists what a strong answer includes. Unlocks the same way.
+//   A "Your turn" prompt always closes the panel: students write their own what-if question.
+// In projector view (?embed=1) the answer boxes are hidden and the teacher can show answers
+// directly. Nothing typed is saved or sent anywhere. Call wireReveals(root) in the tool script.
+// Question, hint, answer, and look text may contain simple HTML.
+import TryItem from './TryItem.astro';
+import { PANEL, H2, H3, HINT, QS, TRY_INPUT } from '../../scripts/lib/ui.js';
 
 interface Props {
   items: { q: string; a: string; hint?: string }[];
+  defend?: { q: string; hint?: string; look: string[] };
   /** Panel classes, for a tool whose panels use different spacing. */
   panel?: string;
 }
-const { items, panel = PANEL } = Astro.props;
+const { items, defend, panel = PANEL } = Astro.props;
 const uid = `try-${Math.random().toString(36).slice(2, 8)}`;
 ---
 <div class={panel} data-projector-collapse>
   <h2 class={H2}>Try it</h2>
   <p class={`${HINT} m-0 -mt-2 embed:hidden`}>Write your answer first, then check it. Nothing you type is saved.</p>
   <ol class={QS}>
-    {items.map(({ q, a, hint }, i) => (
-      <li data-tryit>
-        <span set:html={q} />
-        {hint && (
-          <>
-            {' '}<button type="button" class={REVEAL} data-hint aria-expanded="false" aria-controls={`${uid}-h${i}`}>Hint</button>
-            <span id={`${uid}-h${i}`} class={ANS} hidden set:html={hint} />
-          </>
-        )}
-        <div class="grid gap-2 mt-2">
-          <textarea class={TRY_INPUT} rows="2" data-try-input aria-label={`Your answer to question ${i + 1}`} placeholder="Your answer"></textarea>
-          <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <button type="button" class={TRY_CHECK} data-check disabled aria-expanded="false" aria-controls={`${uid}-a${i}`}>Check my answer</button>
-            <span class={`${HINT} embed:hidden`} data-gate>Write a few words to unlock.</span>
-          </div>
-          <p id={`${uid}-a${i}`} class={TRY_ANS} hidden><strong>Compare:</strong> <Fragment set:html={a} /></p>
-        </div>
-      </li>
-    ))}
+    {items.map((item, i) => <li><TryItem id={`${uid}-${i}`} n={i + 1} {...item} /></li>)}
   </ol>
+  {defend && (
+    <div class="grid gap-1.5 border-t border-line pt-4">
+      <h3 class={H3}>Decide and defend</h3>
+      <p class={`${HINT} m-0`}>There's no single right answer. Pick a side and back it up with numbers from the tool.</p>
+      <TryItem id={`${uid}-d`} n={items.length + 1} {...defend} />
+    </div>
+  )}
+  <div class="grid gap-1.5 border-t border-line pt-4">
+    <h3 class={H3}>Your turn</h3>
+    <p class="m-0">Write a what-if question for a partner. Change one number, test it yourself so you know the answer, then see if your partner can predict what happens.</p>
+    <textarea class={TRY_INPUT} rows="2" aria-label="Your what-if question" placeholder="What happens if..."></textarea>
+  </div>
 </div>

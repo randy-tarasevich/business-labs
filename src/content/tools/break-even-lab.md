@@ -21,6 +21,18 @@ A 10–15 minute **predict, test, explain** activity:
 2. **Test:** Load the preset and check. Then work the "Try it" questions in pairs.
 3. **Explain:** Each pair writes one sentence using *contribution margin* to explain why a $1 price change moves break-even so much.
 
+## Question levels
+
+Rough Webb's Depth of Knowledge (DOK) levels for the student page, so you can pick questions to match your goal.
+
+- **Try it 1:** DOK 2 (explain a cause or compare)
+- **Try it 2:** DOK 2 (explain a cause or compare)
+- **Try it 3:** DOK 3 (reason with evidence and decide)
+- **Decide and defend:** DOK 3 (no single answer; students take a position and back it with numbers). The student page lists what a strong answer includes, which doubles as a quick rubric.
+- **Your turn:** DOK 3 (students write their own what-if question and test it). Good for an exit ticket: collect one question per pair and use the best ones as tomorrow's warm-up.
+
+Students must type a few words before an answer unlocks. In embed mode the boxes are hidden and you can show any answer directly.
+
 ## Answer notes
 
 - **Lemonade stand:** $150 ÷ ($2.00 − $0.50) = 100 cups. At $3.00 it drops to 60 cups.

@@ -25,6 +25,19 @@ Pointing at (or tabbing to) a transaction highlights every line it touches acros
 
 This tool skips the journal and ledger on purpose. It's about how the statements connect, not about posting.
 
+## Question levels
+
+Rough Webb's Depth of Knowledge (DOK) levels for the student page, so you can pick questions to match your goal.
+
+- **Try it 1:** DOK 2 (explain a cause or compare)
+- **Try it 2:** DOK 2 (explain a cause or compare)
+- **Try it 3:** DOK 2 (explain a cause or compare)
+- **Try it 4:** DOK 3 (reason with evidence and decide)
+- **Decide and defend:** DOK 3 (no single answer; students take a position and back it with numbers). The student page lists what a strong answer includes, which doubles as a quick rubric.
+- **Your turn:** DOK 3 (students write their own what-if question and test it). Good for an exit ticket: collect one question per pair and use the best ones as tomorrow's warm-up.
+
+Students must type a few words before an answer unlocks. In embed mode the boxes are hidden and you can show any answer directly.
+
 ## Answer notes
 
 **Sweet Spot Bakery, March:** revenue $4,300, expenses $3,350, net income $950. Capital goes from $7,200 to $8,350 ($7,200 + $1,000 investment + $950 − $800 withdrawal). Total assets $13,450 = liabilities $5,100 + capital $8,350.

@@ -25,6 +25,19 @@ Students can type their own purchases and costs into the table, so it doubles as
 
 The tool uses the **periodic** system (all purchases happen, then sales are costed at the end). Perpetual LIFO and moving average can give different answers; say so if your textbook uses perpetual. Tax is figured on gross profit only, to keep the comparison clean.
 
+## Question levels
+
+Rough Webb's Depth of Knowledge (DOK) levels for the student page, so you can pick questions to match your goal.
+
+- **Try it 1:** DOK 2 (explain a cause or compare)
+- **Try it 2:** DOK 2 (explain a cause or compare)
+- **Try it 3:** DOK 2 (explain a cause or compare)
+- **Try it 4:** DOK 2 (explain a cause or compare)
+- **Decide and defend:** DOK 3 (no single answer; students take a position and back it with numbers). The student page lists what a strong answer includes, which doubles as a quick rubric.
+- **Your turn:** DOK 3 (students write their own what-if question and test it). Good for an exit ticket: collect one question per pair and use the best ones as tomorrow's warm-up.
+
+Students must type a few words before an answer unlocks. In embed mode the boxes are hidden and you can show any answer directly.
+
 ## Answer notes
 
 | Preset (21% tax) | Method | COGS | Ending inv. | Gross profit | Tax |

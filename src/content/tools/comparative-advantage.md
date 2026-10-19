@@ -25,6 +25,19 @@ alsoAligned: []
 
 The model uses straight-line production possibilities (constant opportunity cost), which is the standard classroom version.
 
+## Question levels
+
+Rough Webb's Depth of Knowledge (DOK) levels for the student page, so you can pick questions to match your goal.
+
+- **Try it 1:** DOK 2 (explain a cause or compare)
+- **Try it 2:** DOK 3 (reason with evidence and decide)
+- **Try it 3:** DOK 3 (reason with evidence and decide)
+- **Try it 4:** DOK 2 (explain a cause or compare)
+- **Decide and defend:** DOK 3 (no single answer; students take a position and back it with numbers). The student page lists what a strong answer includes, which doubles as a quick rubric.
+- **Your turn:** DOK 3 (students write their own what-if question and test it). Good for an exit ticket: collect one question per pair and use the best ones as tomorrow's warm-up.
+
+Students must type a few words before an answer unlocks. In embed mode the boxes are hidden and you can show any answer directly.
+
 ## Answer notes
 
 - **Two islands:** opportunity cost of 1 fish is 4 coconuts on Palm Island and 1 coconut on Reef Island. Reef specializes in fish (20), Palm in coconuts (40). World output goes from 15 fish and 30 coconuts to 20 and 40. A trade that works: Palm sends 15 coconuts for 7 fish. Palm ends with 7 fish, 25 coconuts (was 5 and 20); Reef with 13 fish, 15 coconuts (was 10 and 10). Any price between 1 and 4 coconuts per fish can work.

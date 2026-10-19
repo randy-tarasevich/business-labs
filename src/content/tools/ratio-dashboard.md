@@ -25,6 +25,19 @@ Students can type in numbers from any statement, including a real company's annu
 
 The colored zones are rough rules of thumb. Stress that "healthy" depends on the industry. Inventory turnover uses ending inventory (not the average) to keep the inputs simple.
 
+## Question levels
+
+Rough Webb's Depth of Knowledge (DOK) levels for the student page, so you can pick questions to match your goal.
+
+- **Try it 1:** DOK 3 (reason with evidence and decide)
+- **Try it 2:** DOK 2 (explain a cause or compare)
+- **Try it 3:** DOK 3 (reason with evidence and decide)
+- **Try it 4:** DOK 2 (explain a cause or compare)
+- **Decide and defend:** DOK 3 (no single answer; students take a position and back it with numbers). The student page lists what a strong answer includes, which doubles as a quick rubric.
+- **Your turn:** DOK 3 (students write their own what-if question and test it). Good for an exit ticket: collect one question per pair and use the best ones as tomorrow's warm-up.
+
+Students must type a few words before an answer unlocks. In embed mode the boxes are hidden and you can show any answer directly.
+
 ## Answer notes
 
 | Ratio | Hardware | Grocery | Software | Furniture |

@@ -23,6 +23,19 @@ A 15–20 minute **predict, test, explain** activity. Students know the format f
 
 **Mock pitch extension:** half the class are founders, half are investors. Founders set an ask for their own business idea; investors counter. Both sides have to defend their valuation using the "Valuation ÷ yearly sales" row.
 
+## Question levels
+
+Rough Webb's Depth of Knowledge (DOK) levels for the student page, so you can pick questions to match your goal.
+
+- **Try it 1:** DOK 2 (explain a cause or compare)
+- **Try it 2:** DOK 1 (recall or find a number)
+- **Try it 3:** DOK 3 (reason with evidence and decide)
+- **Try it 4:** DOK 2 (explain a cause or compare)
+- **Decide and defend:** DOK 3 (no single answer; students take a position and back it with numbers). The student page lists what a strong answer includes, which doubles as a quick rubric.
+- **Your turn:** DOK 3 (students write their own what-if question and test it). Good for an exit ticket: collect one question per pair and use the best ones as tomorrow's warm-up.
+
+Students must type a few words before an answer unlocks. In embed mode the boxes are hidden and you can show any answer directly.
+
 ## Answer notes
 
 - **Smoothie truck:** the ask values the company at $500,000 ($50,000 ÷ 10%). The counteroffer values it at $200,000 ($50,000 ÷ 25%), 60% less. At a $1 million sale the founder gets $900,000 vs. $750,000.

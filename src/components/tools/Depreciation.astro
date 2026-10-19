@@ -75,7 +75,16 @@ import { CHART_KEY, FORMULA, H2, H3, HINT, LOWER, NUM_INPUT, NUM_UNIT, PANEL, PR
       { q: "Add up each method's depreciation over all the years. What do you notice?", hint: "Add the depreciation for every year under each method. Then compare to cost minus salvage.", a: "They all total cost minus salvage. The methods only change when the expense shows up, not how much." },
       { q: "Why might a business that wants to lower its taxes now choose double-declining?", hint: "A bigger expense means lower profit. What happens to the tax on lower profit?", a: "Bigger depreciation in the early years means lower reported profit, and lower taxes, in those years." },
       { q: "Laptops lose value fast. Which method's book value line best matches what a used laptop is really worth after one year?", hint: "Think about what a one-year-old laptop sells for compared to a new one.", a: "Double-declining. It drops the most in year 1, like real resale value for technology." },
-    ]} />
+    ]} defend={{
+      q: "The food truck owner will ask a bank for a loan next year. Which depreciation method makes her business look best to the bank? Would you pick the same method for her taxes?",
+      hint: "Look at the year 1 expense under each method. A smaller expense means a bigger profit.",
+      look: [
+        "Explains how each method changes profit in the early years",
+        "Connects higher reported profit to how a bank sees the business",
+        "Notes that total depreciation is the same under every method",
+        "Explains why lower taxes now might point to a different choice",
+      ],
+    }} />
   </section>
 </div>
 
