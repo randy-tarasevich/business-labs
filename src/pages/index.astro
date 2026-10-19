@@ -5,12 +5,17 @@ import { COURSES } from '../content.config.js';
 import { MIN_TOOLS, courseSlug } from '../data/courses.js';
 
 const tools = (await getCollection('tools', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
-// Each tool appears once, under its first (home) course. Other courses show on the card.
-const courses = COURSES.filter((c) => tools.some((t) => t.data.courses[0] === c));
-const hasPage = (c) => tools.filter((t) => t.data.courses.includes(c)).length >= MIN_TOOLS;
+// Each tool gets a full card once, under its first (home) course. Every other course it fits
+// lists it as a compact link, so a course with few home tools still shows everything it can use.
+const courses = COURSES.filter((c) => tools.some((t) => t.data.courses.includes(c)));
+const fits = (c) => tools.filter((t) => t.data.courses.includes(c));
+const home = (c) => tools.filter((t) => t.data.courses[0] === c);
+const borrowed = (c) => tools.filter((t) => t.data.courses[0] !== c && t.data.courses.includes(c));
+const hasPage = (c) => fits(c).length >= MIN_TOOLS;
+const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 ---
 <Base>
-  <section class="grid gap-3 mb-10">
+  <section class="grid gap-3 mb-8">
     <!-- The header already shows the site name, so the H1 is the pitch. -->
     <h1 class="text-[1.75rem] min-[400px]:text-[2rem] sm:text-5xl font-extrabold leading-tight *:block">
       <span>Change the numbers.</span> <span>See what happens.</span> <span>Explain why.</span>
@@ -20,26 +25,54 @@ const hasPage = (c) => tools.filter((t) => t.data.courses.includes(c)).length >=
     </p>
   </section>
 
+  <nav aria-label="Courses" class="mb-12">
+    <h2 class="sr-only">Courses</h2>
+    <ul class="grid gap-3 grid-cols-2 md:grid-cols-3">
+      {courses.map((course) => (
+        <li>
+          <a href={`#${courseSlug(course)}`} class="group flex h-full flex-col justify-between gap-2 rounded-xl border border-line bg-panel px-4 py-3.5 hover:border-accent transition-colors">
+            <span class="font-display font-semibold text-[17px] leading-snug group-hover:text-accent">{course}</span>
+            <span class="text-[13px] text-muted">{plural(fits(course).length, 'tool')}{hasPage(course) && ' · suggested order'}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+
   {courses.map((course) => (
-    <section class="mb-10">
-      <div class="flex flex-wrap items-baseline justify-between gap-2 mb-3">
-        <h2 class="text-sm uppercase tracking-wider font-sans font-semibold text-muted">{course}</h2>
-        {hasPage(course) && <a href={`/courses/${courseSlug(course)}/`} class="text-sm font-semibold text-accent hover:underline">Suggested sequence →</a>}
+    <section id={courseSlug(course)} class="mb-12 scroll-mt-6">
+      <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 mb-4">
+        <h2 class="text-2xl font-bold">{course}</h2>
+        {hasPage(course) && (
+          <a href={`/courses/${courseSlug(course)}/`} class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-panel px-3.5 py-2 text-sm font-semibold text-accent hover:border-accent">
+            Suggested order and class time →
+          </a>
+        )}
       </div>
-      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {tools.filter((t) => t.data.courses[0] === course).map((t) => (
-          <li>
-            <a href={`/tools/${t.id}/`} class="group block h-full rounded-xl border border-line bg-panel p-5 hover:border-accent transition-colors">
-              <span class="text-xs text-muted">{t.data.unit} · Grades {t.data.grades}</span>
-              <h3 class="text-xl font-semibold mt-1 group-hover:text-accent">{t.data.title}</h3>
-              <p class="text-muted mt-2 text-[15px]">{t.data.summary}</p>
-              {t.data.courses.length > 1 && (
-                <p class="text-xs text-muted mt-3">Also fits: {t.data.courses.slice(1).join(', ')}</p>
-              )}
-            </a>
-          </li>
-        ))}
-      </ul>
+      {home(course).length > 0 && (
+        <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {home(course).map((t) => (
+            <li>
+              <a href={`/tools/${t.id}/`} class="group block h-full rounded-xl border border-line bg-panel p-5 hover:border-accent transition-colors">
+                <span class="text-xs text-muted">{t.data.unit} · Grades {t.data.grades}</span>
+                <h3 class="text-xl font-semibold mt-1 group-hover:text-accent">{t.data.title}</h3>
+                <p class="text-muted mt-2 text-[15px]">{t.data.summary}</p>
+                {t.data.courses.length > 1 && (
+                  <p class="text-xs text-muted mt-3">Also fits: {t.data.courses.slice(1).join(', ')}</p>
+                )}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+      {borrowed(course).length > 0 && (
+        <div class="mt-4 flex flex-wrap items-center gap-2">
+          <span class="text-sm text-muted mr-1">{home(course).length ? 'Also works in this course:' : 'Tools for this course:'}</span>
+          {borrowed(course).map((t) => (
+            <a href={`/tools/${t.id}/`} class="inline-flex items-center min-h-8 rounded-full border border-line bg-panel px-3 py-1 text-sm font-medium hover:border-accent hover:text-accent">{t.data.title}</a>
+          ))}
+        </div>
+      )}
     </section>
   ))}
 </Base>

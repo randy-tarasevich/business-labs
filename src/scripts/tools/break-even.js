@@ -1,7 +1,7 @@
 // Break-Even Lab
 // Break-even units = Fixed costs / (Price - Variable cost per unit)
 
-import { money, niceMax, svgEl, cssVar, onThemeChange, setTone, wireReveals, setBox, tidyOnBlur } from '../lib/util.js';
+import { money, niceMax, svgEl, cssVar, onThemeChange, setTone, wireReveals, setBox, tidyOnBlur, fitRange } from '../lib/util.js';
 
 const PRESETS = [
   { name: 'Lemonade stand', price: 2, vc: 0.5, fc: 150, q: 140 },
@@ -57,7 +57,12 @@ export function initBreakEven(root) {
     [...presetWrap.children].forEach((b, i) => b.setAttribute('aria-pressed', String(i === activePreset)));
   }
 
+  // No skip means a preset or the starting example is loading, so size the sliders to it.
+  // Price and variable cost share one scale, so students can slide the cost up to the price.
   function syncInputs(skip) {
+    if (skip === undefined) {
+      FIELDS.forEach((f) => fitRange($(`#be-${f}`), f === 'vc' ? state.price : state[f]));
+    }
     FIELDS.forEach((f) => {
       const range = $(`#be-${f}`);
       if (state[f] > parseFloat(range.max)) range.max = Math.ceil(state[f] * 1.5);

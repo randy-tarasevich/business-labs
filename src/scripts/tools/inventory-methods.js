@@ -71,7 +71,8 @@ export function initInventoryMethods(root) {
   });
 
   const syncs = [
-    linkRange(root, 'iv-sold', { get: () => state.sold, set: (v) => { state.sold = Math.round(v); setActive(-1); render(); } }),
+    // fit: false because render() sets this slider's max to the units on hand.
+    linkRange(root, 'iv-sold', { get: () => state.sold, set: (v) => { state.sold = Math.round(v); setActive(-1); render(); }, fit: false }),
     linkRange(root, 'iv-price', { get: () => state.price, set: (v) => { state.price = v; setActive(-1); render(); } }),
     linkRange(root, 'iv-tax', { get: () => state.tax, set: (v) => { state.tax = v; setActive(-1); render(); }, max: 60 }),
   ];

@@ -37,7 +37,7 @@ export function initPriceDemand(root) {
     if (k !== 'price') setActive(-1);
     render();
   };
-  const syncs = ['price', 'p0', 'q0', 'b', 'vc', 'fc'].map((k) => linkRange(root, `pd-${k}`, { get: () => state[k], set: edit(k) }));
+  const syncs = ['price', 'p0', 'q0', 'b', 'vc', 'fc'].map((k) => linkRange(root, `pd-${k}`, { get: () => state[k], set: edit(k), fit: k !== 'price' })); // render() sizes the price slider to the demand curve
   const setActive = presetButtons($('[data-presets]'), PRESETS, (p) => {
     Object.assign(state, p);
     syncAll();

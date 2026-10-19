@@ -64,10 +64,27 @@ export function num(n, decimals = 0) {
 }
 
 /**
- * Link a range slider (#id) and its number box (#id-n) to one value.
- * set(v) runs on every edit. Returns sync(), which pushes the current value back into both inputs.
+ * Size a slider to the value it's showing, so a $2 price doesn't sit in the first 2% of a $50 track.
+ * The new max is a friendly number about `factor` times the value, never above the slider's
+ * original max (from the markup). A value of 0 keeps the original max. Call it when a preset or
+ * the starting example loads, never while the student is dragging.
  */
-export function linkRange(root, id, { get, set, max, allowNegative = false }) {
+export function fitRange(range, v, factor = 4) {
+  range.dataset.baseMax ??= range.max;
+  const base = parseFloat(range.dataset.baseMax);
+  const step = parseFloat(range.step) || 1;
+  let max = v > 0 ? Math.min(base, Math.max(niceMax(v * factor), step * 10)) : base;
+  if (v > max) max = Math.ceil(v * 1.5);
+  range.max = max;
+}
+
+/**
+ * Link a range slider (#id) and its number box (#id-n) to one value.
+ * set(v) runs on every edit. Returns sync(), which pushes the current value back into both inputs
+ * and fits the slider to it (see fitRange). Call sync() when a preset loads. Pass fit: false for a
+ * slider whose max the tool sets itself.
+ */
+export function linkRange(root, id, { get, set, max, allowNegative = false, fit = true }) {
   const range = root.querySelector(`#${id}`);
   const box = root.querySelector(`#${id}-n`);
   tidyOnBlur(box);
@@ -87,6 +104,7 @@ export function linkRange(root, id, { get, set, max, allowNegative = false }) {
   });
   return () => {
     const v = get();
+    if (fit) fitRange(range, v);
     if (v > parseFloat(range.max)) range.max = Math.ceil(v * 1.5);
     if (v < parseFloat(range.min)) range.min = Math.floor(v * 1.5);
     range.value = v;

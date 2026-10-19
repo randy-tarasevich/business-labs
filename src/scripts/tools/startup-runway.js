@@ -3,7 +3,7 @@
 // Runway (months) = Cash after startup costs / Burn
 // The chart plays it out month by month, so growing sales can stretch the runway.
 
-import { money, niceMax, svgEl, setTone, wireReveals } from '../lib/util.js';
+import { money, niceMax, svgEl, setTone, wireReveals, fitRange } from '../lib/util.js';
 
 const MONTHS = 24;
 
@@ -147,7 +147,10 @@ export function initStartupRunway(root) {
     [...presetWrap.children].forEach((b, i) => b.setAttribute('aria-pressed', String(i === activePreset)));
   }
 
+  // No skip means a preset or the starting example is loading. Size the dollar sliders to it;
+  // growth and variable cost are percents, so their fixed scales already fit.
   function syncInputs(skip) {
+    if (skip === undefined) ['cash', 'sales'].forEach((f) => fitRange($(`#rw-${f}`), state[f]));
     SLIDERS.forEach((f) => {
       const range = $(`#rw-${f}`);
       if (state[f] > parseFloat(range.max)) range.max = Math.ceil(state[f] * 1.5);

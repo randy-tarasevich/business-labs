@@ -3,7 +3,7 @@
 // Pre-money = Post-money − Investment
 // At a sale (exit), each owner gets their percent of the sale price.
 
-import { money, svgEl, setTone, wireReveals } from '../lib/util.js';
+import { money, svgEl, setTone, wireReveals, fitRange } from '../lib/util.js';
 
 const PRESETS = [
   { name: 'Smoothie truck', sales: 120000, askAmt: 50000, askPct: 10, offAmt: 50000, offPct: 25, exit: 1000000 },
@@ -85,7 +85,15 @@ export function initInvestorDeal(root) {
     [...presetWrap.children].forEach((b, i) => b.setAttribute('aria-pressed', String(i === activePreset)));
   }
 
+  // No skip means a preset or the starting example is loading, so size the sliders to it.
+  // The ask and the offer share a scale, so the two sliders can be compared side by side.
   function syncInputs(skip) {
+    if (skip === undefined) {
+      const amt = Math.max(state.askAmt, state.offAmt);
+      const pct = Math.max(state.askPct, state.offPct);
+      const fitTo = { askAmt: amt, offAmt: amt, askPct: pct, offPct: pct, sales: state.sales, exit: state.exit };
+      FIELDS.forEach((f) => fitRange($(`#dl-${f}`), fitTo[f], f.endsWith('Pct') ? 3 : 4));
+    }
     FIELDS.forEach((f) => {
       const range = $(`#dl-${f}`);
       if (state[f] > parseFloat(range.max)) range.max = Math.ceil(state[f] * 1.5);

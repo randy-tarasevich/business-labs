@@ -24,9 +24,10 @@ export const HINT = 'text-[12.5px] text-muted';
 /** Explanatory paragraph in a panel. */
 export const PROSE = 'max-w-[65ch]';
 
-/** Preset buttons are created by presetButtons() in util.js, so the wrapper styles its children. */
+/** Preset buttons are created by presetButtons() in util.js, so the wrapper styles its children.
+    32px tall so they're easy to hit on a Chromebook trackpad or a phone. */
 export const PRESETS =
-  'flex flex-wrap gap-1.5 *:font-sans *:font-medium *:text-[13px] *:leading-[normal] *:text-ink *:bg-transparent *:border *:border-line *:rounded-full *:py-[5px] *:px-[11px] *:cursor-pointer *:hover:border-accent *:aria-pressed:bg-accent *:aria-pressed:border-accent *:aria-pressed:text-panel';
+  'flex flex-wrap gap-2 *:font-sans *:font-medium *:text-[13.5px] *:leading-[normal] *:text-ink *:bg-transparent *:border *:border-line *:rounded-full *:min-h-8 *:py-[6px] *:px-3 *:cursor-pointer *:hover:border-accent *:aria-pressed:bg-accent *:aria-pressed:border-accent *:aria-pressed:text-panel';
 
 /** Number box next to a slider. Add a width class (w-[100px] is the usual). */
 export const NUM_INPUT =
@@ -76,8 +77,9 @@ export const BTN_GHOST =
 
 /** "Try it" questions. Hint buttons carry data-reveal (see wireReveals in util.js). */
 export const QS = 'm-0 pl-5 grid gap-2.5 list-decimal';
+/** Hint button: 32px tall for trackpads and phones, with a hover state so it reads as clickable. */
 export const REVEAL =
-  'font-sans font-medium text-[13px] leading-[normal] bg-transparent border border-line text-accent rounded-md py-[3px] px-[9px] cursor-pointer ml-1';
+  'font-sans font-semibold text-[13.5px] leading-[normal] bg-transparent border border-line text-accent rounded-md min-h-8 py-[6px] px-3 my-0.5 cursor-pointer ml-1 hover:border-accent hover:bg-accent/8';
 export const ANS = 'block mt-1 text-muted text-[14px]';
 
 /** Data table: headers muted, numbers right-aligned in mono, row labels on the left. */
