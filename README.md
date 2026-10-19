@@ -43,6 +43,7 @@ Everything is styled with Tailwind v4 utilities. There are no per-tool CSS files
 - **Phone results bar:** add `data-live` (or `live` on `<Stat>`) to one or two key results, or to the `VERDICT` line if the tool has no stats. On phones, those results pin to the bottom of the screen while the student is working the inputs. Mark every tool whose inputs sit above its chart.
 - **Slider ranges:** `linkRange`'s `sync()` sizes each slider to the value it loads (`fitRange` in `util.js`), so a $2 price isn't stuck at the left of a $50 track. Call `sync()` when a preset loads, never on every edit. Pass `fit: false` if your script sets that slider's max itself. Tools with their own slider code call `fitRange` on preset load.
 - **Money boxes:** a `RangeField` with `unit="$"` and a fractional `step` shows two decimals. Write values into number boxes with `setBox()` from `util.js` (`linkRange` already does).
+- **Course colors:** each course has a color token (`--c-intro`, `--c-acct`, ...) in `global.css`, mapped from the course name in `COURSE_COLORS` in `src/data/courses.js`. Put `style={courseStyle(course)}` on a wrapper, then use `bg-(--course)`, `text-(--course)`, or `border-(--course)` inside it. Use them for wayfinding only (dots, borders, chips), never for good/bad meaning. A new course needs a token in both themes and an entry in `COURSE_COLORS`.
 - **Gotcha:** a class on an element loses to a parent's `[&_td]:...` rule. If a table cell needs to differ from the table's defaults, use `!` (`font-semibold!`) or give the table its own class string.
 
 ## Teacher notes
@@ -56,6 +57,8 @@ Only add MBA Research indicator codes you've verified against the official docum
 ## Embed mode
 
 Add `?embed=1` to any tool URL (or click **Project** on the tool page) to hide the site header and footer. The tool title stays, and the page scales up on wide screens so it reads from the back of the room. Use it for projecting or for linking from slides. Add `&theme=light` or `&theme=dark` to force a theme for that link without changing anyone's saved setting. The `embed:` variant styles anything that should differ in projector view.
+
+In projector view, the explanation panel and the Try it questions start collapsed behind **Show** buttons, so answers don't appear until the teacher opens them. This covers both panels in a tool's `LOWER` section and any `TryIt` panel. Add `data-projector-collapse` to any other panel that should start collapsed (see `src/scripts/lib/projector.js`).
 
 ## Structure
 

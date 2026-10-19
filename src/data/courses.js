@@ -7,6 +7,20 @@ export const MIN_TOOLS = 3;
 
 export const courseSlug = (name) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
+// Each course's color token (defined in src/styles/global.css, light and dark).
+// courseStyle(c) returns an inline style that sets --course, so markup can use
+// bg-(--course), text-(--course), border-(--course) without a class per course.
+// A new course needs a token there and an entry here.
+export const COURSE_COLORS = {
+  'Intro to Business': '--c-intro',
+  'Personal Finance': '--c-pf',
+  Accounting: '--c-acct',
+  Marketing: '--c-mkt',
+  Entrepreneurship: '--c-ent',
+  'International Business': '--c-intl',
+};
+export const courseStyle = (name) => `--course: var(${COURSE_COLORS[name] ?? '--accent'})`;
+
 export const COURSE_GUIDES = {
   'Intro to Business': {
     intro: 'Three tools that show students how a small business works from the inside: what it costs, how long the money lasts, and how the books stay balanced.',

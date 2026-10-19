@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 import { COURSES } from '../content.config.js';
-import { MIN_TOOLS, courseSlug } from '../data/courses.js';
+import { MIN_TOOLS, courseSlug, courseStyle } from '../data/courses.js';
 
 const tools = (await getCollection('tools', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
 // Each tool gets a full card once, under its first (home) course. Every other course it fits
@@ -13,6 +13,8 @@ const home = (c) => tools.filter((t) => t.data.courses[0] === c);
 const borrowed = (c) => tools.filter((t) => t.data.courses[0] !== c && t.data.courses.includes(c));
 const hasPage = (c) => fits(c).length >= MIN_TOOLS;
 const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
+// Text the search box matches against: title, summary, unit, and every course the tool fits.
+const searchText = (t) => [t.data.title, t.data.summary, t.data.unit, ...t.data.courses].join(' ').toLowerCase();
 ---
 <Base>
   <section class="grid gap-3 mb-8">
@@ -25,13 +27,22 @@ const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
     </p>
   </section>
 
-  <nav aria-label="Courses" class="mb-12">
+  <div class="mb-5 max-w-xl" data-search-box>
+    <label for="tool-search" class="block text-sm font-semibold mb-1.5">Find a tool</label>
+    <div class="relative">
+      <svg class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 size-[18px] text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="tool-search" type="search" autocomplete="off" spellcheck="false" placeholder="Try depreciation, pricing, or budget" class="w-full rounded-lg border border-line bg-panel py-2.5 pl-10 pr-3 text-[16px] text-ink placeholder:text-muted" />
+    </div>
+    <p class="mt-2 text-sm text-muted empty:hidden" data-search-status role="status"></p>
+  </div>
+
+  <nav aria-label="Courses" class="mb-12" data-course-nav>
     <h2 class="sr-only">Courses</h2>
     <ul class="grid gap-3 grid-cols-2 md:grid-cols-3">
       {courses.map((course) => (
-        <li>
-          <a href={`#${courseSlug(course)}`} class="group flex h-full flex-col justify-between gap-2 rounded-xl border border-line bg-panel px-4 py-3.5 hover:border-accent transition-colors">
-            <span class="font-display font-semibold text-[17px] leading-snug group-hover:text-accent">{course}</span>
+        <li style={courseStyle(course)}>
+          <a href={`#${courseSlug(course)}`} class="group flex h-full flex-col justify-between gap-2 rounded-xl border border-line border-l-4 border-l-(--course) bg-panel px-4 py-3.5 hover:border-(--course) transition-colors">
+            <span class="font-display font-semibold text-[17px] leading-snug group-hover:text-(--course)">{course}</span>
             <span class="text-[13px] text-muted">{plural(fits(course).length, 'tool')}{hasPage(course) && ' · suggested order'}</span>
           </a>
         </li>
@@ -40,11 +51,13 @@ const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
   </nav>
 
   {courses.map((course) => (
-    <section id={courseSlug(course)} class="mb-12 scroll-mt-6">
+    <section id={courseSlug(course)} class="mb-12 scroll-mt-6" style={courseStyle(course)} data-course-section>
       <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 mb-4">
-        <h2 class="text-2xl font-bold">{course}</h2>
+        <h2 class="flex items-center gap-2.5 text-2xl font-bold">
+          <span class="size-3 shrink-0 rounded-full bg-(--course)" aria-hidden="true"></span>{course}
+        </h2>
         {hasPage(course) && (
-          <a href={`/courses/${courseSlug(course)}/`} class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-panel px-3.5 py-2 text-sm font-semibold text-accent hover:border-accent">
+          <a href={`/courses/${courseSlug(course)}/`} class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-panel px-3.5 py-2 text-sm font-semibold text-(--course) hover:border-(--course)">
             Suggested order and class time →
           </a>
         )}
@@ -52,10 +65,10 @@ const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
       {home(course).length > 0 && (
         <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {home(course).map((t) => (
-            <li>
-              <a href={`/tools/${t.id}/`} class="group block h-full rounded-xl border border-line bg-panel p-5 hover:border-accent transition-colors">
+            <li data-search={searchText(t)}>
+              <a href={`/tools/${t.id}/`} class="group block h-full rounded-xl border border-line border-t-[3px] border-t-(--course) bg-panel p-5 hover:border-(--course) transition-colors">
                 <span class="text-xs text-muted">{t.data.unit} · Grades {t.data.grades}</span>
-                <h3 class="text-xl font-semibold mt-1 group-hover:text-accent">{t.data.title}</h3>
+                <h3 class="text-xl font-semibold mt-1 group-hover:text-(--course)">{t.data.title}</h3>
                 <p class="text-muted mt-2 text-[15px]">{t.data.summary}</p>
                 {t.data.courses.length > 1 && (
                   <p class="text-xs text-muted mt-3">Also fits: {t.data.courses.slice(1).join(', ')}</p>
@@ -66,13 +79,60 @@ const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
         </ul>
       )}
       {borrowed(course).length > 0 && (
-        <div class="mt-4 flex flex-wrap items-center gap-2">
+        <div class="mt-4 flex flex-wrap items-center gap-2" data-borrowed>
           <span class="text-sm text-muted mr-1">{home(course).length ? 'Also works in this course:' : 'Tools for this course:'}</span>
           {borrowed(course).map((t) => (
-            <a href={`/tools/${t.id}/`} class="inline-flex items-center min-h-8 rounded-full border border-line bg-panel px-3 py-1 text-sm font-medium hover:border-accent hover:text-accent">{t.data.title}</a>
+            <a href={`/tools/${t.id}/`} style={courseStyle(t.data.courses[0])} data-search={searchText(t)} class="inline-flex items-center gap-2 min-h-8 rounded-full border border-line bg-panel px-3 py-1 text-sm font-medium hover:border-(--course) hover:text-(--course)">
+              <span class="size-2 shrink-0 rounded-full bg-(--course)" aria-hidden="true"></span>{t.data.title}
+            </a>
           ))}
         </div>
       )}
     </section>
   ))}
+  <p class="hidden text-muted text-lg py-6" data-search-empty>No tools match that. Try a shorter word, like <em>cost</em> or <em>price</em>.</p>
 </Base>
+
+<script>
+  // Find a tool: hides cards and links that don't contain every word typed, and any course
+  // section left empty. Runs entirely in the browser; nothing typed is saved or sent anywhere.
+  const input = document.querySelector<HTMLInputElement>('#tool-search');
+  const status = document.querySelector('[data-search-status]');
+  const empty = document.querySelector('[data-search-empty]');
+  const nav = document.querySelector('[data-course-nav]');
+  const sections = [...document.querySelectorAll<HTMLElement>('[data-course-section]')];
+
+  function filter() {
+    const words = input.value.toLowerCase().split(/\s+/).filter(Boolean);
+    const searching = words.length > 0;
+    const shown = new Set();
+    sections.forEach((section) => {
+      let any = false;
+      section.querySelectorAll<HTMLElement>('[data-search]').forEach((el) => {
+        const hit = words.every((w) => el.dataset.search.includes(w));
+        el.hidden = !hit;
+        if (hit) {
+          any = true;
+          shown.add(el.querySelector('a')?.getAttribute('href') ?? el.getAttribute('href'));
+        }
+      });
+      const borrowed = section.querySelector<HTMLElement>('[data-borrowed]');
+      if (borrowed) borrowed.hidden = ![...borrowed.querySelectorAll<HTMLElement>('[data-search]')].some((el) => !el.hidden);
+      section.hidden = !any;
+    });
+    nav.hidden = searching;
+    empty.classList.toggle('hidden', !searching || shown.size > 0);
+    const n = shown.size;
+    status.textContent = searching && n ? `${n} tool${n === 1 ? '' : 's'} match.` : '';
+  }
+
+  input.addEventListener('input', filter);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && input.value) {
+      input.value = '';
+      filter();
+    }
+  });
+  // A browser restoring the box after Back should restore the filter too.
+  if (input.value) filter();
+</script>
