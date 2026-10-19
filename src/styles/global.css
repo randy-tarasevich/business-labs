@@ -20,14 +20,16 @@
   --bad-soft: #fbe7e3;
   --warn-soft: #fcefe2;
   --grid: #e8ecf0;
-  /* Course colors, for wayfinding only (dots, borders, chips). Each passes 4.5:1 as text on
-     --bg and --panel in both themes. Course names map to these in src/data/courses.js. */
-  --c-intro: #2563eb;
-  --c-pf: #0f766e;
-  --c-acct: #b45309;
-  --c-mkt: #be185d;
-  --c-ent: #7c3aed;
-  --c-intl: #4d7c0f;
+  /* Course colors, for wayfinding only (dots, borders, chips). Each is an ink from the world
+     of business paperwork, kept muted so they read as print, not as a UI kit. Each passes 4.5:1
+     as text on --bg and --panel in both themes, and with --panel text on top of it.
+     Course names map to these in src/data/courses.js. */
+  --c-intro: #8a5a14; /* manila folder */
+  --c-pf: #1f5f73;    /* check paper blue */
+  --c-acct: #2f6a46;  /* ledger green */
+  --c-mkt: #9c2a5c;   /* print magenta */
+  --c-ent: #5b3a86;   /* rubber-stamp ink */
+  --c-intl: #283f78;  /* passport navy */
   color-scheme: light;
 }
 /* Dark mode. A script in Base.astro's <head> sets data-theme before paint: the visitor's choice
@@ -46,12 +48,13 @@
   --bad-soft: #3a1f1a;
   --warn-soft: #3a2814;
   --grid: #222c37;
-  --c-intro: #7ea2ff;
-  --c-pf: #2dd4bf;
-  --c-acct: #f0b44c;
-  --c-mkt: #f472b6;
-  --c-ent: #b197fc;
-  --c-intl: #a3c94a;
+  /* Course colors in dark mode: the same inks at mid-tone, not pastel. */
+  --c-intro: #c4923e;
+  --c-pf: #4f9db5;
+  --c-acct: #5ea374;
+  --c-mkt: #d0679a;
+  --c-ent: #9d82d0;
+  --c-intl: #7790d8;
   color-scheme: dark;
 }
 
