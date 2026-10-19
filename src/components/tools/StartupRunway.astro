@@ -44,9 +44,9 @@ const NOTE = 'not-italic font-normal text-muted text-[13px]';
       </div>
       <div class="w-full overflow-x-auto"><svg data-chart viewBox="0 0 640 360" role="img" aria-label="Cash in the bank over 24 months" class="block w-full h-auto min-w-[340px] [&_text]:font-mono [&_text]:text-[11px] [&_text]:fill-muted max-[620px]:[&_text]:text-[14px]"></svg></div>
       <div class={RESULTS}>
-        <Stat label="Cash runs out" r="runout" box="runout-box" keyed />
+        <Stat label="Cash runs out" r="runout" box="runout-box" keyed live />
         <Stat label="Cash on opening day" r="opening" />
-        <Stat label="Lowest cash" r="low" box="low-box" labelRef="low-k" />
+        <Stat label="Lowest cash" r="low" box="low-box" labelRef="low-k" live />
         <Stat label="First month in the black" r="profit" />
       </div>
       <div class={VERDICT} data-r="verdict" role="status"></div>

@@ -64,9 +64,10 @@ export const STAT_V =
 export const VERDICT =
   'rounded-lg py-2.5 px-3.5 text-[14.5px] empty:hidden tone-good:bg-good-soft tone-bad:bg-bad-soft tone-warn:bg-warn-soft tone-info:bg-accent/12';
 
-/** Worked math. The first line is plain text; each child <span> is a line of work under it. */
+/** Worked math. The first line is plain text; each child <span> is a line of work under it.
+    Long lines wrap at spaces, because a hidden scrollbar is easy to miss on a Chromebook trackpad. */
 export const FORMULA =
-  'font-mono font-medium text-[15px] leading-[normal] bg-bg rounded-lg py-3 px-3.5 overflow-x-auto whitespace-nowrap *:block *:mt-1 *:text-muted *:text-[13.5px]';
+  'font-mono font-medium text-[15px] leading-[1.45] bg-bg rounded-lg py-3 px-3.5 overflow-x-auto *:block *:mt-1 *:text-muted *:text-[13.5px]';
 
 export const BTN =
   'font-sans font-semibold text-[14px] leading-[normal] text-panel bg-accent border border-accent rounded-lg py-2 px-3.5 cursor-pointer disabled:opacity-45 disabled:cursor-default';
@@ -85,3 +86,15 @@ export const TABLE =
   'w-full border-collapse text-[14px] [&_th]:py-1.5 [&_th]:px-2 [&_td]:py-1.5 [&_td]:px-2 [&_th]:border-b [&_td]:border-b [&_th]:border-line [&_td]:border-line [&_th]:text-right [&_td]:text-right [&_thead_th]:text-[12.5px] [&_thead_th]:text-muted [&_thead_th]:font-semibold [&_thead_th]:border-b-2 [&_tbody_th]:text-left [&_tbody_th]:font-normal [&_tbody_th]:pl-0 [&_td]:font-mono [&_td]:font-medium [&_td]:leading-[normal] [&_td]:tabular-nums [&_td]:whitespace-nowrap';
 /** Visually hidden, still read by screen readers. */
 export const SR = 'sr-only';
+
+/** Phone results bar (see live-bar.js). Pinned to the bottom while the inputs are on screen. */
+export const LIVE_BAR =
+  'fixed inset-x-0 bottom-0 z-40 border-t border-line bg-panel/95 backdrop-blur px-4 py-2.5 shadow-[0_-4px_16px_rgb(0_0_0/0.08)] grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 text-left cursor-pointer min-[861px]:hidden print:hidden';
+export const LIVE_ITEMS = 'flex flex-wrap gap-x-5 gap-y-1 min-w-0';
+export const LIVE_STAT = 'grid min-w-0';
+export const LIVE_K = 'text-[11.5px] text-muted';
+export const LIVE_V =
+  'font-mono font-semibold text-[18px] leading-[1.15] tabular-nums tone-good:text-good tone-bad:text-bad tone-warn:text-warn';
+export const LIVE_TEXT =
+  'text-[13.5px] leading-snug line-clamp-2 rounded-md px-2 py-1 tone-good:bg-good-soft tone-bad:bg-bad-soft tone-warn:bg-warn-soft tone-info:bg-accent/12';
+export const LIVE_JUMP = 'text-[13px] font-semibold text-accent whitespace-nowrap';

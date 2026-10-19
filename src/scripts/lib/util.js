@@ -28,10 +28,10 @@ export function cssVar(name) {
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 }
 
-/** Re-run a callback when the OS switches light/dark, so canvas/SVG colors update. */
+/** Re-run a callback when the theme changes (header toggle or device setting), so canvas/SVG colors
+    read with cssVar() update. Colors written as var(--token) update on their own. */
 export function onThemeChange(fn) {
-  const mq = window.matchMedia('(prefers-color-scheme: dark)');
-  mq.addEventListener?.('change', fn);
+  document.addEventListener('themechange', () => fn());
 }
 
 /** Short beep using Web Audio. Must be called after a user gesture at least once. */
@@ -70,9 +70,10 @@ export function num(n, decimals = 0) {
 export function linkRange(root, id, { get, set, max, allowNegative = false }) {
   const range = root.querySelector(`#${id}`);
   const box = root.querySelector(`#${id}-n`);
+  tidyOnBlur(box);
   range.addEventListener('input', () => {
     const v = parseFloat(range.value) || 0;
-    box.value = v;
+    setBox(box, v);
     set(v);
   });
   box.addEventListener('input', () => {
@@ -89,8 +90,24 @@ export function linkRange(root, id, { get, set, max, allowNegative = false }) {
     if (v > parseFloat(range.max)) range.max = Math.ceil(v * 1.5);
     if (v < parseFloat(range.min)) range.min = Math.floor(v * 1.5);
     range.value = v;
-    box.value = v;
+    setBox(box, v);
   };
+}
+
+/**
+ * Write a value into a number box. Boxes marked data-money (RangeField does this for $ fields
+ * with cents) always show two decimals, so "0.5" reads as "0.50" like the results do.
+ */
+export function setBox(box, v) {
+  box.value = box.dataset.money !== undefined && Number.isFinite(v) ? v.toFixed(2) : v;
+}
+
+/** Reformat a number box when the student leaves it, without fighting them while they type. */
+export function tidyOnBlur(box) {
+  box.addEventListener('change', () => {
+    const v = parseFloat(box.value);
+    if (!Number.isNaN(v)) setBox(box, v);
+  });
 }
 
 /** Fill a [data-presets] group with buttons. Returns setActive(i); pass -1 to clear. */

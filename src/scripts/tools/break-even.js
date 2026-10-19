@@ -1,7 +1,7 @@
 // Break-Even Lab
 // Break-even units = Fixed costs / (Price - Variable cost per unit)
 
-import { money, niceMax, svgEl, cssVar, onThemeChange, setTone, wireReveals } from '../lib/util.js';
+import { money, niceMax, svgEl, cssVar, onThemeChange, setTone, wireReveals, setBox, tidyOnBlur } from '../lib/util.js';
 
 const PRESETS = [
   { name: 'Lemonade stand', price: 2, vc: 0.5, fc: 150, q: 140 },
@@ -34,6 +34,7 @@ export function initBreakEven(root) {
   FIELDS.forEach((f) => {
     const range = $(`#be-${f}`);
     const num = $(`#be-${f}-n`);
+    tidyOnBlur(num);
     range.addEventListener('input', () => {
       state[f] = parseFloat(range.value) || 0;
       activePreset = -1;
@@ -61,7 +62,7 @@ export function initBreakEven(root) {
       const range = $(`#be-${f}`);
       if (state[f] > parseFloat(range.max)) range.max = Math.ceil(state[f] * 1.5);
       if (f !== skip) range.value = state[f];
-      $(`#be-${f}-n`).value = state[f];
+      setBox($(`#be-${f}-n`), state[f]);
     });
     syncPresetButtons();
   }
@@ -141,8 +142,19 @@ export function initBreakEven(root) {
 
     if (Number.isFinite(be) && be <= xMax) {
       add('circle', { cx: x(be), cy: y(P * be), r: 6, fill: cssVar('--accent'), stroke: cssVar('--panel'), 'stroke-width': 2 });
-      const right = x(be) > W * 0.6;
-      add('text', { x: right ? x(be) - 10 : x(be) + 10, y: y(P * be) - 12, 'text-anchor': right ? 'end' : 'start', style: `fill:${cssVar('--accent')};font-weight:500;font-size:12px` }, `Break-even: ${Math.ceil(be).toLocaleString('en-US')} units`);
+      // Label goes above and to the left of the dot: both lines fall away to the left of break-even,
+      // so that corner is always clear. If the dot is too close to the y-axis for the label to fit,
+      // it goes below and to the right instead. The panel-colored halo keeps it readable if the
+      // forecast or fixed-cost line passes behind it.
+      const LABEL_W = 170;
+      const left = x(be) - 10 - LABEL_W > L;
+      add('text', {
+        x: left ? x(be) - 10 : x(be) + 8,
+        y: left ? Math.max(y(P * be) - 14, T + 12) : Math.min(y(P * be) + 22, H - B - 6),
+        'text-anchor': left ? 'end' : 'start',
+        stroke: cssVar('--panel'), 'stroke-width': 4, 'stroke-linejoin': 'round', 'paint-order': 'stroke',
+        style: `fill:${cssVar('--accent')};font-weight:600;font-size:12px`,
+      }, `Break-even: ${Math.ceil(be).toLocaleString('en-US')} units`);
     }
   }
 

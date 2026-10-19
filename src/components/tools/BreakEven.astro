@@ -24,10 +24,10 @@ import { TOOL, PANEL, PANEL_TIGHT, LOWER, H2, PROSE, PRESETS, CHART_KEY, RESULTS
       </div>
       <div class="w-full overflow-x-auto"><svg data-chart viewBox="0 0 640 360" role="img" aria-label="Break-even chart" class="block w-full h-auto min-w-[340px] [&_text]:font-mono [&_text]:text-[11px] [&_text]:fill-muted"></svg></div>
       <div class={RESULTS}>
-        <Stat label="Break-even units" r="units" keyed />
+        <Stat label="Break-even units" r="units" keyed live />
         <Stat label="Break-even sales $" r="dollars" />
         <Stat label="Contribution margin" r="cm" />
-        <Stat label="Profit at forecast" r="profit" box="profit-box" labelRef="profit-k" />
+        <Stat label="Profit at forecast" r="profit" box="profit-box" labelRef="profit-k" live />
       </div>
       <div class={VERDICT} data-r="verdict" role="status"></div>
     </div>

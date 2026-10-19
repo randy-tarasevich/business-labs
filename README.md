@@ -39,6 +39,9 @@ Everything is styled with Tailwind v4 utilities. There are no per-tool CSS files
 - **Shared pieces** live in `src/scripts/lib/ui.js` as class strings (`PANEL`, `BTN`, `VERDICT`, `TABLE`, ...), plus three components in `src/components/ui/`: `RangeField` (slider + number box), `Stat`, and `TryIt`. Use them so every tool looks the same.
 - **Markup built in scripts** uses the same `ui.js` strings or literal classes. Write every class out in full (`'bg-good'`, not `` `bg-${tone}` ``): Tailwind only generates classes it can find as complete strings in the source.
 - **State colors:** scripts call `setTone(el, 'good' | 'bad' | 'warn' | 'info')` from `util.js`, which sets `data-tone`. Markup styles each state with the `tone-good:`, `tone-bad:`, `tone-warn:`, `tone-info:` variants (and `group-tone-*:` for children). Other states use attributes too (`aria-pressed`, `data-changed`), never swapped class names.
+- **Theme:** the page's theme lives in `data-theme="light|dark"` on `<html>`, set before paint by `Base.astro` from the header toggle, `?theme=`, or the device. Use the `dark:` variant if you need it (it follows `data-theme`). Charts that read colors with `cssVar()` must redraw on `onThemeChange()`; colors written as `var(--token)` update on their own.
+- **Phone results bar:** add `data-live` (or `live` on `<Stat>`) to one or two key results, or to the `VERDICT` line if the tool has no stats. On phones, those results pin to the bottom of the screen while the student is working the inputs. Mark every tool whose inputs sit above its chart.
+- **Money boxes:** a `RangeField` with `unit="$"` and a fractional `step` shows two decimals. Write values into number boxes with `setBox()` from `util.js` (`linkRange` already does).
 - **Gotcha:** a class on an element loses to a parent's `[&_td]:...` rule. If a table cell needs to differ from the table's defaults, use `!` (`font-semibold!`) or give the table its own class string.
 
 ## Teacher notes
@@ -51,7 +54,7 @@ Only add MBA Research indicator codes you've verified against the official docum
 
 ## Embed mode
 
-Add `?embed=1` to any tool URL to hide the site header and footer. Use it for projecting or for linking from slides.
+Add `?embed=1` to any tool URL (or click **Project** on the tool page) to hide the site header and footer. The tool title stays, and the page scales up on wide screens so it reads from the back of the room. Use it for projecting or for linking from slides. Add `&theme=light` or `&theme=dark` to force a theme for that link without changing anyone's saved setting. The `embed:` variant styles anything that should differ in projector view.
 
 ## Structure
 

@@ -74,9 +74,9 @@ import { ANS, CHART_KEY, FIELDSET, FORMULA, H2, HINT, LEGEND, LOWER, NUM_INPUT, 
       <div class="w-full min-w-0"><svg class={SVG} data-chart viewBox="0 0 640 320" role="img"></svg></div>
       <ul class="list-none m-0 p-0 flex flex-wrap gap-x-4 gap-y-1.5 text-[13.5px] [&_i]:inline-block [&_i]:w-2.5 [&_i]:h-2.5 [&_i]:rounded-full [&_i]:mr-1.5" data-r="best" hidden></ul>
       <div class={RESULTS}>
-        <div class={STAT_KEY}><span class={STAT_K} data-r="units-k">Units sold</span><span class={STAT_V} data-r="units">–</span></div>
+        <div class={STAT_KEY} data-live><span class={STAT_K} data-r="units-k">Units sold</span><span class={STAT_V} data-r="units">–</span></div>
         <div class={STAT}><span class={STAT_K}>Revenue</span><span class={STAT_V} data-r="rev">–</span></div>
-        <div class={STAT} data-r="profit-box"><span class={STAT_K}>Profit</span><span class={STAT_V} data-r="profit">–</span></div>
+        <div class={STAT} data-r="profit-box" data-live><span class={STAT_K}>Profit</span><span class={STAT_V} data-r="profit">–</span></div>
         <div class={STAT}><span class={STAT_K} data-r="elas-k">Elasticity</span><span class={STAT_V} data-r="elas">–</span></div>
       </div>
       <div class={VERDICT} data-r="verdict" role="status"></div>

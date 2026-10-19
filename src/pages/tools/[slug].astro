@@ -19,10 +19,17 @@ const Tool = TOOL_COMPONENTS[tool.data.component];
 if (!Tool) throw new Error(`No component "${tool.data.component}" registered in src/components/tools/index.js`);
 ---
 <Base title={tool.data.title} description={tool.data.summary}>
-  <div class="site-chrome mb-6 grid gap-1 print:hidden">
-    <a href="/" class="text-sm text-muted hover:text-ink">← All tools</a>
-    <h1 class="text-3xl sm:text-4xl font-extrabold">{tool.data.title}</h1>
-    <p class="text-muted">
+  <!-- The title stays in projector view (?embed=1) so the class knows which tool is up. -->
+  <div class="mb-6 grid gap-1 print:hidden embed:mb-4">
+    <a href="/" class="site-chrome text-sm text-muted hover:text-ink">← All tools</a>
+    <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+      <h1 class="text-3xl sm:text-4xl font-extrabold">{tool.data.title}</h1>
+      <a href="?embed=1" class="site-chrome inline-flex items-center gap-2 rounded-lg border border-line bg-panel px-3.5 py-2 text-sm font-semibold text-ink hover:border-accent max-[860px]:hidden" title="Full-width view without the site header, for a projector or a slide link">
+        <svg class="size-4 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        Project
+      </a>
+    </div>
+    <p class="site-chrome text-muted">
       {tool.data.courses.map((c, i) => (
         <>{i > 0 && ', '}{withPages.includes(c) ? <a href={`/courses/${courseSlug(c)}/`} class="hover:text-ink underline decoration-line underline-offset-2">{c}</a> : c}</>
       ))} · {tool.data.unit} · Grades {tool.data.grades}
@@ -31,3 +38,9 @@ if (!Tool) throw new Error(`No component "${tool.data.component}" registered in 
 
   <Tool {...tool.data.props} />
 </Base>
+
+<script>
+  // Phone results bar for tools that mark results with data-live.
+  import { initLiveBar } from '../../scripts/lib/live-bar.js';
+  document.querySelectorAll('[data-tool]').forEach(initLiveBar);
+</script>

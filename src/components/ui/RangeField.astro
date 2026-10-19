@@ -22,13 +22,15 @@ interface Props {
 const { id, label, hint = '', aria, unit = '', step = 1, min = 0, max = 100, numMax, width = 'w-[100px]', labelRef, hintRef } = Astro.props;
 const before = unit === '$';
 const after = unit && !before ? unit : '';
+// Dollar fields that take cents show two decimals (see setBox in util.js).
+const money = before && Number(step) % 1 !== 0;
 ---
 <div class="grid gap-1.5">
   <div class="flex justify-between items-baseline gap-2">
     <label for={id} class="font-semibold text-[14px]" data-r={labelRef}>{label}</label>
     <div class="flex items-center gap-1 shrink-0">
       {before && <span class={NUM_UNIT}>$</span>}
-      <input id={`${id}-n`} type="number" step={step} min={min} max={numMax} inputmode="decimal" aria-label={aria} class:list={[NUM_INPUT, width]} />
+      <input id={`${id}-n`} type="number" step={step} min={min} max={numMax} inputmode="decimal" data-money={money ? '' : undefined} aria-label={aria} class:list={[NUM_INPUT, width]} />
       {after && <span class={NUM_UNIT}>{after}</span>}
     </div>
   </div>
