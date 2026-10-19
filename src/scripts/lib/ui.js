@@ -100,3 +100,8 @@ export const LIVE_V =
 export const LIVE_TEXT =
   'text-[13.5px] leading-snug line-clamp-2 rounded-md px-2 py-1 tone-good:bg-good-soft tone-bad:bg-bad-soft tone-warn:bg-warn-soft tone-info:bg-accent/12';
 export const LIVE_JUMP = 'text-[13px] font-semibold text-accent whitespace-nowrap';
+
+/** Projector view toggles (see projector.js). The wrapper takes the collapsed panel's grid spot. */
+export const PROJ_WRAP = 'grid gap-3 content-start min-w-0';
+export const PROJ_TOGGLE =
+  'w-full rounded-[10px] border-2 border-dashed border-line bg-transparent px-[18px] py-4 text-left font-display font-semibold text-[17px] text-muted cursor-pointer hover:border-accent hover:text-ink aria-expanded:border-solid aria-expanded:py-2.5 aria-expanded:text-[14px]';

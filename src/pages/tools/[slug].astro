@@ -4,7 +4,7 @@
 import Base from '../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 import { TOOL_COMPONENTS } from '../../components/tools/index.js';
-import { MIN_TOOLS, courseSlug } from '../../data/courses.js';
+import { MIN_TOOLS, courseSlug, courseStyle } from '../../data/courses.js';
 
 export async function getStaticPaths() {
   const tools = await getCollection('tools', ({ data }) => !data.draft);
@@ -29,18 +29,35 @@ if (!Tool) throw new Error(`No component "${tool.data.component}" registered in 
         Project
       </a>
     </div>
-    <p class="site-chrome text-muted">
-      {tool.data.courses.map((c, i) => (
-        <>{i > 0 && ', '}{withPages.includes(c) ? <a href={`/courses/${courseSlug(c)}/`} class="hover:text-ink underline decoration-line underline-offset-2">{c}</a> : c}</>
-      ))} · {tool.data.unit} · Grades {tool.data.grades}
-    </p>
+    <p class="site-chrome text-muted">{tool.data.unit} · Grades {tool.data.grades}</p>
+    <!-- Every course this tool fits, home course first. Courses with a page link to it. -->
+    <ul class="site-chrome mt-2 flex flex-wrap gap-2" aria-label="Courses">
+      {tool.data.courses.map((c) => (
+        <li style={courseStyle(c)}>
+          {withPages.includes(c) ? (
+            <a href={`/courses/${courseSlug(c)}/`} class="inline-flex items-center gap-2 min-h-8 rounded-full border border-line bg-panel px-3 py-1 text-[13.5px] font-medium hover:border-(--course) hover:text-(--course)">
+              <span class="size-2 shrink-0 rounded-full bg-(--course)" aria-hidden="true"></span>{c}
+            </a>
+          ) : (
+            <span class="inline-flex items-center gap-2 min-h-8 rounded-full border border-line px-3 py-1 text-[13.5px] font-medium text-muted">
+              <span class="size-2 shrink-0 rounded-full bg-(--course)" aria-hidden="true"></span>{c}
+            </span>
+          )}
+        </li>
+      ))}
+    </ul>
   </div>
 
   <Tool {...tool.data.props} />
 </Base>
 
 <script>
-  // Phone results bar for tools that mark results with data-live.
+  // Phone results bar for tools that mark results with data-live, and the projector view
+  // toggles that keep explanations and Try it questions collapsed until the teacher opens them.
   import { initLiveBar } from '../../scripts/lib/live-bar.js';
-  document.querySelectorAll('[data-tool]').forEach(initLiveBar);
+  import { initProjector } from '../../scripts/lib/projector.js';
+  document.querySelectorAll('[data-tool]').forEach((root) => {
+    initLiveBar(root);
+    initProjector(root);
+  });
 </script>

@@ -10,7 +10,7 @@ interface Props {
 }
 const { items, panel = PANEL } = Astro.props;
 ---
-<div class={panel}>
+<div class={panel} data-projector-collapse>
   <h2 class={H2}>Try it</h2>
   <ol class={QS}>
     {items.map(({ q, a }) => (
