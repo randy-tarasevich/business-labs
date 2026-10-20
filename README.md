@@ -56,6 +56,10 @@ Only add MBA Research indicator codes you've verified against the official docum
 
 Current codes were checked word for word against MBA Research's published standards pages (October 2026): the [Business Administration Core](https://www.mbaresearch.org/local-educators/teaching-resources/standards/business-administration-core/) and the Marketing & Sales, Financial Services, and Management & Entrepreneurship cluster pages. Copy the indicator text and level (PQ, CS, SP, SU, MN, ON) exactly as written there.
 
+## Print
+
+Every tool page (except the class timer and the Business Plan Builder, which prints itself) has a **Print** button. It prints a worksheet: name, date, and class lines, the student's current numbers, the chart and results, "The math," and the "Try it" questions with blank answer lines. Sliders, preset buttons, and hints are left off, and it always prints in light colors. Print rules live in `global.css`; the answer lines come from `src/scripts/lib/print.js`. New tools get this for free as long as their Try it list uses `QS` (or the `TryIt` component).
+
 ## Embed mode
 
 Add `?embed=1` to any tool URL (or click **Project** on the tool page) to hide the site header and footer. The tool title stays, and the page scales up on wide screens so it reads from the back of the room. Use it for projecting or for linking from slides. Add `&theme=light` or `&theme=dark` to force a theme for that link without changing anyone's saved setting. The `embed:` variant styles anything that should differ in projector view.
