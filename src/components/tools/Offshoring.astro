@@ -1,0 +1,90 @@
+---
+// Offshoring Decision Lab: markup only. Behavior lives in src/scripts/tools/offshoring.js
+import RangeField from '../ui/RangeField.astro';
+import Stat from '../ui/Stat.astro';
+import TryIt from '../ui/TryIt.astro';
+import { TOOL, PANEL, PANEL_TIGHT, LOWER, H2, H3, HINT, PROSE, PRESETS, FIELDSET, LEGEND, CHART_KEY, SWATCH, SVG, RESULTS, VERDICT, FORMULA } from '../../scripts/lib/ui.js';
+
+const tryIt = [
+  {
+    q: 'Load the T-shirts. Overseas wages are about 7 times lower, but overseas workers take longer to sew a shirt. How much does making them overseas save per shirt, and per year?',
+    a: '$6.47 a shirt, about $647,000 a year. Labor drops from $9.00 a shirt to $2.00, which more than covers the extra shipping, tariff, and bad shirts.',
+  },
+  {
+    q: 'Still on T-shirts: how high would the tariff have to go before making shirts at home is cheaper?',
+    a: 'About 152%. Labor is such a big part of a shirt\'s cost that even a huge tariff barely changes the decision.',
+  },
+  {
+    q: 'Load the furniture. Wages overseas are almost 5 times lower, but home wins. Which costs are to blame? Find the overseas shipping cost that would make it a tie.',
+    a: 'Shipping ($60 vs. $15) and the tariff ($22.50). Furniture is big and heavy. Overseas shipping would have to drop to about $47.70 a unit for a tie.',
+  },
+  {
+    q: 'Load the headphones. First set the tariff to 0. Then put it back to 25 and set the currency change to 0 instead. Which change flips the decision?',
+    a: 'Removing the tariff: overseas drops to $51.05, below home\'s $53.54. Undoing the currency change alone only gets overseas to $57.73, so home still wins.',
+  },
+  {
+    q: 'Give one reason a company might make headphones at home that this tool doesn\'t measure.',
+    a: 'Many answers work: faster delivery to customers, easier quality checks, protecting the design from copying, "Made in USA" appeal, or not depending on one faraway supplier.',
+  },
+];
+---
+<div class={TOOL} data-tool="offshoring">
+  <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Factory inputs">
+      <h2 class={H2}>Where to make it</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example products"></div>
+
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>The two factories</legend>
+        <span class={HINT}>Pick a factory to change its numbers.</span>
+        <div class={PRESETS} data-pick role="group" aria-label="Which factory to edit"></div>
+        <RangeField id="off-wage" label="Wage per hour" unit="$" step="0.5" max={60} aria="Wage per hour in dollars" />
+        <RangeField id="off-hours" label="Hours to make one" step="0.1" max={10} aria="Hours of work to make one unit" hint="Better machines and training mean fewer hours." />
+        <RangeField id="off-mat" label="Materials per unit" unit="$" step="0.5" max={200} aria="Materials per unit in dollars" />
+        <RangeField id="off-ship" label="Shipping per unit" unit="$" step="0.1" max={100} aria="Shipping per unit in dollars" hint="Getting it to the company's warehouse." />
+        <RangeField id="off-defect" label="Defect rate" unit="%" step="0.5" max={20} aria="Defect rate in percent" hint="Units that come out bad and have to be made again." />
+      </fieldset>
+
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>Trade and money</legend>
+        <RangeField id="off-tariff" label="Tariff on imports" unit="%" step="1" max={200} aria="Tariff in percent" hint="A tax on goods brought into the country. Only the overseas factory pays it." />
+        <RangeField id="off-currency" label="Currency change" unit="%" step="1" min={-30} max={30} aria="Currency change in percent" hint="How much stronger the factory country's money gets against the dollar. Below 0 means weaker." />
+        <RangeField id="off-units" label="Units per year" step="100" max={500000} width="w-[112px]" aria="Units made per year" />
+      </fieldset>
+    </div>
+
+    <div class={PANEL_TIGHT}>
+      <h3 class={H3}>Cost of one good unit</h3>
+      <div class={CHART_KEY} aria-hidden="true">
+        <span><i class={`${SWATCH} bg-accent`}></i>Labor</span>
+        <span><i class={`${SWATCH} bg-accent/50`}></i>Materials</span>
+        <span><i class={`${SWATCH} bg-muted`}></i>Shipping</span>
+        <span><i class={`${SWATCH} bg-warn`}></i>Tariff</span>
+        <span><i class={`${SWATCH} bg-bad`}></i>Redoing bad units</span>
+      </div>
+      <div class="w-full min-w-0"><svg class={SVG} data-chart viewBox="0 0 640 120" role="img"></svg></div>
+      <div class={RESULTS}>
+        <Stat label="Home, per good unit" r="home" live />
+        <Stat label="Overseas, per good unit" r="off" live />
+        <Stat label="Overseas saves per unit" r="save" box="save-box" labelRef="save-k" keyed />
+        <Stat label="Saved per year" r="year" box="year-box" labelRef="year-k" />
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <p class={HINT}>Showing: <strong class="text-ink" data-r="editing"></strong></p>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}><strong>Offshoring</strong> means moving production to another country. Low wages are the main reason, but the real comparison is the <strong>landed cost</strong>: what a product costs once it's made, shipped, and taxed at the border. Bad units count too, because the company pays to make them again. When the factory country's money gets stronger, its wages and materials cost more in dollars.</p>
+    </div>
+    <TryIt items={tryIt} />
+  </section>
+</div>
+
+<script>
+  import { initOffshoring } from '../../scripts/tools/offshoring.js';
+  document.querySelectorAll('[data-tool="offshoring"]').forEach(initOffshoring);
+</script>

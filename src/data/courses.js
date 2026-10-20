@@ -73,6 +73,7 @@ export const COURSE_GUIDES = {
     sequence: [
       { id: 'comparative-advantage', why: 'Start with why trade happens at all: both sides can end up with more.' },
       { id: 'currency-trade', why: 'Once goods cross borders, exchange rates and tariffs change what they cost on the shelf.' },
+      { id: 'offshoring-decision-lab', why: 'Use tariffs and exchange rates to make a real decision: should the product be made at home or overseas?' },
       { id: 'market-entry', why: 'Bring it together from a company\'s point of view: the safest and most profitable way into a new country.' },
     ],
   },
