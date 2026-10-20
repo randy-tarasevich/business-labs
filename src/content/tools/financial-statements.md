@@ -1,7 +1,7 @@
 ---
 title: Financial Statements Lab
 summary: A month of transactions becomes an income statement, a statement of owner's equity, and a balance sheet. Turn transactions off and watch every statement react.
-courses: [Accounting, Entrepreneurship]
+courses: [Accounting, Entrepreneurship, Intro to Business]
 unit: Financial Statements
 grades: 10–12
 minutes: [20, 20]
