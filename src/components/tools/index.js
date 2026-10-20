@@ -16,6 +16,7 @@ import CurrencyTrade from './CurrencyTrade.astro';
 import ComparativeAdvantage from './ComparativeAdvantage.astro';
 import MarketEntry from './MarketEntry.astro';
 import BusinessPlan from './BusinessPlan.astro';
+import SupplyDemand from './SupplyDemand.astro';
 
 export const TOOL_COMPONENTS = {
   BreakEven,
@@ -34,4 +35,5 @@ export const TOOL_COMPONENTS = {
   ComparativeAdvantage,
   MarketEntry,
   BusinessPlan,
+  SupplyDemand,
 };

@@ -23,10 +23,11 @@ export const courseStyle = (name) => `--course: var(${COURSE_COLORS[name] ?? '--
 
 export const COURSE_GUIDES = {
   'Intro to Business': {
-    intro: 'A tour of how business works, in the order most Intro courses teach it: why trade happens, how customers react to price, what it takes to make a profit, and how a business keeps its books.',
+    intro: 'A tour of how business works, in the order most Intro courses teach it: why trade happens, how markets set prices, how customers react to price, what it takes to make a profit, and how a business keeps its books.',
     sequence: [
       { id: 'comparative-advantage', why: 'Start with economics. Scarcity forces trade-offs, and trading lets both sides end up with more.' },
-      { id: 'price-demand', why: 'Move from countries to customers. Price is a trade-off too, and buyers react to every change.' },
+      { id: 'supply-demand', why: 'From countries to markets. Buyers and sellers meet at a price, and news from a drought to a viral trend moves it.' },
+      { id: 'price-demand', why: 'Zoom in on one business. Measure how strongly its customers react when it changes its price.' },
       { id: 'marketing-funnel', why: 'Customers have to find you before they can buy. See how many people an ad reaches and whether it paid off.' },
       { id: 'break-even-lab', why: 'Now add costs. How many do you have to sell before the business makes money?' },
       { id: 'startup-runway', why: 'Break-even says how many sales you need. Runway says how long you have to get there.' },

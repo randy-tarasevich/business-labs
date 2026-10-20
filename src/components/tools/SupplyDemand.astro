@@ -1,0 +1,74 @@
+---
+// Supply and Demand Lab: markup only. Behavior lives in src/scripts/tools/supply-demand.js
+import RangeField from '../ui/RangeField.astro';
+import Stat from '../ui/Stat.astro';
+import TryIt from '../ui/TryIt.astro';
+import { TOOL, PANEL, PANEL_TIGHT, LOWER, H2, HINT, PROSE, PRESETS, FIELDSET, LEGEND, CHART_KEY, SVG, RESULTS, VERDICT, FORMULA, BTN_GHOST } from '../../scripts/lib/ui.js';
+
+const LINE = 'w-[18px] h-[3px] rounded-[2px] inline-block';
+---
+<div class={TOOL} data-tool="supply-demand">
+  <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Market inputs">
+      <h2 class={H2}>The market</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example markets"></div>
+
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>What happened?</legend>
+        <span class={HINT}>Predict first: which curve moves, and which way? Then click. You can pick more than one.</span>
+        <div class={PRESETS} data-events role="group" aria-label="Things that happened in this market"></div>
+      </fieldset>
+
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>Or shift the curves yourself</legend>
+        <RangeField id="sd-ds" label="Demand shift" step="10" min={-1000} max={1000} width="w-[96px]" aria="Demand shift in units" hintRef="ds-hint" />
+        <RangeField id="sd-ss" label="Supply shift" step="10" min={-1000} max={1000} width="w-[96px]" aria="Supply shift in units" hintRef="ss-hint" />
+        <button type="button" class:list={[BTN_GHOST, 'justify-self-start']} data-reset>Back to the start</button>
+      </fieldset>
+
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>Set the price yourself</legend>
+        <label class="inline-flex items-center gap-1.5 text-[14px] font-medium cursor-pointer justify-self-start"><input type="checkbox" data-control class="accent-accent w-4 h-4 m-0" /> Lock the price, like a law would</label>
+        <div data-r="price-wrap" hidden>
+          <RangeField id="sd-price" label="Locked price" unit="$" step="0.01" max={20} width="w-[96px]" aria="Locked price in dollars" hint="Below the market price is a price cap. Above it is a price floor." />
+        </div>
+      </fieldset>
+    </div>
+
+    <div class={PANEL_TIGHT}>
+      <div class={CHART_KEY} aria-hidden="true">
+        <span><i class={`${LINE} bg-accent`}></i>Demand (buyers)</span>
+        <span><i class={`${LINE} bg-warn`}></i>Supply (sellers)</span>
+        <span><i class="w-[18px] h-0 inline-block border-t-2 border-dashed border-muted"></i>Before the change</span>
+      </div>
+      <div class="w-full min-w-0"><svg class={SVG} data-chart viewBox="0 0 640 340" role="img"></svg></div>
+      <div class={RESULTS}>
+        <Stat label="Market price" r="price" labelRef="price-k" keyed live />
+        <Stat label="Quantity sold" r="qty" labelRef="qty-k" live />
+        <Stat label="Price change" r="c3" labelRef="c3-k" />
+        <Stat label="Quantity change" r="c4" labelRef="c4-k" />
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}>The <strong>market price</strong> (also called the equilibrium price) is where the two curves cross: the amount buyers want equals the amount sellers offer. When something other than the price changes, like the weather, a trend, or the cost of materials, a whole curve <strong>shifts</strong>. When only the price changes, buyers and sellers just <strong>move along</strong> their curves.</p>
+    </div>
+    <TryIt items={[
+      { q: 'Load the strawberries. Before you click &quot;Drought hits local farms,&quot; predict: which curve moves, which way, and what happens to price and quantity? Then click it.', a: 'Supply shifts left: farmers have fewer berries to sell at every price. Price rises from $4.00 to $4.73 and quantity falls from 1,000 to 891 quarts.' },
+      { q: 'Keep the drought and also click the sleep study. Which do you know for sure: what happens to price, or what happens to quantity?', a: 'Price. Both changes push it up, to $5.27. Quantity depends on which shift is bigger. Here demand wins, so quantity rises to 1,109. Drag the supply shift below −800 and quantity falls instead.' },
+      { q: 'With the sneakers, click &quot;A famous athlete wears them.&quot; Did supply change, or did sellers just move along their supply curve? How can you tell?', a: 'Sellers moved along the supply curve. Only the demand curve shifted. The higher price ($140) leads sellers to offer more pairs, but the supply curve itself stays where it was.' },
+      { q: 'Click Back to the start on the strawberries. Lock the price at $3.00, like a law capping it. What happens?', a: 'A shortage. Buyers want 1,150 quarts but sellers only offer 600, so buyers who want 550 quarts go without. Price caps often lead to empty shelves.' },
+      { q: 'Compare the gasoline hurricane with the strawberry drought. Both cut supply a lot. Why does the amount of gas people buy barely change?', a: 'Gas only falls from 20,000 to 19,333 gallons (about 3%), while strawberries fall about 11%. Drivers still need gas to get to work, so they keep buying at a higher price. Their demand curve is steep. Price and Demand Lab calls this inelastic demand.' },
+    ]} />
+  </section>
+</div>
+
+<script>
+  import { initSupplyDemand } from '../../scripts/tools/supply-demand.js';
+  document.querySelectorAll('[data-tool="supply-demand"]').forEach(initSupplyDemand);
+</script>
