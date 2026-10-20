@@ -89,7 +89,9 @@ export const COURSE_GUIDES = {
     intro: 'The numbers behind social media: whether an audience is really paying attention, which creator is worth paying, and whether a campaign turned likes into sales.',
     sequence: [
       { id: 'engagement-rate-lab', why: 'Start with the number every brand checks first. A big follower count can hide an audience that never interacts.' },
+      { id: 'feed-ranking-sandbox', why: 'Engagement is what feeds reward. Build the algorithm yourself and see why some posts rise and others disappear.' },
       { id: 'influencer-deal-lab', why: 'Use engagement rate to compare creators. The biggest account is often not the best deal.' },
+      { id: 'ab-post-test', why: 'Before spending money on a post, test two versions. Learn when a winner is real and when it is just luck.' },
       { id: 'marketing-funnel', why: 'Follow a paid campaign from views to sales and find out if it paid for itself.' },
     ],
   },

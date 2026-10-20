@@ -1,0 +1,75 @@
+---
+// A/B Post Test: markup only. Behavior lives in src/scripts/tools/ab-test.js
+import RangeField from '../ui/RangeField.astro';
+import Stat from '../ui/Stat.astro';
+import TryIt from '../ui/TryIt.astro';
+import { TOOL, PANEL, PANEL_TIGHT, LOWER, H2, H3, HINT, PROSE, PRESETS, FIELDSET, LEGEND, CHART_KEY, SWATCH, SVG, RESULTS, VERDICT, FORMULA } from '../../scripts/lib/ui.js';
+
+const tryIt = [
+  {
+    q: 'Load the bake sale. Version B got a 5% click rate and A got 3%. Is B really better? How often would luck alone make a gap this big?',
+    a: 'Can\'t tell yet. About 39 times in 100, two identical posts would show a gap this big. 200 viewers each is too small a test.',
+  },
+  {
+    q: 'Keep the same click rates (3% and 5%) but show each version to 800 people (24 and 40 clicks). Now what?',
+    a: 'Luck explains it only about 3 times in 100, so B is very likely better. Same rates, bigger test, much more certain.',
+  },
+  {
+    q: 'Load "Tiny gap, huge test." The gap is only half a point. Is it real? Is it worth acting on?',
+    a: 'Very likely real (less than 1 in 100 by luck) because the test is huge. Whether it matters is a separate question: 3.5% vs. 3.0% is 100 more clicks per 20,000 viewers.',
+  },
+  {
+    q: 'Set both versions to 200 viewers and 6 clicks. What does the chart show, and why do the fake tests still have gaps?',
+    a: 'Every fake test counts, since your gap is 0. Even identical posts get slightly different results each time, because different people happen to see them.',
+  },
+];
+---
+<div class={TOOL} data-tool="ab-test">
+  <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Test inputs">
+      <h2 class={H2}>Two versions of a post</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example tests"></div>
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>Version A</legend>
+        <RangeField id="ab-nA" label="People who saw it" step="10" max={50000} width="w-[104px]" aria="People who saw version A" />
+        <RangeField id="ab-cA" label="Clicks" max={5000} width="w-[104px]" aria="Clicks on version A" />
+      </fieldset>
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>Version B</legend>
+        <RangeField id="ab-nB" label="People who saw it" step="10" max={50000} width="w-[104px]" aria="People who saw version B" />
+        <RangeField id="ab-cB" label="Clicks" max={5000} width="w-[104px]" aria="Clicks on version B" />
+      </fieldset>
+      <p class={HINT}>In an A/B test, the app shows each version to a different random group of people.</p>
+    </div>
+
+    <div class={PANEL_TIGHT}>
+      <h3 class={H3}>Could the gap be luck?</h3>
+      <div class={CHART_KEY} aria-hidden="true">
+        <span><i class={`${SWATCH} rounded-full bg-bad`}></i>Fake test with a gap as big as yours</span>
+        <span><i class={`${SWATCH} rounded-full bg-muted`}></i>Smaller gap</span>
+      </div>
+      <div class="w-full min-w-0"><svg class={SVG} data-chart viewBox="0 0 640 220" role="img"></svg></div>
+      <div class={RESULTS}>
+        <Stat label="A's click rate" r="rA" />
+        <Stat label="B's click rate" r="rB" />
+        <Stat label="Gap (B − A)" r="gap" live />
+        <Stat label="Gap this big by luck" r="luck" box="luck-box" keyed live />
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}>An <strong>A/B test</strong> shows two versions of a post or ad to two random groups and compares the results. The catch: even two identical posts get different results, because different people happen to see them. So the tool pretends A and B are the same post, runs 1,000 fake tests, and counts how many show a gap as big as yours. If that almost never happens (fewer than 5 in 100 is a common rule), the gap is probably real. Bigger tests make luck smaller.</p>
+    </div>
+    <TryIt items={tryIt} />
+  </section>
+</div>
+
+<script>
+  import { initAbTest } from '../../scripts/tools/ab-test.js';
+  document.querySelectorAll('[data-tool="ab-test"]').forEach(initAbTest);
+</script>
