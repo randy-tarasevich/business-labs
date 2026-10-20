@@ -1,0 +1,70 @@
+---
+// Credit Card Payoff Lab: markup only. Behavior lives in src/scripts/tools/credit-card.js
+import RangeField from '../ui/RangeField.astro';
+import Stat from '../ui/Stat.astro';
+import TryIt from '../ui/TryIt.astro';
+import { TOOL, PANEL, PANEL_TIGHT, LOWER, H2, H3, PROSE, PRESETS, HINT, CHART_KEY, SVG, RESULTS, VERDICT, FORMULA } from '../../scripts/lib/ui.js';
+
+const LINE = 'w-[18px] h-[3px] rounded-[2px] inline-block';
+
+const tryIt = [
+  {
+    q: 'Load the spring break trip. How long does it take to pay off $1,200 making only the minimum payment? How much interest do you pay?',
+    a: '7 years and 8 months, and $1,287 in interest. The trip ends up costing $2,487, more than twice the price.',
+  },
+  {
+    q: 'Still on the trip: what fixed payment pays it off in 12 months or less?',
+    a: '$114 a month. That pays it off in 12 months with $161 of interest.',
+  },
+  {
+    q: 'Load the maxed-out card and set the fixed payment to $100. What happens? Why?',
+    a: 'It never gets paid off. The first month\'s interest is $116.67, so a $100 payment doesn\'t even cover the interest and the balance grows.',
+  },
+  {
+    q: 'Compare the car repair\'s two plans. How much does paying $150 a month instead of the minimum save?',
+    a: 'The minimum plan takes 13 years, 5 months and costs $3,516 in interest. Paying $150 takes 1 year, 9 months and costs $511. That saves $3,005.',
+  },
+];
+---
+<div class={TOOL} data-tool="credit-card">
+  <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Card inputs">
+      <h2 class={H2}>The card</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example balances"></div>
+      <RangeField id="cc-balance" label="Balance on the card" unit="$" step="10" max={20000} aria="Card balance in dollars" />
+      <RangeField id="cc-apr" label="Interest rate (APR)" unit="%" step="0.5" max={36} aria="Yearly interest rate in percent" hint="The yearly rate. The card charges one twelfth of it each month." />
+      <RangeField id="cc-fixed" label="Your fixed payment" unit="$" step="5" max={1000} aria="Fixed monthly payment in dollars" hint="Compared with paying only the minimum each month." />
+      <p class={HINT}>Both plans assume nothing new goes on the card.</p>
+    </div>
+
+    <div class={PANEL_TIGHT}>
+      <h3 class={H3}>What's left on the card</h3>
+      <div class={CHART_KEY} aria-hidden="true">
+        <span><i class={`${LINE} bg-bad`}></i>Minimum payments</span>
+        <span><i class="w-[18px] h-0 inline-block border-t-[3px] border-dashed border-good"></i>Your fixed payment</span>
+      </div>
+      <div class="w-full min-w-0"><svg class={SVG} data-chart viewBox="0 0 640 280" role="img"></svg></div>
+      <div class={RESULTS}>
+        <Stat label="Minimum: time to pay off" r="min-time" box="min-time-box" />
+        <Stat label="Minimum: interest" r="min-int" live />
+        <Stat label="Fixed: time to pay off" r="fix-time" box="fix-time-box" keyed />
+        <Stat label="Fixed: interest" r="fix-int" live />
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}>Every month, the card charges <strong>interest</strong> on what you still owe. The <strong>minimum payment</strong> is set low on purpose: here it's that month's interest plus 1% of the balance (at least $25), a formula many cards use. As the balance shrinks, so does the minimum, which is why paying only the minimum can take years. Card companies use different formulas, so check your own statement.</p>
+    </div>
+    <TryIt items={tryIt} />
+  </section>
+</div>
+
+<script>
+  import { initCreditCard } from '../../scripts/tools/credit-card.js';
+  document.querySelectorAll('[data-tool="credit-card"]').forEach(initCreditCard);
+</script>

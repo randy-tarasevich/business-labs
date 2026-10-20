@@ -1,0 +1,87 @@
+---
+// Start Early Lab: markup only. Behavior lives in src/scripts/tools/start-early.js
+import RangeField from '../ui/RangeField.astro';
+import TryIt from '../ui/TryIt.astro';
+import { TOOL, PANEL, PANEL_TIGHT, LOWER, H2, H3, HINT, PROSE, PRESETS, FIELDSET, LEGEND, CHART_KEY, SVG, VERDICT, FORMULA, STAT, STAT_K, STAT_V } from '../../scripts/lib/ui.js';
+
+const LINE = 'w-[18px] h-[3px] rounded-[2px] inline-block';
+
+const tryIt = [
+  {
+    q: 'Load "Start at 16 vs. 26." Both save $50 a month until 65. How much more does Saver A end up with? How much more did Saver A put in?',
+    a: 'Saver A ends with $253,461, about $131,600 more than Saver B ($121,815). Saver A only put in $6,000 more. Ten extra years of growth roughly doubled the result.',
+  },
+  {
+    q: 'Load "Save 10 years, then stop." Saver A saves from 18 to 28 and never adds another dollar. Saver B saves from 28 to 65. Who wins?',
+    a: 'Saver A, with $228,988 vs. $209,654, even though Saver A put in $12,000 and Saver B put in $44,400.',
+  },
+  {
+    q: 'Back on "Start at 16 vs. 26": how much would Saver B have to save each month to catch up with Saver A by 65?',
+    a: 'About $104 a month, more than twice as much, because Saver B\'s money has 10 fewer years to grow.',
+  },
+  {
+    q: 'Load "Savings account vs. index fund." Same deposits, same ages. Why is the gap so big?',
+    a: 'At 0.5% a year, B\'s money barely grows: $5,954 of growth. At 7%, A\'s grows by $276,013. Over 43 years, the return rate matters as much as the deposits. A higher return also means more risk, since stock prices go up and down.',
+  },
+];
+---
+<div class={TOOL} data-tool="start-early">
+  <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Saver inputs">
+      <h2 class={H2}>Two savers</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example savers"></div>
+      <RangeField id="se-monthly" label="Each saves per month" unit="$" step="5" max={1000} aria="Monthly deposit in dollars" />
+
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>Saver A</legend>
+        <RangeField id="se-aStart" label="Starts at age" min={14} max={65} aria="Saver A starting age" />
+        <RangeField id="se-aStop" label="Stops at age" min={14} max={65} aria="Saver A stopping age" />
+        <RangeField id="se-rate" label="Yearly return" unit="%" step="0.5" max={12} aria="Saver A yearly return in percent" />
+      </fieldset>
+
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>Saver B</legend>
+        <RangeField id="se-bStart" label="Starts at age" min={14} max={65} aria="Saver B starting age" />
+        <RangeField id="se-bStop" label="Stops at age" min={14} max={65} aria="Saver B stopping age" />
+        <RangeField id="se-bRate" label="Yearly return" unit="%" step="0.5" max={12} aria="Saver B yearly return in percent" />
+      </fieldset>
+      <p class={HINT}>Returns are averages, not promises. Investments go up and down from year to year.</p>
+    </div>
+
+    <div class={PANEL_TIGHT}>
+      <h3 class={H3}>Savings by age</h3>
+      <div class={CHART_KEY} aria-hidden="true">
+        <span><i class={`${LINE} bg-accent`}></i>Saver A</span>
+        <span><i class="w-[18px] h-0 inline-block border-t-[3px] border-dashed border-warn"></i>Saver B</span>
+      </div>
+      <div class="w-full min-w-0"><svg class={SVG} data-chart viewBox="0 0 640 280" role="img"></svg></div>
+      <div class="grid grid-cols-2 gap-2.5">
+        <div class="grid gap-2.5">
+          <div class={STAT} data-r="a-box" data-live><span class={STAT_K}>Saver A at 65</span><span class={STAT_V} data-r="a-final">–</span></div>
+          <div class={STAT}><span class={STAT_K}>A put in</span><span class={STAT_V} data-r="a-put">–</span></div>
+          <div class={STAT}><span class={STAT_K}>A's growth</span><span class={STAT_V} data-r="a-growth">–</span></div>
+        </div>
+        <div class="grid gap-2.5">
+          <div class={STAT} data-r="b-box" data-live><span class={STAT_K}>Saver B at 65</span><span class={STAT_V} data-r="b-final">–</span></div>
+          <div class={STAT}><span class={STAT_K}>B put in</span><span class={STAT_V} data-r="b-put">–</span></div>
+          <div class={STAT}><span class={STAT_K}>B's growth</span><span class={STAT_V} data-r="b-growth">–</span></div>
+        </div>
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}><strong>Compound interest</strong> means your money earns a return, and then that return earns a return too. The longer money sits, the faster it grows, so the <strong>years</strong> matter as much as the deposits. Here, each month the balance grows by one twelfth of the yearly return and then the new deposit goes in. 7% is a common long-term estimate for a stock index fund, but no return is guaranteed.</p>
+    </div>
+    <TryIt items={tryIt} />
+  </section>
+</div>
+
+<script>
+  import { initStartEarly } from '../../scripts/tools/start-early.js';
+  document.querySelectorAll('[data-tool="start-early"]').forEach(initStartEarly);
+</script>
