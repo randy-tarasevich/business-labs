@@ -1,0 +1,75 @@
+---
+// Engagement Rate Lab: markup only. Behavior lives in src/scripts/tools/engagement-rate.js
+import RangeField from '../ui/RangeField.astro';
+import Stat from '../ui/Stat.astro';
+import TryIt from '../ui/TryIt.astro';
+import { TOOL, PANEL, LOWER, H2, H3, HINT, PROSE, PRESETS, FIELDSET, LEGEND, SVG, RESULTS, VERDICT, FORMULA } from '../../scripts/lib/ui.js';
+
+const tryIt = [
+  {
+    q: 'Load the big account, then the small local account. Which post got more interactions? Which audience is more engaged?',
+    a: 'The small account wins both: 320 interactions to 250, even with 46,000 fewer followers. Its engagement rate is 8.0% of followers. The big account\'s is 0.50%.',
+  },
+  {
+    q: 'Load the big account and check "Add 20,000 bought followers." What happens to the follower count and the engagement rate? Why would a brand care?',
+    a: 'Followers jump 40% to 70,000, but engagement by followers falls from 0.50% to 0.36%. Bought followers are bots or inactive accounts. They never like or comment, so the account looks bigger and less engaged at the same time.',
+  },
+  {
+    q: 'Load the viral post. How can the engagement rate by followers be over 700%? Which rate tells the real story?',
+    a: 'Most people who saw it don\'t follow the account: 90,000 people saw it, but only 1,200 follow. Dividing by followers stops making sense. Engagement by reach (9.5%) shows how many viewers actually interacted.',
+  },
+  {
+    q: 'The small local account wants a 10% engagement rate by followers on its next post. How many more interactions does it need than this post got?',
+    a: '10% of 4,000 followers is 400 interactions. This post got 320, so it needs 80 more.',
+  },
+];
+---
+<div class={TOOL} data-tool="engagement-rate">
+  <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Post inputs">
+      <h2 class={H2}>One post</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example accounts"></div>
+
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>The account</legend>
+        <RangeField id="er-followers" label="Followers" max={200000} aria="Number of followers" hint="Real people who follow the account." />
+        <RangeField id="er-reach" label="People who saw the post" max={200000} aria="Number of people who saw the post" hint="Called reach. Most followers never see a given post." />
+        <label class="inline-flex items-center gap-1.5 text-[14px] font-medium cursor-pointer justify-self-start"><input type="checkbox" data-bought class="accent-accent w-4 h-4 m-0" /> Add 20,000 bought followers</label>
+      </fieldset>
+
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>What people did</legend>
+        <RangeField id="er-likes" label="Likes" max={20000} aria="Number of likes" />
+        <RangeField id="er-comments" label="Comments" max={5000} aria="Number of comments" />
+        <RangeField id="er-shares" label="Shares" max={5000} aria="Number of shares" />
+      </fieldset>
+    </div>
+
+    <div class={PANEL}>
+      <h3 class={H3}>From followers to fans who acted</h3>
+      <div class="w-full min-w-0"><svg class={SVG} data-chart viewBox="0 0 640 200" role="img"></svg></div>
+      <div class={RESULTS}>
+        <Stat label="Engagement rate (followers)" r="rate-f" box="rate-f-box" keyed live />
+        <Stat label="Engagement rate (reach)" r="rate-r" live />
+        <Stat label="Followers who saw it" r="reach-rate" />
+        <Stat label="Interactions" r="inter" />
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}><strong>Engagement rate</strong> is the share of people who did something with a post. Marketers divide by <strong>followers</strong> to compare one account with another, and by <strong>reach</strong> (the people who actually saw the post) to judge a single post. Companies count it a little differently. This tool counts likes, comments, and shares.</p>
+      <p class={HINT}>Bought followers are fake or inactive accounts sold in bulk. In this tool, the app shows the post to 1,000 of them, and none of them interact.</p>
+    </div>
+    <TryIt items={tryIt} />
+  </section>
+</div>
+
+<script>
+  import { initEngagementRate } from '../../scripts/tools/engagement-rate.js';
+  document.querySelectorAll('[data-tool="engagement-rate"]').forEach(initEngagementRate);
+</script>

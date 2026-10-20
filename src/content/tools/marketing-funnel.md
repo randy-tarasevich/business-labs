@@ -1,7 +1,7 @@
 ---
 title: Marketing Funnel and Ad ROI
 summary: Follow an ad campaign from views to clicks to customers, and find out whether it paid for itself.
-courses: [Marketing, Entrepreneurship, Intro to Business]
+courses: [Marketing, Social Media Marketing, Entrepreneurship, Intro to Business]
 unit: Promotion and Digital Marketing
 grades: 9–12
 minutes: [15, 20]

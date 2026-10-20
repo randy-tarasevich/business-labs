@@ -1,0 +1,109 @@
+---
+// Influencer Deal Lab: markup only. Behavior lives in src/scripts/tools/influencer-deal.js
+import RangeField from '../ui/RangeField.astro';
+import TryIt from '../ui/TryIt.astro';
+import { TOOL, PANEL, PANEL_TIGHT, LOWER, H2, H3, HINT, PROSE, PRESETS, FIELDSET, LEGEND, CHART_KEY, SWATCH, SVG, VERDICT, FORMULA, TABLE_BOX, TABLE } from '../../scripts/lib/ui.js';
+
+const NAMES = ['Big creator', 'Mid creator', 'Small creator'];
+const ROWS = [
+  ['fol', 'Followers'],
+  ['fee', 'Fee for one post'],
+  ['fans', 'Real fans who engage'],
+  ['cpf', 'Cost per real fan'],
+  ['cust', 'Customers'],
+  ['profit', 'Profit after fee'],
+];
+// Selected creator's column is shaded. Profit cells color by sign.
+const COL = 'aria-current:bg-accent/8';
+const PROFIT = 'font-semibold! tone-good:text-good tone-bad:text-bad';
+
+const tryIt = [
+  {
+    q: 'Load the phone cases. The big creator has more than 13 times as many followers as the mid creator. Why does the big creator lose money?',
+    a: 'Only 1.2% of its followers engage, and 30% of its followers are fake, so $6,000 buys just 6,720 real fans. That\'s $0.89 per fan. The mid creator\'s real fans cost $0.16 each.',
+  },
+  {
+    q: 'Still on phone cases: which creator reaches real fans for the lowest cost? Why isn\'t that creator the best deal?',
+    a: 'The small creator, at $0.13 per fan. But it only has 621 real fans, so it makes $65. The mid creator costs a bit more per fan and makes $167 because it has more of them.',
+  },
+  {
+    q: 'Load the sneaker shop and pick the mid creator. Its followers and engagement rate look great. Find the number that sinks the deal, then change it until the deal makes money.',
+    a: '45% of its followers are fake. At about 35% fake, the deal breaks even. At 5% fake, it makes $286.',
+  },
+  {
+    q: 'Load the video game launch. Does "smaller creators are always better" still hold? What is different about this big creator?',
+    a: 'No. The big creator makes the most profit, $692. Its fans engage at 3.5% and only 5% of its followers are fake, so its fee buys real attention.',
+  },
+  {
+    q: 'Back on phone cases: what is the most the big creator could charge before the deal loses money?',
+    a: 'About $1,572, the profit its 6,720 real fans bring in. Anything above that loses money.',
+  },
+];
+---
+<div class={TOOL} data-tool="influencer-deal">
+  <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Campaign inputs">
+      <h2 class={H2}>The campaign</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example campaigns"></div>
+
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>The creators</legend>
+        <span class={HINT}>Pick a creator to change their numbers.</span>
+        <div class={PRESETS} data-pick role="group" aria-label="Which creator to edit"></div>
+        <RangeField id="inf-fee" label="Fee for one post" unit="$" step="10" max={20000} aria="Fee for one post in dollars" />
+        <RangeField id="inf-followers" label="Followers" step="100" max={2000000} width="w-[112px]" aria="Number of followers" />
+        <RangeField id="inf-eng" label="Engagement rate" unit="%" step="0.1" max={20} aria="Engagement rate in percent" hint="Percent of followers who like, comment, or share a post." />
+        <RangeField id="inf-fake" label="Fake followers" unit="%" step="1" max={90} aria="Fake followers in percent" hint="Bots and bought accounts. They never buy anything." />
+      </fieldset>
+
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>The product</legend>
+        <RangeField id="inf-aov" label="Average order" unit="$" step="1" max={300} aria="Average order in dollars" />
+        <RangeField id="inf-margin" label="Profit margin" unit="%" step="1" max={100} aria="Profit margin in percent" hint="Percent of each sale left after paying for the product." />
+        <RangeField id="inf-click" label="Fans who click the link" unit="%" step="0.5" max={30} aria="Percent of real fans who click the link" />
+        <RangeField id="inf-buy" label="Clickers who buy" unit="%" step="0.5" max={30} aria="Percent of clickers who buy" />
+      </fieldset>
+    </div>
+
+    <div class={PANEL_TIGHT}>
+      <h3 class={H3}>Fee vs. what the post earns</h3>
+      <div class={CHART_KEY} aria-hidden="true">
+        <span><i class={`${SWATCH} bg-bad`}></i>Fee paid to the creator</span>
+        <span><i class={`${SWATCH} bg-good`}></i>Profit from the sales it brings in</span>
+      </div>
+      <div class="w-full min-w-0"><svg class={SVG} data-chart viewBox="0 0 640 220" role="img"></svg></div>
+      <div class={TABLE_BOX}>
+        <table class={TABLE}>
+          <thead>
+            <tr><th scope="col"><span class="sr-only">Measure</span></th>{NAMES.map((n, i) => <th scope="col" class={COL} data-r={`col-${i}`}>{n}</th>)}</tr>
+          </thead>
+          <tbody>
+            {ROWS.map(([key, label]) => (
+              <tr>
+                <th scope="row">{label}</th>
+                {NAMES.map((_, i) => <td data-r={`${key}-${i}`} class:list={[key === 'profit' && PROFIT]}>–</td>)}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status" data-live></div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <p class={HINT}>Showing: <strong class="text-ink" data-r="editing"></strong></p>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}>A brand pays a creator for <strong>attention</strong>, so the useful number is the cost per <strong>real fan</strong>: a follower who actually engages and isn't a bot. Marketers often sort creators by size, from nano (under 10,000 followers) to mega (over 1 million). Bigger accounts charge more, and their followers usually engage less, but not always.</p>
+      <p class={HINT}>Paid posts have to say they're paid. In the U.S., the Federal Trade Commission requires creators to clearly disclose when a brand pays them, for example with #ad.</p>
+    </div>
+    <TryIt items={tryIt} />
+  </section>
+</div>
+
+<script>
+  import { initInfluencerDeal } from '../../scripts/tools/influencer-deal.js';
+  document.querySelectorAll('[data-tool="influencer-deal"]').forEach(initInfluencerDeal);
+</script>

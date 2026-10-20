@@ -18,6 +18,7 @@ export const COURSE_COLORS = {
   Marketing: '--c-mkt',
   Entrepreneurship: '--c-ent',
   'International Business': '--c-intl',
+  'Social Media Marketing': '--c-smm',
 };
 export const courseStyle = (name) => `--course: var(${COURSE_COLORS[name] ?? '--accent'})`;
 
@@ -73,6 +74,14 @@ export const COURSE_GUIDES = {
       { id: 'comparative-advantage', why: 'Start with why trade happens at all: both sides can end up with more.' },
       { id: 'currency-trade', why: 'Once goods cross borders, exchange rates and tariffs change what they cost on the shelf.' },
       { id: 'market-entry', why: 'Bring it together from a company\'s point of view: the safest and most profitable way into a new country.' },
+    ],
+  },
+  'Social Media Marketing': {
+    intro: 'The numbers behind social media: whether an audience is really paying attention, which creator is worth paying, and whether a campaign turned likes into sales.',
+    sequence: [
+      { id: 'engagement-rate-lab', why: 'Start with the number every brand checks first. A big follower count can hide an audience that never interacts.' },
+      { id: 'influencer-deal-lab', why: 'Use engagement rate to compare creators. The biggest account is often not the best deal.' },
+      { id: 'marketing-funnel', why: 'Follow a paid campaign from views to sales and find out if it paid for itself.' },
     ],
   },
 };
