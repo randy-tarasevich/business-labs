@@ -16,6 +16,8 @@ export async function getStaticPaths() {
 
 const { tool, withPages } = Astro.props;
 const Tool = TOOL_COMPONENTS[tool.data.component];
+// The timer has nothing to print, and the Business Plan Builder prints the student's plan itself.
+const printable = !['ClassTimer', 'BusinessPlan'].includes(tool.data.component);
 if (!Tool) throw new Error(`No component "${tool.data.component}" registered in src/components/tools/index.js`);
 ---
 <Base title={tool.data.title} description={tool.data.summary}>
@@ -24,10 +26,18 @@ if (!Tool) throw new Error(`No component "${tool.data.component}" registered in 
     <a href="/" class="site-chrome text-sm text-muted hover:text-ink">← All tools</a>
     <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
       <h1 class="text-3xl sm:text-4xl font-extrabold">{tool.data.title}</h1>
+      <div class="site-chrome flex flex-wrap gap-2">
+      {printable && (
+        <button type="button" data-print class="inline-flex items-center gap-2 rounded-lg border border-line bg-panel px-3.5 py-2 text-sm font-semibold text-ink hover:border-accent cursor-pointer" title="Print a worksheet with your current numbers and space to answer the Try it questions">
+          <svg class="size-4 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/></svg>
+          Print
+        </button>
+      )}
       <a href="?embed=1" class="site-chrome inline-flex items-center gap-2 rounded-lg border border-line bg-panel px-3.5 py-2 text-sm font-semibold text-ink hover:border-accent max-[860px]:hidden" title="Full-width view without the site header, for a projector or a slide link">
         <svg class="size-4 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
         Project
       </a>
+      </div>
     </div>
     <p class="site-chrome text-muted">{tool.data.unit} · Grades {tool.data.grades}</p>
     <!-- Every course this tool fits, home course first. Courses with a page link to it. -->
@@ -48,6 +58,17 @@ if (!Tool) throw new Error(`No component "${tool.data.component}" registered in 
     </ul>
   </div>
 
+  <!-- Worksheet header: only on paper. -->
+  <div class="hidden print:block mb-4">
+    <div class="flex gap-6 text-[11pt]">
+      <span class="flex flex-1 items-end gap-2">Name <span class="flex-1 border-b border-ink"></span></span>
+      <span class="flex w-[28%] items-end gap-2">Date <span class="flex-1 border-b border-ink"></span></span>
+      <span class="flex w-[20%] items-end gap-2">Class <span class="flex-1 border-b border-ink"></span></span>
+    </div>
+    <h1 class="mt-4 text-2xl font-extrabold">{tool.data.title}</h1>
+    <p class="text-muted">{tool.data.unit} · Business Labs</p>
+  </div>
+
   <Tool {...tool.data.props} />
 </Base>
 
@@ -56,8 +77,11 @@ if (!Tool) throw new Error(`No component "${tool.data.component}" registered in 
   // toggles that keep explanations and Try it questions collapsed until the teacher opens them.
   import { initLiveBar } from '../../scripts/lib/live-bar.js';
   import { initProjector } from '../../scripts/lib/projector.js';
+  import { initPrint } from '../../scripts/lib/print.js';
   document.querySelectorAll('[data-tool]').forEach((root) => {
     initLiveBar(root);
     initProjector(root);
+    initPrint(root);
   });
+  document.querySelector('[data-print]')?.addEventListener('click', () => window.print());
 </script>

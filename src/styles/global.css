@@ -106,6 +106,47 @@ html.embed main { padding-block: 16px; }
 @media (min-width: 1600px) { html.embed { zoom: 1.35; } }
 @media (min-width: 1900px) { html.embed { zoom: 1.6; } }
 
+/* Print (the Print button on a tool page, or Ctrl+P): a student worksheet. Always prints in light
+   colors, on a white page, with the sliders, preset buttons, and hints left off. The number boxes
+   stay, so the page shows the numbers the student was working with. Answer lines under each
+   "Try it" question come from src/scripts/lib/print.js. */
+@media print {
+  :root,
+  :root[data-theme="dark"] {
+    --bg: #f3f5f7;
+    --panel: #ffffff;
+    --ink: #16202b;
+    --muted: #5b6876;
+    --line: #d9dfe5;
+    --accent: #2f5bd3;
+    --good: #16744b;
+    --bad: #c2412d;
+    --warn: #a14f0d;
+    --good-soft: #e3f3ea;
+    --bad-soft: #fbe7e3;
+    --warn-soft: #fcefe2;
+    --grid: #e8ecf0;
+    --c-intro: #8a5a14;
+    --c-pf: #1f5f73;
+    --c-acct: #2f6a46;
+    --c-mkt: #9c2a5c;
+    --c-ent: #5b3a86;
+    --c-intl: #283f78;
+    --c-smm: #566a14;
+    --bg: #ffffff;
+    color-scheme: light;
+  }
+  html.embed { zoom: 1; }
+  main { padding-block: 0; }
+  [data-tool] input[type="range"],
+  [data-tool] button,
+  [data-tool] [data-presets],
+  [data-tool] [data-reveal] + * { display: none !important; }
+  [data-tool] input { background: transparent; }
+  [data-tool] .bg-panel { break-inside: avoid; }
+  svg { break-inside: avoid; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
