@@ -7,9 +7,13 @@ grades: 9–12
 minutes: [20, 25]
 component: InfluencerDeal
 order: 20
-# Indicators left empty on purpose: add codes only after verifying them
-# against the official MBA Research / CT CTE documents.
-indicators: []
+indicators:
+  - code: PR:321
+    name: Explain the use of celebrities/influencers as a WOM strategy
+    level: SP
+  - code: PR:352
+    name: Select celebrity/influencer to deliver promotional message
+    level: MN
 alsoAligned: []
 ---
 

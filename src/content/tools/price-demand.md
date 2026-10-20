@@ -7,9 +7,16 @@ grades: 9–12
 minutes: [15, 20]
 component: PriceDemand
 order: 10
-# Indicators left empty on purpose: add codes only after verifying them
-# against the official MBA Research / CT CTE documents.
-indicators: []
+indicators:
+  - code: EC:006
+    name: Describe the functions of prices in markets
+    level: CS
+  - code: PI:002
+    name: Explain factors affecting pricing decisions
+    level: SP
+  - code: IM:415
+    name: Determine price sensitivity
+    level: MN
 alsoAligned: []
 ---
 

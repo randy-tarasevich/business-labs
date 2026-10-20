@@ -7,9 +7,19 @@ grades: 9–12
 minutes: [20, 25]
 component: Offshoring
 order: 20
-# Indicators left empty on purpose: add codes only after verifying them
-# against the official MBA Research / CT CTE documents.
-indicators: []
+indicators:
+  - code: PM:192
+    name: Compare and contrast buying from domestic sources with that of foreign sources
+    level: SP
+  - code: PM:193
+    name: Determine final cost of purchases from domestic and international sources
+    level: SP
+  - code: EC:100
+    name: Describe the determinants of exchange rates and their effects on the domestic economy
+    level: SP
+  - code: EC:013
+    name: Explain the concept of productivity
+    level: CS
 alsoAligned: []
 ---
 

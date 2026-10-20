@@ -7,9 +7,19 @@ grades: 10–12
 minutes: [20, 25]
 component: RatioDashboard
 order: 50
-# Indicators left empty on purpose: add codes only after verifying them
-# against the official MBA Research / CT CTE documents.
-indicators: []
+indicators:
+  - code: FI:097
+    name: Calculate financial ratios
+    level: MN
+  - code: FI:102
+    name: Interpret financial statements
+    level: MN
+  - code: FI:552
+    name: Calculate activity/efficiency ratios
+    level: MN
+  - code: FI:553
+    name: Calculate debt/leverage ratios
+    level: MN
 alsoAligned: []
 ---
 

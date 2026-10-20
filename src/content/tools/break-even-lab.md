@@ -7,9 +7,16 @@ grades: 9–12
 minutes: [10, 15]
 component: BreakEven
 order: 10
-# Indicators left empty on purpose: add codes only after verifying them
-# against the official MBA Research / CT CTE documents.
-indicators: []
+indicators:
+  - code: EC:010
+    name: Identify factors affecting a business’s profit
+    level: CS
+  - code: OP:192
+    name: Conduct break-even analysis
+    level: MN
+  - code: FI:718
+    name: Discuss the use of cost-volume-profit analysis
+    level: SP
 alsoAligned: []
 ---
 

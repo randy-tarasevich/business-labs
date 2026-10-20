@@ -7,9 +7,16 @@ grades: 9–12
 minutes: [20, 20]
 component: CurrencyTrade
 order: 10
-# Indicators left empty on purpose: add codes only after verifying them
-# against the official MBA Research / CT CTE documents.
-indicators: []
+indicators:
+  - code: EC:016
+    name: Explain the nature of global trade
+    level: SP
+  - code: EC:100
+    name: Describe the determinants of exchange rates and their effects on the domestic economy
+    level: SP
+  - code: PM:193
+    name: Determine final cost of purchases from domestic and international sources
+    level: SP
 alsoAligned: []
 ---
 

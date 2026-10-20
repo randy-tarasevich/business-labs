@@ -7,9 +7,16 @@ grades: 9–12
 minutes: [90, 180]
 component: BusinessPlan
 order: 40
-# Indicators left empty on purpose: add codes only after verifying them
-# against the official MBA Research / CT CTE documents.
-indicators: []
+indicators:
+  - code: SM:007
+    name: Explain the nature of business plans
+    level: MN
+  - code: SM:013
+    name: Develop business plan
+    level: ON
+  - code: EN:014
+    name: Use components of business plan to define venture idea
+    level: ON
 alsoAligned: []
 ---
 

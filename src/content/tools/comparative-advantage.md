@@ -7,9 +7,13 @@ grades: 9–12
 minutes: [25, 30]
 component: ComparativeAdvantage
 order: 20
-# Indicators left empty on purpose: add codes only after verifying them
-# against the official MBA Research / CT CTE documents.
-indicators: []
+indicators:
+  - code: EC:014
+    name: Analyze impact of specialization/division of labor on productivity
+    level: SP
+  - code: EC:016
+    name: Explain the nature of global trade
+    level: SP
 alsoAligned: []
 ---
 

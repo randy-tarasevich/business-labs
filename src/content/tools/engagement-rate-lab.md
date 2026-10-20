@@ -7,9 +7,13 @@ grades: 9–12
 minutes: [15, 20]
 component: EngagementRate
 order: 10
-# Indicators left empty on purpose: add codes only after verifying them
-# against the official MBA Research / CT CTE documents.
-indicators: []
+indicators:
+  - code: PR:365
+    name: Explain the use of social media for digital marketing
+    level: SP
+  - code: PR:386
+    name: Quantify contribution of social media (metrics and goals, finding what is good, measuring and adjusting on the fly, reporting and sharing insights)
+    level: MN
 alsoAligned: []
 ---
 
