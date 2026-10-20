@@ -1,7 +1,7 @@
 ---
 title: Price and Demand Lab
 summary: Change the price and watch customers, revenue, and profit respond. Find the price that earns the most, and learn why it isn't the highest one.
-courses: [Marketing, Entrepreneurship]
+courses: [Marketing, Entrepreneurship, Intro to Business]
 unit: Pricing
 grades: 9–12
 minutes: [15, 20]

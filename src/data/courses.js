@@ -23,11 +23,15 @@ export const courseStyle = (name) => `--course: var(${COURSE_COLORS[name] ?? '--
 
 export const COURSE_GUIDES = {
   'Intro to Business': {
-    intro: 'Three tools that show students how a small business works from the inside: what it costs, how long the money lasts, and how the books stay balanced.',
+    intro: 'A tour of how business works, in the order most Intro courses teach it: why trade happens, how customers react to price, what it takes to make a profit, and how a business keeps its books.',
     sequence: [
-      { id: 'break-even-lab', why: 'Start with the question every business owner asks first: how many do I have to sell?' },
+      { id: 'comparative-advantage', why: 'Start with economics. Scarcity forces trade-offs, and trading lets both sides end up with more.' },
+      { id: 'price-demand', why: 'Move from countries to customers. Price is a trade-off too, and buyers react to every change.' },
+      { id: 'marketing-funnel', why: 'Customers have to find you before they can buy. See how many people an ad reaches and whether it paid off.' },
+      { id: 'break-even-lab', why: 'Now add costs. How many do you have to sell before the business makes money?' },
       { id: 'startup-runway', why: 'Break-even says how many sales you need. Runway says how long you have to get there.' },
-      { id: 'accounting-equation-lab', why: 'Close the unit by showing how a business keeps track of everything it owns and owes.' },
+      { id: 'accounting-equation-lab', why: 'Show how a business keeps track of everything it owns and owes.' },
+      { id: 'financial-statements', why: 'Close the course by showing where all those transactions end up and how a business reports how it did.' },
     ],
   },
   Accounting: {

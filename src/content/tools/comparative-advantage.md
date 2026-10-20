@@ -1,7 +1,7 @@
 ---
 title: Comparative Advantage Sim
 summary: Two countries, two goods. Find who should make what, set up a trade, and see if both sides can end up with more than they could make alone.
-courses: [International Business]
+courses: [International Business, Intro to Business]
 unit: Why Countries Trade
 grades: 9–12
 minutes: [25, 30]
