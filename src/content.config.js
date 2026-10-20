@@ -3,7 +3,7 @@ import { glob } from 'astro/loaders';
 
 // One markdown file per tool. Frontmatter = metadata, body = teacher notes.
 // Display order for course sections.
-export const COURSES = ['Intro to Business', 'Personal Finance', 'Accounting', 'Marketing', 'Entrepreneurship', 'International Business'];
+export const COURSES = ['Intro to Business', 'Personal Finance', 'Accounting', 'Marketing', 'Entrepreneurship', 'International Business', 'Social Media Marketing'];
 
 const tools = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/tools' }),
