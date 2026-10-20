@@ -19,6 +19,7 @@ import BusinessPlan from './BusinessPlan.astro';
 import SupplyDemand from './SupplyDemand.astro';
 import EngagementRate from './EngagementRate.astro';
 import InfluencerDeal from './InfluencerDeal.astro';
+import Offshoring from './Offshoring.astro';
 
 export const TOOL_COMPONENTS = {
   BreakEven,
@@ -40,4 +41,5 @@ export const TOOL_COMPONENTS = {
   SupplyDemand,
   EngagementRate,
   InfluencerDeal,
+  Offshoring,
 };
