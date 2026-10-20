@@ -45,9 +45,10 @@ export const COURSE_GUIDES = {
     ],
   },
   Accounting: {
-    intro: 'A sequence that runs from the accounting equation through financial analysis. The first three fit Accounting 1; the last three are built for Advanced Accounting.',
+    intro: 'A sequence that runs from the accounting equation through financial analysis. The first four fit Accounting 1; the last three are built for Advanced Accounting.',
     sequence: [
       { id: 'accounting-equation-lab', level: 'Accounting 1', why: 'The foundation. Every later tool assumes students know A = L + E holds after every transaction.' },
+      { id: 't-account-lab', level: 'Accounting 1', why: 'Same transactions, written the way accountants do: debits, credits, T-accounts, and a trial balance.' },
       { id: 'financial-statements', level: 'Accounting 1', why: 'Once students can post transactions, show where those transactions end up and how the three statements connect.' },
       { id: 'break-even-lab', level: 'Accounting 1', why: 'Separates fixed and variable costs, which students need for cost behavior and managerial accounting.' },
       { id: 'inventory-methods', level: 'Advanced', why: 'Start Advanced Accounting here. Same sales, three methods, three different profits.' },
