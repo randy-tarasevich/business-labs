@@ -36,6 +36,14 @@ export const COURSE_GUIDES = {
       { id: 'financial-statements', why: 'Close the course by showing where all those transactions end up and how a business reports how it did.' },
     ],
   },
+  'Personal Finance': {
+    intro: 'Money decisions students will face soon: building a budget that works, using a credit card without getting buried, and why the years you save matter as much as the dollars.',
+    sequence: [
+      { id: 'budget-balancer', why: 'Start with the budget. Every later choice about credit and saving comes out of it.' },
+      { id: 'credit-card-payoff-lab', why: 'See what happens when spending goes on a card and only the minimum gets paid.' },
+      { id: 'start-early-lab', why: 'Flip it around: when interest works for you instead of against you, starting early is the biggest advantage.' },
+    ],
+  },
   Accounting: {
     intro: 'A sequence that runs from the accounting equation through financial analysis. The first three fit Accounting 1; the last three are built for Advanced Accounting.',
     sequence: [

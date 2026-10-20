@@ -20,6 +20,8 @@ import SupplyDemand from './SupplyDemand.astro';
 import EngagementRate from './EngagementRate.astro';
 import InfluencerDeal from './InfluencerDeal.astro';
 import Offshoring from './Offshoring.astro';
+import CreditCard from './CreditCard.astro';
+import StartEarly from './StartEarly.astro';
 
 export const TOOL_COMPONENTS = {
   BreakEven,
@@ -42,4 +44,6 @@ export const TOOL_COMPONENTS = {
   EngagementRate,
   InfluencerDeal,
   Offshoring,
+  CreditCard,
+  StartEarly,
 };
