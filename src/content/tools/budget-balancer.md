@@ -3,6 +3,7 @@ title: Budget Balancer
 summary: Four real Connecticut budgets, all over $2,400. Label every line, make the cuts, and defend your trade-offs.
 courses: [Personal Finance]
 unit: Spending and Budgeting
+minutes: [10, 15]
 grades: 10–12
 component: BudgetBalancer
 order: 15
