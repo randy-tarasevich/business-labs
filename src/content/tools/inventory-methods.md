@@ -7,9 +7,13 @@ grades: 10–12
 minutes: [20, 25]
 component: InventoryMethods
 order: 40
-# Indicators left empty on purpose: add codes only after verifying them
-# against the official MBA Research / CT CTE documents.
-indicators: []
+indicators:
+  - code: FI:586
+    name: Explain methods used to value inventory (e.g., FIFO, LIFO, average cost, etc.)
+    level: CS
+  - code: FI:436
+    name: Determine the cost/value of inventory
+    level: SP
 alsoAligned: []
 ---
 

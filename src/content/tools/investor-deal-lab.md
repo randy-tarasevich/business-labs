@@ -7,9 +7,13 @@ grades: 9–12
 minutes: [15, 20]
 component: InvestorDeal
 order: 30
-# Indicators left empty on purpose: add codes only after verifying them
-# against the official MBA Research / CT CTE documents.
-indicators: []
+indicators:
+  - code: EN:015
+    name: Describe processes used to acquire adequate financial resources for venture creation/start-up
+    level: ON
+  - code: EN:016
+    name: Select sources to finance venture creation/start-up
+    level: ON
 alsoAligned: []
 ---
 

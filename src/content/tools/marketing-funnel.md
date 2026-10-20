@@ -7,9 +7,16 @@ grades: 9–12
 minutes: [15, 20]
 component: MarketingFunnel
 order: 20
-# Indicators left empty on purpose: add codes only after verifying them
-# against the official MBA Research / CT CTE documents.
-indicators: []
+indicators:
+  - code: PR:001
+    name: Explain the role of promotion as a marketing function
+    level: CS
+  - code: PR:164
+    name: Explain the nature of online advertising (e.g., email, search, social media, display, mobile)
+    level: SP
+  - code: IM:410
+    name: Track performance of promotional activities
+    level: SP
 alsoAligned: []
 ---
 

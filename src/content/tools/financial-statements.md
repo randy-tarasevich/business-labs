@@ -7,9 +7,16 @@ grades: 10–12
 minutes: [20, 20]
 component: FinancialStatements
 order: 35
-# Indicators left empty on purpose: add codes only after verifying them
-# against the official MBA Research / CT CTE documents.
-indicators: []
+indicators:
+  - code: FI:093
+    name: Explain the nature of balance sheets
+    level: SP
+  - code: FI:094
+    name: Describe the nature of income statements
+    level: SP
+  - code: FI:630
+    name: Explain the nature of statements of changes in equity
+    level: SP
 alsoAligned: []
 ---
 

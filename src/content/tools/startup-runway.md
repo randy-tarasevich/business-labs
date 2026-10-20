@@ -7,9 +7,13 @@ grades: 9–12
 minutes: [15, 20]
 component: StartupRunway
 order: 20
-# Indicators left empty on purpose: add codes only after verifying them
-# against the official MBA Research / CT CTE documents.
-indicators: []
+indicators:
+  - code: EN:009
+    name: Assess start-up requirements
+    level: ON
+  - code: FI:043
+    name: Determine financing needed for business operations
+    level: ON
 alsoAligned: []
 ---
 

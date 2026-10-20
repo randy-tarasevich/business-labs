@@ -7,9 +7,13 @@ grades: 9–12
 minutes: [20, 25]
 component: SupplyDemand
 order: 5
-# Indicators left empty on purpose: add codes only after verifying them
-# against the official MBA Research / CT CTE documents.
-indicators: []
+indicators:
+  - code: EC:005
+    name: Explain the principles of supply and demand
+    level: CS
+  - code: EC:006
+    name: Describe the functions of prices in markets
+    level: CS
 alsoAligned: []
 ---
 

@@ -14,6 +14,9 @@ indicators:
   - code: FI:093
     name: Explain the nature of balance sheets
     level: SP
+  - code: FI:378
+    name: Demonstrate the effects of transactions on the accounting equation
+    level: CS
 alsoAligned: []
 ---
 

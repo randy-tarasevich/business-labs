@@ -10,6 +10,9 @@ indicators:
   - code: FI:066
     name: Develop personal budget
     level: CS
+  - code: FI:783
+    name: Make responsible financial decisions
+    level: CS
 alsoAligned:
   - "Jump$tart Spending 12-1b: develop a budget, including fixed and variable expenses"
   - "Jump$tart Spending 12-1c: adjust a budget for unexpected expenses"

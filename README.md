@@ -54,6 +54,8 @@ Teacher notes live at `/teachers/` (bookmark it). Those pages are marked `noinde
 
 Only add MBA Research indicator codes you've verified against the official documents. Tools with no codes show up as "Not yet aligned" on `/standards/`.
 
+Current codes were checked word for word against MBA Research's published standards pages (October 2026): the [Business Administration Core](https://www.mbaresearch.org/local-educators/teaching-resources/standards/business-administration-core/) and the Marketing & Sales, Financial Services, and Management & Entrepreneurship cluster pages. Copy the indicator text and level (PQ, CS, SP, SU, MN, ON) exactly as written there.
+
 ## Embed mode
 
 Add `?embed=1` to any tool URL (or click **Project** on the tool page) to hide the site header and footer. The tool title stays, and the page scales up on wide screens so it reads from the back of the room. Use it for projecting or for linking from slides. Add `&theme=light` or `&theme=dark` to force a theme for that link without changing anyone's saved setting. The `embed:` variant styles anything that should differ in projector view.

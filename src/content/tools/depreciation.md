@@ -7,9 +7,10 @@ grades: 10–12
 minutes: [15, 20]
 component: Depreciation
 order: 45
-# Indicators left empty on purpose: add codes only after verifying them
-# against the official MBA Research / CT CTE documents.
-indicators: []
+indicators:
+  - code: FI:691
+    name: Account for long-term assets (e.g., record acquisition, record depreciation/amortization, record disposal)
+    level: SP
 alsoAligned: []
 ---
 

@@ -7,9 +7,13 @@ grades: 9–12
 minutes: [20, 25]
 component: MarketEntry
 order: 30
-# Indicators left empty on purpose: add codes only after verifying them
-# against the official MBA Research / CT CTE documents.
-indicators: []
+indicators:
+  - code: EN:122
+    name: Select market-entry strategies for conducting business internationally
+    level: ON
+  - code: EC:113
+    name: Describe the impact of the political environment on world trade
+    level: SP
 alsoAligned: []
 ---
 
