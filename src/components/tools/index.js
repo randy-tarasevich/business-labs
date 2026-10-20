@@ -22,6 +22,8 @@ import InfluencerDeal from './InfluencerDeal.astro';
 import Offshoring from './Offshoring.astro';
 import CreditCard from './CreditCard.astro';
 import StartEarly from './StartEarly.astro';
+import AbTest from './AbTest.astro';
+import FeedRanking from './FeedRanking.astro';
 
 export const TOOL_COMPONENTS = {
   BreakEven,
@@ -46,4 +48,6 @@ export const TOOL_COMPONENTS = {
   Offshoring,
   CreditCard,
   StartEarly,
+  AbTest,
+  FeedRanking,
 };

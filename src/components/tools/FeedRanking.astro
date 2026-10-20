@@ -1,0 +1,76 @@
+---
+// Feed Ranking Sandbox: markup only. Behavior lives in src/scripts/tools/feed-ranking.js
+import RangeField from '../ui/RangeField.astro';
+import Stat from '../ui/Stat.astro';
+import TryIt from '../ui/TryIt.astro';
+import { TOOL, PANEL, PANEL_TIGHT, LOWER, H2, H3, HINT, PROSE, PRESETS, FIELDSET, LEGEND, RESULTS, VERDICT, FORMULA, BTN_GHOST } from '../../scripts/lib/ui.js';
+import { SIGNALS } from '../../scripts/tools/feed-ranking.js';
+
+const tryIt = [
+  {
+    q: 'Click "Newest first," then "Most liked." Where does your bakery post land each time? Why the big change?',
+    a: 'Newest first: #3, because it\'s only 3 hours old. Most liked: #6, because 120 likes is tiny next to the meme\'s 5,000.',
+  },
+  {
+    q: 'Click "Keep them watching." Which post is #1? Why might a feed like this be a problem for the people using it?',
+    a: 'The shouting match at the town meeting. Arguments get tons of comments and long watch times, so a feed that rewards them can fill up with conflict. That\'s an ethics question for the app, not just a math one.',
+  },
+  {
+    q: 'Stay on "Keep them watching." Change only one number on your post to get it into the top 3. What worked?',
+    a: 'Watch time. Around 25 seconds puts it at #3. Likes, comments, or shares alone don\'t get it there. A short video that people watch to the end would help more than begging for likes.',
+  },
+  {
+    q: 'Click "Friends first." What happens to posts from brands and businesses? Why do businesses pay for ads?',
+    a: 'They sink: your bakery drops to #7 and the sneaker brand to #6. When a feed favors friends, businesses pay for ads to get seen.',
+  },
+];
+---
+<div class={TOOL} data-tool="feed-ranking">
+  <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Feed inputs">
+      <h2 class={H2}>Build the algorithm</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example algorithms"></div>
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>How much each signal counts (0 to 10)</legend>
+        {SIGNALS.map(([k, label]) => (
+          <RangeField id={`fr-w-${k}`} label={label} step="1" max={10} width="w-[72px]" aria={`Weight for ${label.toLowerCase()}`} />
+        ))}
+      </fieldset>
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>Your bakery's post</legend>
+        <RangeField id="fr-you-likes" label="Likes" max={6000} aria="Likes on your post" />
+        <RangeField id="fr-you-comments" label="Comments" max={2000} aria="Comments on your post" />
+        <RangeField id="fr-you-shares" label="Shares" max={2000} aria="Shares of your post" />
+        <RangeField id="fr-you-watch" label="Watch time" unit=" sec" max={60} aria="Average watch time in seconds" hint="How long people look at it, on average." />
+        <RangeField id="fr-you-hours" label="Hours old" max={48} aria="Hours since posting" />
+        <button type="button" class:list={[BTN_GHOST, 'justify-self-start']} data-reset-post>Reset my post</button>
+      </fieldset>
+    </div>
+
+    <div class={PANEL_TIGHT}>
+      <h3 class={H3}>The feed</h3>
+      <ol class="grid gap-2 m-0 p-0 list-none" data-feed aria-label="Feed, top post first"></ol>
+      <div class={RESULTS}>
+        <Stat label="Your post's spot" r="place" box="place-box" keyed live />
+        <Stat label="Your score" r="your-score" />
+        <Stat label="Top post" r="top" />
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}>A feed <strong>algorithm</strong> decides which posts you see first. This one gives every post a score from 0 to 100 on each <strong>signal</strong> (how new it is, likes, comments, shares, watch time, and whether it's from a friend), multiplies each by how much that signal counts, and sorts by the total.</p>
+      <p class={HINT}>This is a made-up model for class. Real apps use many more signals and don't publish their exact formulas, but they do say signals like these matter.</p>
+    </div>
+    <TryIt items={tryIt} />
+  </section>
+</div>
+
+<script>
+  import { initFeedRanking } from '../../scripts/tools/feed-ranking.js';
+  document.querySelectorAll('[data-tool="feed-ranking"]').forEach(initFeedRanking);
+</script>
