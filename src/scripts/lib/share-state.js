@@ -125,6 +125,28 @@ export function stateUrl(extra = {}) {
   return url.toString();
 }
 
+/**
+ * Set a tool to a scenario, the same way a share link does: presets and tabs are clicked first (they
+ * can rebuild inputs), then each field that differs gets the input/change events a student would fire.
+ * params: URLSearchParams or a plain object ({ g0: 1, 'be-fc': 7500 }). force: true clicks a preset
+ * even when it already looks pressed, so it reloads its numbers. Returns the group index applied for
+ * each group (-1 where none). Used by share links on load and by predictions (predictions.js).
+ */
+export function applyParams(root, params, { force = false } = {}) {
+  const p = params instanceof URLSearchParams ? params : new URLSearchParams(Object.entries(params).map(([k, v]) => [k, String(v)]));
+  const applied = [...root.querySelectorAll(GROUPS)].map((g, n) => {
+    const i = parseInt(p.get(`g${n}`), 10);
+    const b = g.children[i];
+    if (!b) return -1;
+    if (force || b.getAttribute('aria-pressed') !== 'true') b.click();
+    return i;
+  });
+  for (const f of fields(root)) {
+    if (p.has(f.key)) write(f, p.get(f.key));
+  }
+  return applied;
+}
+
 export function initShareState(root, { onChange } = {}) {
   const saved = new URLSearchParams(location.search);
   const groups = [...root.querySelectorAll(GROUPS)];
@@ -133,16 +155,9 @@ export function initShareState(root, { onChange } = {}) {
 
   // 1. Restore presets/tabs, then fields.
   if ([...saved.keys()].some((k) => !RESERVED.has(k))) {
-    groups.forEach((g, n) => {
-      const i = parseInt(saved.get(`g${n}`), 10);
-      const b = g.children[i];
-      if (!b) return;
-      if (b.getAttribute('aria-pressed') !== 'true') b.click();
-      picks[n] = i;
+    applyParams(root, saved).forEach((i, n) => {
+      if (i >= 0) picks[n] = i;
     });
-    for (const f of fields(root)) {
-      if (saved.has(f.key)) write(f, saved.get(f.key));
-    }
   }
 
   // 2. Keep the URL in step with what the student does.

@@ -3,6 +3,7 @@
 // anything on this page is readable by students in the page source.
 import Base from '../../layouts/Base.astro';
 import Challenges from '../../components/ui/Challenges.astro';
+import Predictions from '../../components/ui/Predictions.astro';
 import { getCollection } from 'astro:content';
 import { TOOL_COMPONENTS } from '../../components/tools/index.js';
 import { MIN_TOOLS, courseSlug, courseStyle } from '../../data/courses.js';
@@ -81,7 +82,12 @@ if (!Tool) throw new Error(`No component "${tool.data.component}" registered in 
   </div>
 
   <Tool {...tool.data.props} />
-  {shareable && <div class="mt-[18px]"><Challenges slug={tool.id} /></div>}
+  {shareable && (
+    <div class="mt-[18px] grid gap-[18px] empty:hidden">
+      <Predictions slug={tool.id} />
+      <Challenges slug={tool.id} />
+    </div>
+  )}
 </Base>
 
 <script>
@@ -92,6 +98,7 @@ if (!Tool) throw new Error(`No component "${tool.data.component}" registered in 
   import { initPrint } from '../../scripts/lib/print.js';
   import { initShareState, stateUrl } from '../../scripts/lib/share-state.js';
   import { initChallenges } from '../../scripts/lib/challenges.js';
+  import { initPredictions } from '../../scripts/lib/predictions.js';
 
   // The Project button opens projector view with the numbers currently on screen.
   const project = document.querySelector<HTMLAnchorElement>('[data-project]');
@@ -106,6 +113,8 @@ if (!Tool) throw new Error(`No component "${tool.data.component}" registered in 
     // Challenge cards check themselves after the share link has loaded its numbers.
     const panel = document.querySelector<HTMLElement>('[data-challenges]');
     if (panel) initChallenges(root, panel);
+    const predict = document.querySelector<HTMLElement>('[data-predictions]');
+    if (predict) initPredictions(root, predict);
   });
   syncProject();
   document.querySelector('[data-print]')?.addEventListener('click', () => window.print());

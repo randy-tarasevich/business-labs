@@ -36,6 +36,13 @@ The tool calculates full years only (no partial first year). Double-declining ne
 - Double-declining: $1,000, then $333.33, then $66.67.
 - Sum-of-years: $700, $466.67, $233.33.
 
+## Predict first
+
+Two prediction cards sit above the challenges. Students pick Goes up, Goes down, or Stays the same; the tool makes the change on screen and shows before and after. Works well projected: take a show of hands, click the class favorite, then discuss.
+
+- **Straight-line to double-declining** (food truck): total depreciation **stays the same** at $54,000. Every method spreads cost minus salvage; faster methods just move expense into earlier years. Targets the "faster means more expense" misconception.
+- **Double-declining to sum-of-years** (delivery van): Year 1 depreciation **goes down**, $14,000 to $10,000. Both are accelerated, but double-declining front-loads harder. Follow-up: when does sum-of-years pass double-declining? (Have students compare Year 3.)
+
 ## Challenges
 
 Three challenge cards sit under the tool. Each Start button loads its scenario and makes a link you can post. Sample solutions:

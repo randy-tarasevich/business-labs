@@ -1,0 +1,41 @@
+---
+// Predict-first cards (src/data/predictions.js). Renders nothing for tools with no predictions.
+// Behavior lives in src/scripts/lib/predictions.js, started from the tool page.
+import { PREDICTIONS } from '../../data/predictions.js';
+import { PANEL, H2, HINT, BTN_GHOST } from '../../scripts/lib/ui.js';
+
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+const list = PREDICTIONS[slug] ?? [];
+const CHOICES = [
+  { key: 'up', label: 'Goes up' },
+  { key: 'down', label: 'Goes down' },
+  { key: 'same', label: 'Stays the same' },
+];
+---
+{list.length > 0 && (
+  <section class:list={[PANEL, 'print:hidden']} data-predictions={slug} aria-labelledby="pr-heading">
+    <div class="grid gap-1">
+      <h2 id="pr-heading" class={H2}>Predict first</h2>
+      <p class={HINT}>Make your guess before you touch the numbers. The tool will make the change so you can see what happens.</p>
+    </div>
+    <ol class="grid grid-cols-2 gap-3 max-[860px]:grid-cols-1">
+      {list.map((p, i) => (
+        <li data-pr={i} class="group grid gap-3 content-start rounded-lg border border-line bg-bg p-3.5 tone-good:border-good tone-warn:border-warn">
+          <p class="text-[14.5px] font-medium">{p.question}</p>
+          <div class="flex flex-wrap gap-2" role="group" aria-label="Your prediction">
+            {CHOICES.map((c) => (
+              <button type="button" data-choice={c.key} aria-pressed="false" class="font-sans font-medium text-[13.5px] leading-[normal] text-ink bg-panel border border-line rounded-full min-h-9 py-1.5 px-3.5 cursor-pointer hover:border-accent aria-pressed:bg-accent aria-pressed:border-accent aria-pressed:text-panel disabled:cursor-default disabled:hover:border-line disabled:aria-pressed:hover:border-accent">
+                {c.label}
+              </button>
+            ))}
+          </div>
+          <div data-result role="status" class="grid gap-1.5 rounded-md text-[14px] empty:hidden group-tone-good:bg-good-soft group-tone-warn:bg-warn-soft px-3 py-2.5"></div>
+          <button type="button" data-again hidden class:list={[BTN_GHOST, 'justify-self-start']}>Try it again</button>
+        </li>
+      ))}
+    </ol>
+  </section>
+)}

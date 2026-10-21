@@ -43,6 +43,13 @@ The funnel shape is drawn for readability, not to scale. Real drop-offs are stee
 - T-shirt break-even conversion rate: about 5.6% (needs about 89 customers).
 - The bakery's ads bring in $1.68 for every $1, yet only make $4. Revenue isn't profit: 40% of each sale goes to the product.
 
+## Predict first
+
+Two prediction cards sit above the challenges. Students pick Goes up, Goes down, or Stays the same; the tool makes the change on screen and shows before and after. Works well projected: take a show of hands, click the class favorite, then discuss.
+
+- **Twice the clicks** (T-shirt video ads, 0.8% to 1.6%): profit after ads **goes up**, from a $640 loss to a $280 loss. Many students expect doubling clicks to make the campaign profitable. Still a loss: doubling one step of the funnel isn't enough when the rest is weak. Follow-up: what else would have to change?
+- **Bigger orders** (bakery, average order $28 to $35): cost per customer **stays the same** at $16.67. It's budget divided by customers, and a bigger order doesn't bring in more customers. Profit does go up. Good bridge to why businesses chase bigger orders from the customers they already paid for.
+
 ## Challenges
 
 Three challenge cards sit under the tool. Each Start button loads its scenario and makes a link you can post. Sample solutions (there are others):
