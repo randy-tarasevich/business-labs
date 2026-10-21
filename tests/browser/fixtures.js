@@ -1,0 +1,38 @@
+// Known answers for challenges and predictions. These live in tests/, which never ships to
+// student pages, so it's safe to keep solutions here. They should match the teacher notes.
+//
+// Challenges: for each tool, one entry per challenge, in order.
+//   solve: changes that reach the goal within the rules (the card should say Done)
+//   break: changes that reach the goal but break a rule (the card should say Rule broken)
+//   Keys are input ids without "-n"; 'tab' clicks a tab by index.
+export const CHALLENGE_ANSWERS = {
+  'break-even-lab': [
+    { solve: { 'be-vc': 4 }, break: { 'be-price': 30 } },
+    { solve: { 'be-price': 31 }, break: { 'be-price': 25, 'be-q': 300 } },
+    { solve: { 'be-price': 13 }, break: { 'be-fc': 6000 } },
+  ],
+  depreciation: [
+    { solve: { tab: 1 }, break: { tab: 1, 'dp-cost': 40000 } },
+    { solve: { 'dp-salvage': 300 }, break: { 'dp-life': 1, 'dp-salvage': 1100 } },
+    { solve: { 'dp-life': 6 }, break: { 'dp-cost': 30000 } },
+  ],
+  'marketing-funnel': [
+    { solve: { 'fn-ctr': 1.8 }, break: { 'fn-margin': 90 } },
+    { solve: { 'fn-conv': 3.2 }, break: { 'fn-cpm': 3 } },
+    { solve: { 'fn-conv': 3.6 }, break: { 'fn-aov': 400 } },
+  ],
+};
+
+// Predictions: the right answer for each card, in order ('up', 'down', or 'same').
+export const PREDICTION_ANSWERS = {
+  'break-even-lab': ['same', 'up'],
+  depreciation: ['same', 'down'],
+  'marketing-funnel': ['up', 'same'],
+};
+
+// T-Account Lab: [debit account, credit account, amount] for each transaction.
+export const T_ACCOUNT_ENTRIES = [
+  ['cash', 'capital', 10000], ['cash', 'loan', 15000], ['equipment', 'cash', 20000], ['supplies', 'ap', 800],
+  ['cash', 'sales', 1500], ['ar', 'sales', 600], ['fuel', 'cash', 300], ['ap', 'cash', 500],
+  ['cash', 'ar', 600], ['loan', 'cash', 1000], ['supexp', 'supplies', 400], ['drawing', 'cash', 700],
+];
