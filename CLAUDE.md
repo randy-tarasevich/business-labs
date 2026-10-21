@@ -21,6 +21,8 @@ Free interactive tools for high school business and personal finance classes. St
 
 Follow the README's "Add a tool" steps: component, behavior script exporting `init(root)`, registry entry in `src/components/tools/index.js`, and a content `.md`. Styling is Tailwind utilities (see the README's Styling section).
 
+Share links (README "Share links"): keep input ids stable, never random, because links use them as keys. If a new tool's state isn't plain inputs, add it to `SKIP_SHARE`.
+
 Content frontmatter:
 - `courses`: a list. The first course is the tool's home section on the index page; list every other course it genuinely fits so it can be cross-listed. Allowed values live in `COURSES` in `src/content.config.js`.
 - `minutes`: `[low, high]` class time for the activity. Course pages add these up.
