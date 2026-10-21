@@ -72,6 +72,12 @@ Every tool page (except the class timer, Business Plan Builder, Budget Balancer,
 
 New tools get this for free (`src/scripts/lib/share-state.js`). It saves number boxes, checkboxes, selects, radio groups, and the last pick in each `[data-presets]` or `[data-tabs]` group. Keep input ids stable (no random suffixes), since links use them as keys; inputs without an id are saved by position. Put `data-no-share` on anything that shouldn't be saved. A tool whose state isn't plain inputs goes in `SKIP_SHARE` in `src/pages/tools/[slug].astro`.
 
+## Challenges
+
+A tool can have challenge cards under it: a goal ("get break-even down to 75 shirts"), a few rules ("price stays at $20 or less"), and a **Start** button that loads the scenario. Cards check themselves live as students work and show Not yet, Rule broken, or Done. Start loads the scenario as a share link (with `ch=` marking the active card), so after pressing Start the address bar holds a link you can post for the class. Cards work in projector view and are left off printouts.
+
+Challenges live in `src/data/challenges.js`, keyed by tool slug. Each has `title`, `goal`, `start` (share-link params: `g0` preset, `g1` tab, input ids for overrides), `met(s)`, and `rules`. Checks read inputs with `s.v('id')` and should reuse the tool's own exported math (`schedule()`, `funnel()`) so a card never disagrees with the screen. Before adding one, confirm the start scenario isn't already solved and that a solution exists within the rules. Goal text is student-facing; **sample solutions go in the tool's teacher notes** under "Challenges," never in the data file. Piloted on Break-Even Lab, Depreciation, and Marketing Funnel.
+
 ## Structure
 
 ```

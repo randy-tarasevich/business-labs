@@ -1,0 +1,143 @@
+// Challenge mode: goal cards under a tool. Each card checks itself live as students change the numbers.
+//
+// Keyed by tool slug (the content file name). Each challenge:
+//   title   short name for the card
+//   goal    what to reach, in one or two plain sentences (student-facing: no em-dashes)
+//   start   share-link params that set up the scenario (see src/scripts/lib/share-state.js):
+//           g0 = which preset, g1 = which tab, and input ids (without "-n") for any overrides
+//   met(s)  true when the goal is reached
+//   rules   limits that must still hold: { text, ok(s) }
+//
+// s is the tool's current state: s.v('be-price') reads an input as a number, s.pick(1) reads which
+// button is pressed in group 1 (presets are group 0, tabs are group 1). Checks reuse each tool's own
+// math where it's exported, so a card never disagrees with the results on screen.
+//
+// Sample solutions go in the tool's teacher notes, never here: this file ships to student pages.
+
+import { schedule } from '../scripts/tools/depreciation.js';
+import { funnel } from '../scripts/tools/marketing-funnel.js';
+
+const near = (a, b, tol = 0.005) => Math.abs(a - b) <= tol;
+
+// Break-even units, rounded up the way the tool shows it. Infinity when each sale loses money.
+const beUnits = (s) => {
+  const cm = s.v('be-price') - s.v('be-vc');
+  return cm > 0 ? Math.ceil(s.v('be-fc') / cm) : Infinity;
+};
+const beProfit = (s) => (s.v('be-price') - s.v('be-vc')) * s.v('be-q') - s.v('be-fc');
+
+const dep = (s, method) => schedule(method, s.v('dp-cost'), Math.min(s.v('dp-salvage'), s.v('dp-cost')), Math.max(1, Math.round(s.v('dp-life'))));
+
+const fn = (s) =>
+  funnel({
+    budget: s.v('fn-budget'),
+    cpm: s.v('fn-cpm'),
+    ctr: s.v('fn-ctr'),
+    conv: s.v('fn-conv'),
+    aov: s.v('fn-aov'),
+    margin: s.v('fn-margin'),
+  });
+
+export const CHALLENGES = {
+  'break-even-lab': [
+    {
+      title: 'Cut costs, not price',
+      goal: 'The T-shirt shop breaks even at 100 shirts. Get break-even down to 75 shirts or fewer.',
+      start: { g0: 1 },
+      met: (s) => beUnits(s) <= 75,
+      rules: [{ text: 'Price stays at $20 or less.', ok: (s) => s.v('be-price') <= 20 }],
+    },
+    {
+      title: 'Price your way to profit',
+      goal: 'The phone case startup loses money at its forecast. Earn a profit of at least $400 at 200 cases.',
+      start: { g0: 3 },
+      met: (s) => beProfit(s) >= 400,
+      rules: [
+        { text: 'Forecast stays at 200 cases.', ok: (s) => s.v('be-q') === 200 },
+        { text: 'Price stays at $32 or less.', ok: (s) => s.v('be-price') <= 32 },
+        { text: 'Fixed costs stay at $4,000.', ok: (s) => s.v('be-fc') === 4000 },
+      ],
+    },
+    {
+      title: 'Rent goes up',
+      goal: 'The food truck\'s rent went up, so fixed costs are now $7,500. Get break-even back under 1,000 meals.',
+      start: { g0: 2, 'be-fc': 7500 },
+      met: (s) => beUnits(s) < 1000,
+      rules: [{ text: 'Fixed costs stay at $7,500 or more.', ok: (s) => s.v('be-fc') >= 7500 }],
+    },
+  ],
+
+  depreciation: [
+    {
+      title: 'Biggest first-year write-off',
+      goal: 'For the delivery van, show the schedule for the method with the largest Year 1 depreciation.',
+      start: { g0: 1, g1: 0 },
+      met: (s) => {
+        const y1 = ['sl', 'ddb', 'syd'].map((m) => dep(s, m)[0]?.dep ?? 0);
+        return s.pick(1) === y1.indexOf(Math.max(...y1));
+      },
+      rules: [
+        { text: 'Cost stays at $35,000.', ok: (s) => s.v('dp-cost') === 35000 },
+        { text: 'Salvage stays at $5,000.', ok: (s) => s.v('dp-salvage') === 5000 },
+        { text: 'Life stays at 5 years.', ok: (s) => s.v('dp-life') === 5 },
+      ],
+    },
+    {
+      title: '$400 a year',
+      goal: 'Your company wants straight-line depreciation of exactly $400 a year on a $1,500 laptop. Set the salvage value and life to make it happen.',
+      start: { g0: 3, g1: 0 },
+      met: (s) => near(dep(s, 'sl')[0]?.dep ?? 0, 400),
+      rules: [
+        { text: 'Cost stays at $1,500.', ok: (s) => s.v('dp-cost') === 1500 },
+        { text: 'Life is at least 2 years.', ok: (s) => s.v('dp-life') >= 2 },
+      ],
+    },
+    {
+      title: 'Write it off faster',
+      goal: 'Using sum-of-the-years-digits, get the pizza oven\'s Year 1 depreciation to at least $3,000. You may only change the useful life.',
+      start: { g0: 2, g1: 2 },
+      met: (s) => s.pick(1) === 2 && (dep(s, 'syd')[0]?.dep ?? 0) >= 3000,
+      rules: [
+        { text: 'Cost stays at $12,000.', ok: (s) => s.v('dp-cost') === 12000 },
+        { text: 'Salvage stays at $1,000.', ok: (s) => s.v('dp-salvage') === 1000 },
+        { text: 'The sum-of-years schedule is showing.', ok: (s) => s.pick(1) === 2 },
+      ],
+    },
+  ],
+
+  'marketing-funnel': [
+    {
+      title: 'Make the ads pay',
+      goal: 'The bakery barely breaks even on its ads. Earn at least $250 profit after ads.',
+      start: { g0: 0 },
+      met: (s) => fn(s).profit >= 250,
+      rules: [
+        { text: 'Budget stays at $500 or less.', ok: (s) => s.v('fn-budget') <= 500 },
+        { text: 'Cost per 1,000 views stays at $8 (the platform sets it).', ok: (s) => s.v('fn-cpm') === 8 },
+        { text: 'Profit margin stays at 60%.', ok: (s) => s.v('fn-margin') === 60 },
+      ],
+    },
+    {
+      title: 'Cheaper customers',
+      goal: 'Each T-shirt customer costs over $30 in ads. Get the cost per customer under $20.',
+      start: { g0: 2 },
+      met: (s) => fn(s).cac < 20,
+      rules: [
+        { text: 'Budget stays at $1,000.', ok: (s) => s.v('fn-budget') === 1000 },
+        { text: 'Average order stays at $25.', ok: (s) => s.v('fn-aov') === 25 },
+        { text: 'Cost per 1,000 views stays at $5 or more.', ok: (s) => s.v('fn-cpm') >= 5 },
+      ],
+    },
+    {
+      title: 'Scale up',
+      goal: 'The tutor doubles the budget to $1,600, but bigger keywords cost $70 per 1,000 views. Get sales per $1 of ads back to 6× or higher.',
+      start: { g0: 1, 'fn-budget': 1600, 'fn-cpm': 70 },
+      met: (s) => fn(s).roas >= 6,
+      rules: [
+        { text: 'Budget stays at $1,600 or more.', ok: (s) => s.v('fn-budget') >= 1600 },
+        { text: 'Cost per 1,000 views stays at $70 or more.', ok: (s) => s.v('fn-cpm') >= 70 },
+        { text: 'Average order stays at $300 or less.', ok: (s) => s.v('fn-aov') <= 300 },
+      ],
+    },
+  ],
+};

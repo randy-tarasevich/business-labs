@@ -43,6 +43,14 @@ The funnel shape is drawn for readability, not to scale. Real drop-offs are stee
 - T-shirt break-even conversion rate: about 5.6% (needs about 89 customers).
 - The bakery's ads bring in $1.68 for every $1, yet only make $4. Revenue isn't profit: 40% of each sale goes to the product.
 
+## Challenges
+
+Three challenge cards sit under the tool. Each Start button loads its scenario and makes a link you can post. Sample solutions (there are others):
+
+- **Make the ads pay** (bakery, $250 profit, budget $500 or less, cost per 1,000 views and margin locked): click rate 1.8% gives $256. Conversion rate 6% or average order $42 also work. Ask which one a bakery can actually change (better photos, a bundle deal).
+- **Cheaper customers** (T-shirts, cost per customer under $20, budget $1,000): conversion rate 3.2% gives 51 customers at $19.53 each, or click rate 1.3%. Average order doesn't change cost per customer, which is a useful surprise.
+- **Scale up** (tutor, budget $1,600, $70 per 1,000 views, sales per $1 back to 6×): conversion rate 3.6% gives 6.17×, or click rate 4.7%. Connects to the misconception that doubling budget doubles results.
+
 ## Common misconceptions
 
 - Students judge an ad by views. Views are cheap; customers are what matter. Compare cost per customer.

@@ -36,6 +36,14 @@ The tool calculates full years only (no partial first year). Double-declining ne
 - Double-declining: $1,000, then $333.33, then $66.67.
 - Sum-of-years: $700, $466.67, $233.33.
 
+## Challenges
+
+Three challenge cards sit under the tool. Each Start button loads its scenario and makes a link you can post. Sample solutions:
+
+- **Biggest first-year write-off** (delivery van): double-declining. Year 1 is $14,000 vs. $10,000 sum-of-years and $6,000 straight-line. Follow up: does it write off more in total? (No, all three total $30,000.)
+- **$400 a year** (laptop, straight-line, life 2 or more): life 3 with salvage $300, or life 2 with salvage $700. Ask which is more believable for a laptop.
+- **Write it off faster** (pizza oven, sum-of-years, only change life): life 6 or shorter. Life 6 gives 11,000 × 6 ÷ 21 = $3,142.86. Shorter life means bigger early expense.
+
 ## Common misconceptions
 
 - Students think depreciation is cash going out. The cash left when the asset was bought; depreciation just spreads the cost.

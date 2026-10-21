@@ -18,7 +18,8 @@
 // Saving: after the student changes something, the URL is rewritten in place (no new history
 // entries). If everything is back to how the page loaded, the URL is cleared.
 
-const RESERVED = new Set(['embed', 'theme']);
+// embed and theme are page settings; ch is the active challenge (src/scripts/lib/challenges.js).
+const RESERVED = new Set(['embed', 'theme', 'ch']);
 const GROUPS = '[data-presets], [data-tabs]';
 
 function fields(root) {
@@ -93,6 +94,25 @@ function snapshot(root, picks) {
     if (v !== null) p.set(f.key, v);
   }
   return p;
+}
+
+/**
+ * The tool's current values, for code that checks them (challenge mode).
+ * v(key) reads an input by its share-link key as a number (checkboxes are 1 or 0).
+ * pick(n) is the index of the pressed button in preset/tab group n, or -1.
+ */
+export function readState(root) {
+  const map = new Map(fields(root).map((f) => [f.key, f]));
+  const groups = [...root.querySelectorAll(GROUPS)];
+  return {
+    v: (key) => {
+      const f = map.get(key);
+      const raw = f ? read(f) : null;
+      const n = parseFloat(raw);
+      return Number.isFinite(n) ? n : NaN;
+    },
+    pick: (n) => (groups[n] ? pressedIndex(groups[n]) : -1),
+  };
 }
 
 /** The current page URL with this tool's state in it and any extra params (e.g. embed) kept or removed. */
