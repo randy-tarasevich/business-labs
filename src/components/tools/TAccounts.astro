@@ -1,0 +1,93 @@
+---
+// T-Account Lab: markup only. Behavior lives in src/scripts/tools/t-accounts.js
+import TryIt from '../ui/TryIt.astro';
+import { PANEL, H2, H3, HINT, SELECT, NUM_INPUT_SM, NUM_UNIT, BTN, BTN_GHOST, TABLE_BOX, TABLE, VERDICT } from '../../scripts/lib/ui.js';
+
+// Entry rows: a checked row gets data-tone="good" or "bad".
+const ROW = 'grid grid-cols-[4.2rem_minmax(0,1fr)_auto] items-center gap-2 py-1.5 px-2 rounded-md border-l-[3px] border-transparent tone-good:bg-good-soft tone-good:border-good tone-bad:bg-bad-soft tone-bad:border-bad max-[420px]:grid-cols-[minmax(0,1fr)_auto] max-[420px]:[&>label]:col-span-2';
+const SEL = `${SELECT} w-full min-w-0 disabled:opacity-100 disabled:text-ink`;
+const AMT = `${NUM_INPUT_SM} w-[96px] disabled:opacity-100 disabled:text-ink`;
+const RULES = 'w-full border-collapse text-[13.5px] [&_th]:text-left [&_th]:py-1.5 [&_th]:px-2 [&_td]:py-1.5 [&_td]:px-2 [&_td]:border-t [&_td]:border-line [&_thead_th]:text-[12px] [&_thead_th]:text-muted [&_thead_th]:font-semibold [&_tbody_th]:font-semibold [&_tbody_th]:border-t [&_tbody_th]:border-line';
+---
+<div class="grid gap-[18px]" data-tool="t-accounts">
+  <section class="grid grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] gap-[18px] items-start max-[900px]:grid-cols-1">
+    <div class:list={[PANEL, 'group/card']} data-r="card">
+      <div class="grid gap-1.5 text-[13px] text-muted font-medium">
+        <span data-r="progress">Transaction 1 of 12</span>
+        <div class="h-1 bg-grid rounded-[2px] overflow-hidden" aria-hidden="true"><div class="h-full w-0 bg-accent transition-[width] duration-300" data-r="bar"></div></div>
+      </div>
+      <p class="font-display text-[clamp(18px,2.4vw,22px)] font-semibold leading-[1.3] text-pretty" data-r="text" aria-live="polite"></p>
+      <form class="grid gap-2 group-data-done/card:hidden" onsubmit="return false" aria-label="Journal entry">
+        <p class="text-[14px] text-muted">Write the journal entry: which account is debited, which is credited, and for how much?</p>
+        <div class={ROW} data-r="dr-row">
+          <label for="ta-dr" class="font-semibold text-[14px]">Debit</label>
+          <select id="ta-dr" class={SEL}></select>
+          <span class="flex items-center gap-1"><span class={NUM_UNIT}>$</span><input id="ta-dr-amt" type="number" min="0" step="1" inputmode="numeric" placeholder="0" aria-label="Debit amount in dollars" class={AMT} /></span>
+        </div>
+        <div class:list={[ROW, 'pl-6']} data-r="cr-row">
+          <label for="ta-cr" class="font-semibold text-[14px]">Credit</label>
+          <select id="ta-cr" class={SEL}></select>
+          <span class="flex items-center gap-1"><span class={NUM_UNIT}>$</span><input id="ta-cr-amt" type="number" min="0" step="1" inputmode="numeric" placeholder="0" aria-label="Credit amount in dollars" class={AMT} /></span>
+        </div>
+      </form>
+      <p class="rounded-lg py-2.5 px-3.5 text-[14.5px] tone-good:bg-good-soft tone-bad:bg-bad-soft tone-info:bg-bg" data-r="feedback" role="status" hidden></p>
+      <p class="text-[15px] border-l-[3px] border-accent pl-3 max-w-[65ch]" data-r="why" hidden></p>
+      <div class="flex flex-wrap gap-2">
+        <button type="button" class={BTN} data-act="check">Check my entry</button>
+        <button type="button" class={BTN_GHOST} data-act="reveal">Show answer</button>
+        <button type="button" class={BTN} data-act="next" hidden>Next transaction</button>
+        <button type="button" class={BTN_GHOST} data-act="restart" hidden>Start over</button>
+      </div>
+    </div>
+
+    <div class={PANEL}>
+      <h2 class={H2}>Debit and credit rules</h2>
+      <div class={TABLE_BOX}>
+        <table class={RULES}>
+          <thead><tr><th scope="col">Account type</th><th scope="col">Goes up with a</th><th scope="col">Goes down with a</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Assets</th><td>Debit</td><td>Credit</td></tr>
+            <tr><th scope="row">Liabilities</th><td>Credit</td><td>Debit</td></tr>
+            <tr><th scope="row">Owner's capital</th><td>Credit</td><td>Debit</td></tr>
+            <tr><th scope="row">Owner's drawing</th><td>Debit</td><td>Credit</td></tr>
+            <tr><th scope="row">Revenue</th><td>Credit</td><td>Debit</td></tr>
+            <tr><th scope="row">Expenses</th><td>Debit</td><td>Credit</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class={HINT}><strong class="text-ink">Debit</strong> means the left side of a T-account and <strong class="text-ink">credit</strong> means the right side. Every entry has equal debits and credits, which is why the accounting equation always balances.</p>
+    </div>
+  </section>
+
+  <section class={PANEL} aria-label="T-accounts">
+    <h2 class={H2}>Maya's Food Truck <span class="font-sans text-[13px] font-medium text-muted ml-1.5">General ledger</span></h2>
+    <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] max-[480px]:grid-cols-2 gap-2.5" data-r="tgrid"></div>
+    <p class={HINT}>Numbers in parentheses are transaction numbers. The account changed by the last entry is outlined.</p>
+  </section>
+
+  <section class="grid grid-cols-2 gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL}>
+      <h2 class={H2}>Trial balance</h2>
+      <p class="text-muted text-[14px]" data-r="tb-empty">Post an entry to start the trial balance.</p>
+      <div class={TABLE_BOX}>
+        <table class={TABLE}>
+          <thead><tr><th scope="col" class="text-left!">Account</th><th scope="col">Debit</th><th scope="col">Credit</th></tr></thead>
+          <tbody data-r="tb"></tbody>
+          <tfoot><tr class="[&>*]:border-t-2 [&>*]:border-ink [&>*]:font-bold"><th scope="row" class="text-left! py-1.5 px-2 pl-0">Totals</th><td data-r="tb-dr">$0</td><td data-r="tb-cr">$0</td></tr></tfoot>
+        </table>
+      </div>
+      <div class={VERDICT} data-r="tb-verdict" role="status" data-live></div>
+    </div>
+    <TryIt items={[
+      { q: 'Transaction 5 brings in cash from sales. Why is Sales Revenue credited, when credits sometimes mean "going down"?', a: 'Revenue increases owner\'s equity, and equity accounts go up on the credit side. Credit just means the right side of the T-account. Whether that\'s up or down depends on the type of account.' },
+      { q: 'In transaction 10, the business pays $1,000 on its loan. Which side of Loan Payable is that on, and why?', a: 'The debit side. Loan Payable is a liability, and liabilities go down with a debit.' },
+      { q: 'At the end, what are the trial balance totals? What mistake would a trial balance NOT catch?', a: 'Debits and credits are both $26,400. It won\'t catch an entry posted to the wrong account on the correct side (say, debiting Supplies instead of Equipment), or an entry that was left out completely.' },
+      { q: 'In the Accounting Equation Lab, Maya\'s equity ended at $10,700. Find that number here using Capital, Drawing, Revenue, and Expenses.', a: '$10,000 capital + $2,100 revenue − $300 fuel − $400 supplies expense − $700 drawing = $10,700.' },
+    ]} />
+  </section>
+</div>
+
+<script>
+  import { initTAccounts } from '../../scripts/tools/t-accounts.js';
+  document.querySelectorAll('[data-tool="t-accounts"]').forEach(initTAccounts);
+</script>
