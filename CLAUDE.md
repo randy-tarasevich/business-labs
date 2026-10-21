@@ -17,6 +17,10 @@ Free interactive tools for high school business and personal finance classes. St
 - **Teacher content never goes on student pages.** Answer keys, routines, and misconceptions live in the tool's markdown body, which only renders on `/teachers/<slug>/` (noindex, not linked from student pages). Anything on a `/tools/` page is readable in the page source, so hiding it with CSS or JS is not protection.
 - No em-dashes in any copy. Student-facing text is short, plain, and written for high schoolers.
 
+## Checks
+
+Run `npm run check` before opening a PR; GitHub runs it on every PR too (README "Checks"). New challenges and predictions need their answers in `tests/browser/fixtures.js`. Math tests compare against answers worked out independently (formula or by hand), never against the tool's own output.
+
 ## Adding a tool
 
 Follow the README's "Add a tool" steps: component, behavior script exporting `init(root)`, registry entry in `src/components/tools/index.js`, and a content `.md`. Styling is Tailwind utilities (see the README's Styling section).

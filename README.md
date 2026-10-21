@@ -90,6 +90,28 @@ A tool can have challenge cards under it: a goal ("get break-even down to 75 shi
 
 Challenges live in `src/data/challenges.js`, keyed by tool slug. Each has `title`, `goal`, `start` (share-link params: `g0` preset, `g1` tab, input ids for overrides), `met(s)`, and `rules`. Checks read inputs with `s.v('id')` and should reuse the tool's own exported math (`schedule()`, `funnel()`) so a card never disagrees with the screen. Before adding one, confirm the start scenario isn't already solved and that a solution exists within the rules. Goal text is student-facing; **sample solutions go in the tool's teacher notes** under "Challenges," never in the data file. Piloted on Break-Even Lab, Depreciation, and Marketing Funnel.
 
+## Checks
+
+Every pull request runs automatic checks on GitHub (`.github/workflows/checks.yml`). A green check means it's safe to merge; a red X means something broke. Click **Details** next to it to see which check failed and why.
+
+What's checked:
+
+- **Math** (`tests/unit/math.test.js`): depreciation, inventory costing, ratios, the marketing funnel, credit card payoff, savings growth, and the T-Account Lab's trial balance. Each expected answer is worked out a different way than the tool does it (a textbook formula or by hand), so the tests catch the tool being wrong, not just changing.
+- **House rules** (`tests/unit/content.test.js`): no em-dashes anywhere in `src/`; every challenge and prediction belongs to a real tool, is complete, and has a matching section in that tool's teacher notes.
+- **In a real browser** (`tests/browser/`): every page loads with no errors; every tool fits a 390px phone with no sideways scrolling in light, dark, and projector view; teacher notes never show up on student pages, even hidden; share links reopen the same numbers on every tool; Copy results gives a clean summary; every challenge starts unsolved, reaches Done with a real solution, and shows Rule broken when a rule is broken; every prediction marks the right guess; and the full T-Account Lab walkthrough balances at $26,400.
+
+Run them yourself:
+
+```bash
+npm test              # math and house rules (seconds)
+npm run test:browser  # builds, then the browser tests (a few minutes)
+npm run check         # both
+```
+
+The first time, install the browser with `npx playwright install chromium`.
+
+When you add a challenge or prediction, add its answer to `tests/browser/fixtures.js` (solutions are safe there; `tests/` never ships). The checks will remind you if you forget. New tools are picked up automatically.
+
 ## Structure
 
 ```
