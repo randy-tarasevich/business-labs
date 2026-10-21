@@ -25,6 +25,8 @@ Share links (README "Share links"): keep input ids stable, never random, because
 
 Challenges (README "Challenges"): goal cards per tool in `src/data/challenges.js`. Verify each start isn't already solved and a solution exists within the rules. Sample solutions go in teacher notes only.
 
+Predict first (README "Predict first"): question cards in `src/data/predictions.js`. Aim at a misconception; mix answers so "Stays the same" isn't a safe guess. The why goes in teacher notes only.
+
 Content frontmatter:
 - `courses`: a list. The first course is the tool's home section on the index page; list every other course it genuinely fits so it can be cross-listed. Allowed values live in `COURSES` in `src/content.config.js`.
 - `minutes`: `[low, high]` class time for the activity. Course pages add these up.

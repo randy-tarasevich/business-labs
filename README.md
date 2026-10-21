@@ -72,6 +72,12 @@ Every tool page (except the class timer, Business Plan Builder, Budget Balancer,
 
 New tools get this for free (`src/scripts/lib/share-state.js`). It saves number boxes, checkboxes, selects, radio groups, and the last pick in each `[data-presets]` or `[data-tabs]` group. Keep input ids stable (no random suffixes), since links use them as keys; inputs without an id are saved by position. Put `data-no-share` on anything that shouldn't be saved. A tool whose state isn't plain inputs goes in `SKIP_SHARE` in `src/pages/tools/[slug].astro`.
 
+## Predict first
+
+A tool can have prediction cards above its challenges. Each asks one question ("The T-shirt shop's forecast doubles. What happens to break-even?") and students pick Goes up, Goes down, or Stays the same. The tool measures before and after right away, then replays it on screen (the scenario, then the change a beat later) so students watch the sliders and chart move, and shows before → after next to the guess. While one card replays, the others wait. The right answer comes from the tool's own math, so there's no answer key on the page.
+
+Predictions live in `src/data/predictions.js`, keyed by tool slug: `question`, `start` and `change` (share-link params), and `measure` (`label`, `value(s)`, `fmt(n)`). Aim each question at a misconception, and mix the answers across a tool so "Stays the same" isn't a safe guess. The why and follow-up questions go in the tool's teacher notes under "Predict first." Piloted on Break-Even Lab, Depreciation, and Marketing Funnel.
+
 ## Challenges
 
 A tool can have challenge cards under it: a goal ("get break-even down to 75 shirts"), a few rules ("price stays at $20 or less"), and a **Start** button that loads the scenario. Cards check themselves live as students work and show Not yet, Rule broken, or Done. Start loads the scenario as a share link (with `ch=` marking the active card), so after pressing Start the address bar holds a link you can post for the class. Cards work in projector view and are left off printouts.
