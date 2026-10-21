@@ -23,6 +23,8 @@ Follow the README's "Add a tool" steps: component, behavior script exporting `in
 
 Share links (README "Share links"): keep input ids stable, never random, because links use them as keys. If a new tool's state isn't plain inputs, add it to `SKIP_SHARE`.
 
+Copy results (README "Copy my results"): label every input, group repeated inputs in a `<fieldset>` with a `<legend>`, and mark key results outside `Stat` boxes with `data-copy` or `data-copy-table`.
+
 Challenges (README "Challenges"): goal cards per tool in `src/data/challenges.js`. Verify each start isn't already solved and a solution exists within the rules. Sample solutions go in teacher notes only.
 
 Predict first (README "Predict first"): question cards in `src/data/predictions.js`. Aim at a misconception; mix answers so "Stays the same" isn't a safe guess. The why goes in teacher notes only.

@@ -72,6 +72,12 @@ Every tool page (except the class timer, Business Plan Builder, Budget Balancer,
 
 New tools get this for free (`src/scripts/lib/share-state.js`). It saves number boxes, checkboxes, selects, radio groups, and the last pick in each `[data-presets]` or `[data-tabs]` group. Keep input ids stable (no random suffixes), since links use them as keys; inputs without an id are saved by position. Put `data-no-share` on anything that shouldn't be saved. A tool whose state isn't plain inputs goes in `SKIP_SHARE` in `src/pages/tools/[slug].astro`.
 
+## Copy my results
+
+Every tool with share links also has a **Copy results** button. It copies a plain-text summary to the clipboard: the tool name, the example picked, the student's numbers with labels and units, the results (every `Stat`, the verdict line), and a share link that reopens the tool with those numbers. Students paste it into a Google Form or Doc as an exit ticket. Nothing is sent anywhere.
+
+New tools get this for free (`src/scripts/lib/copy-results.js`, with input labels from `describeFields()` in `share-state.js`). For results that aren't in `Stat` boxes, mark them: `data-copy="Label"` on an element, or `data-copy-table` on a results table (one line per row). Give inputs real labels (`<label for>` or `aria-label`) and put repeated groups in a `<fieldset>` with a `<legend>` so the summary can tell Saver A from Saver B.
+
 ## Predict first
 
 A tool can have prediction cards above its challenges. Each asks one question ("The T-shirt shop's forecast doubles. What happens to break-even?") and students pick Goes up, Goes down, or Stays the same. The tool measures before and after right away, then replays it on screen (the scenario, then the change a beat later) so students watch the sliders and chart move, and shows before → after next to the guess. While one card replays, the others wait. The right answer comes from the tool's own math, so there's no answer key on the page.

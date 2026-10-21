@@ -96,6 +96,97 @@ function snapshot(root, picks) {
   return p;
 }
 
+const squash = (t) => (t || '').replace(/\s+/g, ' ').trim();
+
+/** A label's text without inputs or live numbers inside it; a tag like <em>revenue</em> becomes "(revenue)". */
+function labelText(lab) {
+  const c = lab.cloneNode(true);
+  c.querySelectorAll('input, select, output, [aria-hidden="true"]').forEach((x) => x.remove());
+  c.querySelectorAll('em').forEach((x) => (x.textContent = ` (${squash(x.textContent)})`));
+  return squash(c.textContent);
+}
+
+function labelFor(root, el) {
+  // A slider without a number box: its script-set aria-label says what it is ("Northland: percent of workers making fish").
+  if (el.type === 'range' && el.getAttribute('aria-label')) return squash(el.getAttribute('aria-label'));
+  const byFor = (id) => (id ? root.querySelector(`label[for="${CSS.escape(id)}"]`) : null);
+  const lab = byFor(el.id?.replace(/-n$/, '')) || byFor(el.id) || el.closest('label');
+  return (lab && labelText(lab)) || squash(el.getAttribute('aria-label')) || squash(el.name) || 'Value';
+}
+
+/** A unit printed beside a number box ($ before; %, years, etc. after): a short plain span right next to it. */
+function unitText(sib) {
+  if (!sib || sib.tagName !== 'SPAN' || sib.children.length) return '';
+  const t = sib.textContent;
+  return t.trim().length && t.trim().length <= 10 ? t : '';
+}
+
+/** A number box's value with its unit. Dollar amounts with cents always show two decimals. */
+function withUnit(el) {
+  const n = parseFloat(el.value);
+  const money = squash(unitText(el.previousElementSibling)) === '$';
+  const after = money ? '' : unitText(el.nextElementSibling).replace(/\s+$/, '');
+  const cents = money && n % 1 !== 0;
+  const body = n.toLocaleString('en-US', cents ? { minimumFractionDigits: 2, maximumFractionDigits: 2 } : { maximumFractionDigits: 4 });
+  return `${money ? '$' : ''}${body}${after}`;
+}
+
+/** The name of the group an input sits in (a fieldset's legend), for telling apart repeated labels. */
+function groupName(el) {
+  const fs = el.closest('fieldset');
+  return squash(fs?.querySelector('legend')?.textContent);
+}
+
+/**
+ * Every saved input as { label, value } text, for the Copy my results summary. Only inputs on
+ * screen are listed (a tool may hide fields that don't apply). A checkbox and a number box in the
+ * same list row (include this line? how much?) become one line: the amount, or "left out".
+ * When labels repeat (Saver A and Saver B both have "Starts at age"), inputs in those groups get the
+ * group's name first.
+ */
+export function describeFields(root) {
+  const shown = (el) => el.getClientRects().length > 0;
+  const list = fields(root);
+  const rowOf = (el) => el.closest('li, tr');
+  const out = [];
+  const used = new Set();
+  for (const f of list) {
+    if (used.has(f)) continue;
+    if (f.kind === 'radio') {
+      const on = f.els.find((r) => r.checked);
+      if (!on || !f.els.some(shown)) continue;
+      const group = on.closest('[role="radiogroup"], fieldset, [role="group"]');
+      const label = squash(group?.getAttribute('aria-label')) || squash(group?.querySelector('legend')?.textContent) || 'Choice';
+      out.push({ label, value: labelFor(root, on), el: on });
+      continue;
+    }
+    const el = f.el;
+    if (!shown(el)) continue;
+    if (f.kind === 'check') {
+      const row = rowOf(el);
+      const pair = row && list.filter((g) => g !== f && g.el && rowOf(g.el) === row);
+      if (pair?.length === 1 && pair[0].el.type === 'number') {
+        used.add(pair[0]);
+        out.push({ label: labelFor(root, el), value: el.checked ? withUnit(pair[0].el) : 'left out', el });
+      } else {
+        out.push({ label: labelFor(root, el), value: el.checked ? 'Yes' : 'No', el });
+      }
+    } else if (el.tagName === 'SELECT') {
+      out.push({ label: labelFor(root, el), value: squash(el.selectedOptions[0]?.textContent), el });
+    } else if (Number.isFinite(parseFloat(el.value))) {
+      out.push({ label: labelFor(root, el), value: withUnit(el), el });
+    }
+  }
+  // If any label repeats, name the groups it repeats in, and prefix every input in those groups.
+  const counts = {};
+  out.forEach((o) => (counts[o.label] = (counts[o.label] || 0) + 1));
+  const dupGroups = new Set(out.filter((o) => counts[o.label] > 1).map((o) => groupName(o.el)).filter(Boolean));
+  return out.map(({ label, value, el }) => {
+    const g = groupName(el);
+    return { label: g && dupGroups.has(g) ? `${g}, ${label}` : label, value };
+  });
+}
+
 /**
  * The tool's current values, for code that checks them (challenge mode).
  * v(key) reads an input by its share-link key as a number (checkboxes are 1 or 0).

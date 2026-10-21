@@ -154,7 +154,7 @@ export function initRatioDashboard(root) {
             .filter((x) => x.r.group === g)
             .map(
               ({ r: rr, v, why, tone }) =>
-                `<article data-tone="${tone}" class="group border border-line border-l-4 rounded-lg py-2.5 px-3 grid gap-1.5 content-start tone-good:border-l-good tone-warn:border-l-warn tone-bad:border-l-bad tone-info:border-l-accent"><header class="flex justify-between items-baseline gap-2"><span class="font-semibold text-[14px]">${rr.name}</span><span class="font-mono font-semibold text-[20px] leading-[normal] tabular-nums group-tone-good:text-good group-tone-warn:text-warn group-tone-bad:text-bad">${why ? '–' : fmtVal(rr, v)}</span></header>${why ? '' : gauge(rr, v)}<p class="text-[13.5px]">${why || rr.say(v)}</p><span class="font-mono font-medium text-[11.5px] leading-[normal] text-muted">${rr.formula}</span></article>`
+                `<article data-tone="${tone}" class="group border border-line border-l-4 rounded-lg py-2.5 px-3 grid gap-1.5 content-start tone-good:border-l-good tone-warn:border-l-warn tone-bad:border-l-bad tone-info:border-l-accent"><header class="flex justify-between items-baseline gap-2"><span class="font-semibold text-[14px]">${rr.name}</span><span data-copy="${rr.name}" class="font-mono font-semibold text-[20px] leading-[normal] tabular-nums group-tone-good:text-good group-tone-warn:text-warn group-tone-bad:text-bad">${why ? '–' : fmtVal(rr, v)}</span></header>${why ? '' : gauge(rr, v)}<p class="text-[13.5px]">${why || rr.say(v)}</p><span class="font-mono font-medium text-[11.5px] leading-[normal] text-muted">${rr.formula}</span></article>`
             )
             .join('')}</div></section>`
       )

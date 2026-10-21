@@ -50,7 +50,7 @@ const rows = [
       </div>
       <div class="w-full"><svg data-chart viewBox="0 0 640 230" role="img" aria-label="Who gets what when the business sells" class="block w-full h-auto [&_text]:font-mono [&_text]:text-[12.5px] [&_text]:fill-muted"></svg></div>
       <div class={TABLE_BOX}>
-        <table class={TABLE}>
+        <table data-copy-table class={TABLE}>
           <thead><tr><th scope="col"><span class={SR}>Measure</span></th><th scope="col">Your ask</th><th scope="col">Their offer</th></tr></thead>
           <tbody>
             {rows.map(([k, label]) => <tr><th scope="row">{label}</th><td data-r={`ask-${k}`}>–</td><td data-r={`off-${k}`}>–</td></tr>)}

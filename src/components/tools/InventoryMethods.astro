@@ -46,7 +46,7 @@ import { ANS, CHART_KEY, FORMULA, H2, HINT, LOWER, NUM_INPUT, NUM_UNIT, PANEL, P
       </div>
       <div class="w-full min-w-0"><svg class={SVG} data-chart viewBox="0 0 640 300" role="img" aria-label="Which costs each method puts in COGS"></svg></div>
       <div class={TABLE_BOX}>
-        <table class:list={[TABLE, '[&_thead_th:first-child]:text-left']}>
+        <table data-copy-table class:list={[TABLE, '[&_thead_th:first-child]:text-left']}>
           <thead><tr><th scope="col">Method</th><th scope="col">COGS</th><th scope="col">Ending inventory</th><th scope="col">Gross profit</th><th scope="col">Tax</th></tr></thead>
           <tbody data-r="rows"></tbody>
         </table>
