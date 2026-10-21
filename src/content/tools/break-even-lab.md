@@ -34,6 +34,14 @@ A 10–15 minute **predict, test, explain** activity:
 - **Price = variable cost:** contribution margin is $0, so the lines run parallel and never cross.
 - **Food truck:** cutting rent by $1,000 → $5,000 ÷ $7 ≈ 715 meals. Cutting variable cost by $1 → $6,000 ÷ $8 = 750 meals. Here the rent cut wins.
 
+## Challenges
+
+Three challenge cards sit under the tool. Each Start button loads its scenario and makes a link you can post. Sample solutions (there are others):
+
+- **Cut costs, not price** (T-shirt shop, break-even 75 or fewer, price $20 or less): cut variable cost to $4 (1,200 ÷ 16 = 75), or cut fixed costs to $900 (900 ÷ 12 = 75). Ask which is more realistic.
+- **Price your way to profit** (phone case, $400 profit at 200 cases, price $32 or less, fixed costs stay $4,000): price $31 gives (31 − 9) × 200 − 4,000 = $400. A $6 price change swings profit by $1,200. Cutting variable cost also works.
+- **Rent goes up** (food truck, fixed costs $7,500, break-even under 1,000): price $13 gives 7,500 ÷ 8 = 938 meals, or variable cost $4.50 gives 7,500 ÷ 7.50 = 1,000 (not under, so $4.40 or less). Good debrief: which lever would customers notice?
+
 ## Common misconceptions
 
 - Students think raising the price always helps. Ask what happens to the forecast when customers have a cheaper option.
