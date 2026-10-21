@@ -36,3 +36,9 @@ export const T_ACCOUNT_ENTRIES = [
   ['cash', 'sales', 1500], ['ar', 'sales', 600], ['fuel', 'cash', 300], ['ap', 'cash', 500],
   ['cash', 'ar', 600], ['loan', 'cash', 1000], ['supexp', 'supplies', 400], ['drawing', 'cash', 700],
 ];
+
+// Adjusting Entries Lab: [debit account, credit account, amount] for each adjustment, a to g.
+export const ADJUSTING_ENTRIES = [
+  ['supexp', 'supplies', 650], ['insexp', 'prepaid', 200], ['depexp', 'accdep', 300], ['unearned', 'sales', 300],
+  ['wagesexp', 'wagespay', 240], ['intexp', 'intpay', 90], ['ar', 'sales', 400],
+];

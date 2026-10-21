@@ -1,7 +1,7 @@
 // Challenges, Predict first, and the T-Account Lab walkthrough.
 import { test, expect } from '@playwright/test';
 import { watchErrors, setValue } from './helpers.js';
-import { CHALLENGE_ANSWERS, PREDICTION_ANSWERS, T_ACCOUNT_ENTRIES } from './fixtures.js';
+import { CHALLENGE_ANSWERS, PREDICTION_ANSWERS, T_ACCOUNT_ENTRIES, ADJUSTING_ENTRIES } from './fixtures.js';
 import { CHALLENGES } from '../../src/data/challenges.js';
 import { PREDICTIONS } from '../../src/data/predictions.js';
 
@@ -87,6 +87,43 @@ test('T-Account Lab: hints, all 12 entries, and a balanced trial balance', async
   }
   await expect(page.locator('[data-r="tb-dr"]')).toHaveText('$26,400');
   await expect(page.locator('[data-r="tb-cr"]')).toHaveText('$26,400');
+  await expect(page.locator('[data-share]')).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
+test('Adjusting Entries Lab: targeted hints, all 7 adjustments, and the adjusted trial balance', async ({ page }) => {
+  const errors = watchErrors(page);
+  await page.goto('/tools/adjusting-entries-lab/');
+  const fb = page.locator('[data-r="feedback"]');
+  const enter = async (dr, cr, amt) => {
+    await page.selectOption('#ae-dr', dr);
+    await page.selectOption('#ae-cr', cr);
+    await page.fill('#ae-dr-amt', String(amt));
+    await page.fill('#ae-cr-amt', String(amt));
+    await page.click('[data-act="check"]');
+  };
+  await expect(page.locator('[data-r="ni-start"]')).toHaveText('$3,350');
+  await expect(page.locator('[data-r="f-dr"]')).toHaveText('$31,200');
+  await enter('supexp', 'supplies', 450);
+  await expect(fb).toContainText('what was used up');
+  await enter('supexp', 'cash', 650);
+  await expect(fb).toContainText('never use Cash');
+  await enter('supexp', 'supplies', 600);
+  await expect(fb, 'second wrong amount shows the calculation').toContainText('$1,100 on the books');
+  for (const [i, [dr, cr, amt]] of ADJUSTING_ENTRIES.entries()) {
+    if (i === 2) {
+      await enter('depexp', 'equipment', 300);
+      await expect(fb).toContainText('never touches the Equipment account');
+    }
+    await enter(dr, cr, amt);
+    await expect(fb).toContainText('Correct');
+    await page.click('[data-act="next"]');
+  }
+  await expect(page.locator('[data-r="f-dr"]')).toHaveText('$32,230');
+  await expect(page.locator('[data-r="f-cr"]')).toHaveText('$32,230');
+  await expect(page.locator('[data-r="ni-now"]')).toHaveText('$2,570');
+  await expect(page.locator('[data-r="text"]')).toContainText('$3,350 of profit instead of $2,570');
+  await expect(page.locator('[data-act="restart"]')).toBeVisible();
   await expect(page.locator('[data-share]')).toHaveCount(0);
   expect(errors).toEqual([]);
 });
