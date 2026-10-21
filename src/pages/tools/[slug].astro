@@ -2,6 +2,7 @@
 // Student-facing tool page. Teacher notes live on /teachers/<slug>/ and must never be rendered here:
 // anything on this page is readable by students in the page source.
 import Base from '../../layouts/Base.astro';
+import Challenges from '../../components/ui/Challenges.astro';
 import { getCollection } from 'astro:content';
 import { TOOL_COMPONENTS } from '../../components/tools/index.js';
 import { MIN_TOOLS, courseSlug, courseStyle } from '../../data/courses.js';
@@ -80,6 +81,7 @@ if (!Tool) throw new Error(`No component "${tool.data.component}" registered in 
   </div>
 
   <Tool {...tool.data.props} />
+  {shareable && <div class="mt-[18px]"><Challenges slug={tool.id} /></div>}
 </Base>
 
 <script>
@@ -89,6 +91,7 @@ if (!Tool) throw new Error(`No component "${tool.data.component}" registered in 
   import { initProjector } from '../../scripts/lib/projector.js';
   import { initPrint } from '../../scripts/lib/print.js';
   import { initShareState, stateUrl } from '../../scripts/lib/share-state.js';
+  import { initChallenges } from '../../scripts/lib/challenges.js';
 
   // The Project button opens projector view with the numbers currently on screen.
   const project = document.querySelector<HTMLAnchorElement>('[data-project]');
@@ -100,6 +103,9 @@ if (!Tool) throw new Error(`No component "${tool.data.component}" registered in 
     initProjector(root);
     initPrint(root);
     if (shareOk) initShareState(root, { onChange: syncProject });
+    // Challenge cards check themselves after the share link has loaded its numbers.
+    const panel = document.querySelector<HTMLElement>('[data-challenges]');
+    if (panel) initChallenges(root, panel);
   });
   syncProject();
   document.querySelector('[data-print]')?.addEventListener('click', () => window.print());

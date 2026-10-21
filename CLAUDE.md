@@ -23,6 +23,8 @@ Follow the README's "Add a tool" steps: component, behavior script exporting `in
 
 Share links (README "Share links"): keep input ids stable, never random, because links use them as keys. If a new tool's state isn't plain inputs, add it to `SKIP_SHARE`.
 
+Challenges (README "Challenges"): goal cards per tool in `src/data/challenges.js`. Verify each start isn't already solved and a solution exists within the rules. Sample solutions go in teacher notes only.
+
 Content frontmatter:
 - `courses`: a list. The first course is the tool's home section on the index page; list every other course it genuinely fits so it can be cross-listed. Allowed values live in `COURSES` in `src/content.config.js`.
 - `minutes`: `[low, high]` class time for the activity. Course pages add these up.

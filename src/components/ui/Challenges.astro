@@ -1,0 +1,43 @@
+---
+// Challenge cards under a tool (src/data/challenges.js). Renders nothing for tools with no challenges.
+// Behavior lives in src/scripts/lib/challenges.js, started from the tool page.
+import { CHALLENGES } from '../../data/challenges.js';
+import { PANEL, H2, H3, HINT, BTN_GHOST } from '../../scripts/lib/ui.js';
+
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+const list = CHALLENGES[slug] ?? [];
+---
+{list.length > 0 && (
+  <section class:list={[PANEL, 'print:hidden']} data-challenges={slug} aria-labelledby="ch-heading">
+    <div class="grid gap-1">
+      <h2 id="ch-heading" class={H2}>Challenges</h2>
+      <p class={HINT}>Press Start to load a scenario. Then change the numbers until the card says Done.</p>
+    </div>
+    <ol class="grid grid-cols-3 gap-3 max-[1000px]:grid-cols-2 max-[860px]:grid-cols-1">
+      {list.map((c, i) => (
+        <li data-ch={i} class="group grid gap-2.5 content-start rounded-lg border border-line bg-bg p-3.5 data-active:border-accent data-active:ring-1 data-active:ring-accent tone-good:border-good tone-good:ring-good tone-warn:border-warn">
+          <div class="flex items-start justify-between gap-2">
+            <h3 class={H3}>{c.title}</h3>
+            <span data-status class="shrink-0 rounded-full border border-line px-2.5 py-0.5 text-[12px] font-semibold text-muted group-tone-good:border-good group-tone-good:bg-good group-tone-good:text-panel group-tone-warn:border-warn group-tone-warn:bg-warn-soft group-tone-warn:text-ink">Not yet</span>
+          </div>
+          <p class="text-[14px]">{c.goal}</p>
+          {c.rules?.length > 0 && (
+            <ul class="grid gap-1 text-[13px] text-muted" aria-label="Rules">
+              {c.rules.map((r) => (
+                <li data-rule class="flex gap-1.5 data-broken:font-semibold data-broken:text-bad data-kept:text-good">
+                  <span data-mark class="w-3 shrink-0 text-center" aria-hidden="true">•</span>
+                  <span>{r.text}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+          <button type="button" data-start class:list={[BTN_GHOST, 'justify-self-start mt-1']}>Start</button>
+        </li>
+      ))}
+    </ol>
+    <p class="sr-only" role="status" data-ch-live></p>
+  </section>
+)}
