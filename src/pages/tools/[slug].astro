@@ -18,22 +18,32 @@ const { tool, withPages } = Astro.props;
 const Tool = TOOL_COMPONENTS[tool.data.component];
 // The timer has nothing to print, and the Business Plan Builder prints the student's plan itself.
 const printable = !['ClassTimer', 'BusinessPlan'].includes(tool.data.component);
+// Share links save a tool's inputs in the URL (src/scripts/lib/share-state.js). These tools keep their
+// state in something other than plain inputs, so they don't get a Copy link button.
+const SKIP_SHARE = ['ClassTimer', 'BusinessPlan', 'BudgetBalancer', 'AccountingEquation'];
+const shareable = !SKIP_SHARE.includes(tool.data.component);
 if (!Tool) throw new Error(`No component "${tool.data.component}" registered in src/components/tools/index.js`);
 ---
 <Base title={tool.data.title} description={tool.data.summary}>
   <!-- The title stays in projector view (?embed=1) so the class knows which tool is up. -->
-  <div class="mb-6 grid gap-1 print:hidden embed:mb-4">
+  <div class="mb-6 grid gap-1 print:hidden embed:mb-4" data-share-ok={shareable ? '' : undefined}>
     <a href="/" class="site-chrome text-sm text-muted hover:text-ink">← All tools</a>
     <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
       <h1 class="text-3xl sm:text-4xl font-extrabold">{tool.data.title}</h1>
       <div class="site-chrome flex flex-wrap gap-2">
+      {shareable && (
+        <button type="button" data-share class="inline-flex items-center gap-2 rounded-lg border border-line bg-panel px-3.5 py-2 text-sm font-semibold text-ink hover:border-accent cursor-pointer" title="Copy a link that opens this tool with your current numbers">
+          <svg class="size-4 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>
+          <span data-share-label>Copy link</span>
+        </button>
+      )}
       {printable && (
         <button type="button" data-print class="inline-flex items-center gap-2 rounded-lg border border-line bg-panel px-3.5 py-2 text-sm font-semibold text-ink hover:border-accent cursor-pointer" title="Print a worksheet with your current numbers and space to answer the Try it questions">
           <svg class="size-4 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/></svg>
           Print
         </button>
       )}
-      <a href="?embed=1" class="site-chrome inline-flex items-center gap-2 rounded-lg border border-line bg-panel px-3.5 py-2 text-sm font-semibold text-ink hover:border-accent max-[860px]:hidden" title="Full-width view without the site header, for a projector or a slide link">
+      <a href="?embed=1" data-project class="site-chrome inline-flex items-center gap-2 rounded-lg border border-line bg-panel px-3.5 py-2 text-sm font-semibold text-ink hover:border-accent max-[860px]:hidden" title="Full-width view without the site header, for a projector or a slide link">
         <svg class="size-4 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
         Project
       </a>
@@ -78,10 +88,36 @@ if (!Tool) throw new Error(`No component "${tool.data.component}" registered in 
   import { initLiveBar } from '../../scripts/lib/live-bar.js';
   import { initProjector } from '../../scripts/lib/projector.js';
   import { initPrint } from '../../scripts/lib/print.js';
-  document.querySelectorAll('[data-tool]').forEach((root) => {
+  import { initShareState, stateUrl } from '../../scripts/lib/share-state.js';
+
+  // The Project button opens projector view with the numbers currently on screen.
+  const project = document.querySelector<HTMLAnchorElement>('[data-project]');
+  const syncProject = () => project && (project.href = stateUrl({ embed: '1' }));
+  const shareOk = document.querySelector('[data-share-ok]') !== null;
+
+  document.querySelectorAll<HTMLElement>('[data-tool]').forEach((root) => {
     initLiveBar(root);
     initProjector(root);
     initPrint(root);
+    if (shareOk) initShareState(root, { onChange: syncProject });
   });
+  syncProject();
   document.querySelector('[data-print]')?.addEventListener('click', () => window.print());
+
+  // Copy link: the page URL already holds the tool's numbers. Leave out projector view so students
+  // who open it get the normal page.
+  const share = document.querySelector('[data-share]');
+  const label = share?.querySelector('[data-share-label]');
+  let reset: ReturnType<typeof setTimeout>;
+  share?.addEventListener('click', async () => {
+    const url = stateUrl({ embed: null, theme: null });
+    try {
+      await navigator.clipboard.writeText(url);
+      if (label) label.textContent = 'Link copied';
+    } catch {
+      window.prompt('Copy this link:', url);
+    }
+    clearTimeout(reset);
+    reset = setTimeout(() => label && (label.textContent = 'Copy link'), 2000);
+  });
 </script>

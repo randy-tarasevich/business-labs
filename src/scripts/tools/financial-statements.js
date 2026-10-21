@@ -101,7 +101,7 @@ export function initFinancialStatements(root) {
       const li = document.createElement('li');
       li.className = 'grid grid-cols-[auto_minmax(0,1fr)_auto] gap-2 items-center py-1.5 px-2 rounded-md border border-transparent hover:border-line hover:bg-bg focus-within:border-line focus-within:bg-bg data-off:[&_label]:text-muted data-off:[&_label]:line-through data-off:[&_input[type=number]]:opacity-50';
       li.tabIndex = -1;
-      const cid = `fs-on-${i}-${Math.random().toString(36).slice(2, 7)}`;
+      const cid = `fs-on-${i}`;
       li.innerHTML = `<input type="checkbox" id="${cid}" checked class="w-[17px] h-[17px] accent-accent m-0" /><label for="${cid}" class="text-[13.5px] cursor-pointer">${row.t.text}${row.t.kind ? ` <em class="not-italic text-[11.5px] text-muted border border-line rounded-full px-1.5 ml-0.5 whitespace-nowrap">${row.t.kind}</em>` : ''}</label><div class="flex items-center gap-[3px]"><span class="text-muted font-mono text-[13px]">$</span><input type="number" class="w-[78px] font-mono font-medium text-[14px] leading-[normal] text-ink bg-bg border border-line rounded-md py-[3px] px-1.5 text-right" min="0" step="50" inputmode="decimal" value="${row.amt}" aria-label="Amount for: ${row.t.text}" /></div>`;
       const [box, amtIn] = li.querySelectorAll('input');
       box.addEventListener('change', () => {

@@ -100,7 +100,7 @@ export function initRatioDashboard(root) {
 
   const wrap = r('inputs');
   FIELDS.forEach((f) => {
-    const id = `rt-${f.key}-${Math.random().toString(36).slice(2, 7)}`;
+    const id = `rt-${f.key}`;
     const div = document.createElement('div');
     div.className = 'grid grid-cols-[minmax(0,1fr)_auto] gap-x-2 gap-y-0.5 items-center';
     div.innerHTML = `<label for="${id}" class="font-semibold text-[14px]">${f.label}</label><div class="flex items-center gap-1"><span class="text-muted font-mono">$</span><input id="${id}" type="number" class="w-[120px] font-mono font-medium text-[15px] leading-[normal] text-ink bg-bg border border-line rounded-md py-1 px-2 text-right tabular-nums" step="1000" ${f.neg ? '' : 'min="0"'} inputmode="decimal" data-k="${f.key}" /></div>${f.hint ? `<span class="text-[12.5px] text-muted col-span-full">${f.hint}</span>` : ''}`;

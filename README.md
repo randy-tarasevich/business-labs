@@ -66,6 +66,12 @@ Add `?embed=1` to any tool URL (or click **Project** on the tool page) to hide t
 
 In projector view, the explanation panel and the Try it questions start collapsed behind **Show** buttons, so answers don't appear until the teacher opens them. This covers both panels in a tool's `LOWER` section and any `TryIt` panel. Add `data-projector-collapse` to any other panel that should start collapsed (see `src/scripts/lib/projector.js`).
 
+## Share links
+
+Every tool page (except the class timer, Business Plan Builder, Budget Balancer, and Accounting Equation Lab) keeps its current numbers in the URL. Change a value and the address bar updates; **Copy link** copies it. Anyone who opens the link sees the tool exactly as it was left: same preset, same numbers, same results. Post a scenario in Google Classroom so the class starts from the same place, or have students turn in a link as their answer. The **Project** button carries the current numbers into projector view too. Nothing is sent to the site; the state lives only in the link.
+
+New tools get this for free (`src/scripts/lib/share-state.js`). It saves number boxes, checkboxes, selects, radio groups, and the last pick in each `[data-presets]` or `[data-tabs]` group. Keep input ids stable (no random suffixes), since links use them as keys; inputs without an id are saved by position. Put `data-no-share` on anything that shouldn't be saved. A tool whose state isn't plain inputs goes in `SKIP_SHARE` in `src/pages/tools/[slug].astro`.
+
 ## Structure
 
 ```
