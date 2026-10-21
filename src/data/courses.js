@@ -22,6 +22,21 @@ export const COURSE_COLORS = {
 };
 export const courseStyle = (name) => `--course: var(${COURSE_COLORS[name] ?? '--accent'})`;
 
+// Every tool that lists `course`, in the order the course page shows them: the suggested
+// sequence first, then the rest ("Also fits this course") in site order. `tools` must already
+// be sorted by `order`. Teacher pages use this for their lists and previous/next links.
+export function courseOrder(course, tools) {
+  const list = tools.filter((t) => t.data.courses.includes(course));
+  const byId = new Map(list.map((t) => [t.id, t]));
+  const seq = (COURSE_GUIDES[course]?.sequence ?? []).map((s) => byId.get(s.id)).filter(Boolean);
+  const inSeq = new Set(seq.map((t) => t.id));
+  return [...seq, ...list.filter((t) => !inSeq.has(t.id))];
+}
+
+// Class time as text: [20, 30] → "20–30 min", [600, 600] → "10 hr".
+export const minutesText = ([a, b]) => (a === b ? `${a} min` : `${a}–${b} min`);
+export const hoursText = (m) => (m < 60 ? `${m} min` : `${Math.floor(m / 60)} hr${m % 60 ? ` ${m % 60} min` : ''}`);
+
 export const COURSE_GUIDES = {
   'Intro to Business': {
     intro: 'A tour of how business works, in the order most Intro courses teach it: why trade happens, how markets set prices, how customers react to price, what it takes to make a profit, and how a business keeps its books.',

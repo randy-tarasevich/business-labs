@@ -3,54 +3,136 @@
 // When the site moves to a custom domain, protect /teachers/* with Cloudflare Access.
 import Base from '../../layouts/Base.astro';
 import { getCollection, render } from 'astro:content';
+import { MIN_TOOLS, courseSlug, courseStyle, courseOrder, minutesText } from '../../data/courses.js';
 
 export async function getStaticPaths() {
-  const tools = await getCollection('tools', ({ data }) => !data.draft);
-  return tools.map((tool) => ({ params: { slug: tool.id }, props: { tool } }));
+  const tools = (await getCollection('tools', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
+  return tools.map((tool) => ({ params: { slug: tool.id }, props: { tool, tools } }));
 }
 
-const { tool } = Astro.props;
-const { Content } = await render(tool);
-const { indicators, alsoAligned } = tool.data;
+const { tool, tools } = Astro.props;
+const { Content, headings } = await render(tool);
+const { indicators, alsoAligned, courses, minutes } = tool.data;
+const home = courses[0];
 const toolPath = `/tools/${tool.id}/`;
 const studentUrl = new URL(toolPath, Astro.site).href;
+const embedUrl = `${studentUrl}?embed=1`;
+// "On this page": the notes' section headings (How I use it, Answer notes, ...).
+const sections = headings.filter((h) => h.depth === 2);
+// Previous / next follow the home course's order, the same order its course page uses.
+const order = courseOrder(home, tools);
+const at = order.findIndex((t) => t.id === tool.id);
+const prev = order[at - 1];
+const next = order[at + 1];
+const courseHref = (c) => (tools.filter((t) => t.data.courses.includes(c)).length >= MIN_TOOLS ? `/courses/${courseSlug(c)}/` : `/teachers/#${courseSlug(c)}`);
+
 // Styles for the rendered markdown notes (headings, lists, tables, code).
-const NOTES = "rounded-xl border border-line bg-panel p-5 grid gap-3 *:max-w-[70ch] [&_h2]:text-[1.125rem] [&_h2]:font-semibold [&_h2]:mt-2 [&_h2:first-child]:mt-0 [&_ul]:pl-5 [&_ol]:pl-5 [&_ul]:grid [&_ol]:grid [&_ul]:gap-1 [&_ol]:gap-1 [&_ul]:list-disc [&_ol]:list-decimal [&_code]:font-mono [&_code]:text-[.9em] [&_code]:bg-bg [&_code]:py-px [&_code]:px-[5px] [&_code]:rounded-[4px] [&_table]:border-collapse [&_table]:text-[14px] [&_table]:block [&_table]:overflow-x-auto [&_table]:max-w-full [&_th]:border [&_td]:border [&_th]:border-line [&_td]:border-line [&_th]:py-1.5 [&_td]:py-1.5 [&_th]:px-2.5 [&_td]:px-2.5 [&_th]:text-left [&_td]:text-left [&_th]:bg-bg";
+const NOTES = "rounded-xl border border-line border-t-[3px] border-t-(--course) bg-panel p-5 grid gap-3 *:max-w-[70ch] [&_h2]:text-[1.125rem] [&_h2]:font-semibold [&_h2]:mt-2 [&_h2]:scroll-mt-6 [&_h2:first-child]:mt-0 [&_ul]:pl-5 [&_ol]:pl-5 [&_ul]:grid [&_ol]:grid [&_ul]:gap-1 [&_ol]:gap-1 [&_ul]:list-disc [&_ol]:list-decimal [&_code]:font-mono [&_code]:text-[.9em] [&_code]:bg-bg [&_code]:py-px [&_code]:px-[5px] [&_code]:rounded-[4px] [&_table]:border-collapse [&_table]:text-[14px] [&_table]:block [&_table]:overflow-x-auto [&_table]:max-w-full [&_th]:border [&_td]:border [&_th]:border-line [&_td]:border-line [&_th]:py-1.5 [&_td]:py-1.5 [&_th]:px-2.5 [&_td]:px-2.5 [&_th]:text-left [&_td]:text-left [&_th]:bg-bg";
+const CARD = 'rounded-xl border border-line bg-panel p-5';
+const COPY_BTN = 'inline-flex items-center justify-center gap-2 rounded-lg border border-line bg-bg px-3 py-2 text-sm font-semibold text-ink hover:border-(--course) cursor-pointer';
 ---
 <Base title={`Teacher notes: ${tool.data.title}`} description={`Teacher notes for ${tool.data.title}.`} noindex>
-  <div class="mb-6 grid gap-1">
-    <a href="/teachers/" class="text-sm text-muted hover:text-ink">← All teacher notes</a>
-    <p class="text-xs uppercase tracking-wider font-semibold text-muted mt-2">Teacher notes</p>
-    <h1 class="text-3xl sm:text-4xl font-extrabold">{tool.data.title}</h1>
-    <p class="text-muted">{tool.data.courses.join(', ')} · {tool.data.unit} · Grades {tool.data.grades}</p>
-  </div>
+  <div style={courseStyle(home)}>
+    <div class="mb-6 grid gap-1">
+      <a href="/teachers/" class="text-sm text-muted hover:text-ink">← All teacher notes</a>
+      <p class="text-xs uppercase tracking-wider font-semibold text-(--course) mt-2">Teacher notes</p>
+      <h1 class="text-3xl sm:text-4xl font-extrabold">{tool.data.title}</h1>
+      <div class="mt-2 flex flex-wrap items-center gap-2">
+        {courses.map((c) => (
+          <a href={courseHref(c)} style={courseStyle(c)} class="inline-flex items-center gap-2 min-h-8 rounded-full border border-line bg-panel px-3 py-1 text-sm font-medium hover:border-(--course) hover:text-(--course)">
+            <span class="size-2 shrink-0 rounded-full bg-(--course)" aria-hidden="true"></span>{c}
+          </a>
+        ))}
+        <span class="text-sm text-muted">{tool.data.unit} · Grades {tool.data.grades}{minutes && <> · <span class="font-mono">{minutesText(minutes)}</span> of class</>}</span>
+      </div>
+    </div>
 
-  <div class="flex flex-wrap gap-2 mb-8">
-    <a href={toolPath} class="rounded-lg bg-accent text-panel font-semibold text-sm px-4 py-2">Open the tool</a>
-    <a href={`${toolPath}?embed=1`} class="rounded-lg border border-line text-accent font-semibold text-sm px-4 py-2 hover:border-accent">Open in embed mode</a>
-  </div>
+    <div class="flex flex-wrap gap-2 mb-6">
+      <a href={toolPath} class="rounded-lg bg-accent text-panel font-semibold text-sm px-4 py-2">Open the tool</a>
+      <a href={`${toolPath}?embed=1`} class="rounded-lg border border-line text-accent font-semibold text-sm px-4 py-2 hover:border-accent">Open in embed mode</a>
+    </div>
 
-  <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px] items-start">
-    <article class={NOTES}>
-      <Content />
-    </article>
-    <aside class="grid gap-4">
-      <div class="rounded-xl border border-line bg-panel p-5">
-        <h2 class="text-lg font-semibold mb-2">Standards</h2>
-        {indicators.length === 0 && alsoAligned.length === 0 ? (
-          <p class="text-muted text-sm">Not yet aligned. Add verified codes in this tool's markdown file.</p>
-        ) : (
-          <ul class="text-sm grid gap-1">
-            {indicators.map((i) => <li><span class="font-mono">{i.code}</span> {i.name} ({i.level})</li>)}
-            {alsoAligned.map((a) => <li class="text-muted">{a}</li>)}
-          </ul>
+    {sections.length > 1 && (
+      <nav aria-label="On this page" class="lg:hidden mb-4 flex flex-wrap items-center gap-2">
+        <span class="text-sm text-muted mr-1">Jump to:</span>
+        {sections.map((h) => (
+          <a href={`#${h.slug}`} class="inline-flex items-center min-h-8 rounded-full border border-line bg-panel px-3 py-1 text-sm font-medium hover:border-(--course) hover:text-(--course)">{h.text}</a>
+        ))}
+      </nav>
+    )}
+
+    <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px] items-start">
+      <article class={NOTES}>
+        <Content />
+      </article>
+
+      <aside class="grid gap-4 lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto">
+        {sections.length > 1 && (
+          <nav aria-label="On this page" class={`hidden lg:block ${CARD}`}>
+            <h2 class="text-sm uppercase tracking-wider font-semibold text-muted mb-2">On this page</h2>
+            <ul class="grid gap-1 text-sm">
+              {sections.map((h) => (
+                <li><a href={`#${h.slug}`} class="block rounded-md px-2 py-1 -mx-2 hover:bg-bg hover:text-(--course)">{h.text}</a></li>
+              ))}
+            </ul>
+          </nav>
         )}
-      </div>
-      <div class="rounded-xl border border-line bg-panel p-5 text-sm grid gap-2">
-        <h2 class="text-lg font-semibold">Student link</h2>
-        <p class="text-muted">Share the tool link, not this page. Embed mode hides the site header for projecting or linking from slides.</p>
-        <code class="font-mono text-xs break-all bg-bg rounded p-2 select-all">{studentUrl}</code>
-      </div>
-    </aside>
+        <div class={`${CARD} text-sm grid gap-3`}>
+          <h2 class="text-lg font-semibold">Student links</h2>
+          <p class="text-muted">Share the tool link, not this page. The projector link hides the site header for projecting or linking from slides.</p>
+          <div class="grid gap-2">
+            <button type="button" class={COPY_BTN} data-copy-url={studentUrl} data-label="Copy student link">Copy student link</button>
+            <button type="button" class={COPY_BTN} data-copy-url={embedUrl} data-label="Copy projector link">Copy projector link</button>
+          </div>
+          <p class="font-mono text-xs text-muted break-all">{studentUrl}</p>
+        </div>
+        <div class={CARD}>
+          <h2 class="text-lg font-semibold mb-2">Standards</h2>
+          {indicators.length === 0 && alsoAligned.length === 0 ? (
+            <p class="text-muted text-sm">Not yet aligned. Add verified codes in this tool's markdown file.</p>
+          ) : (
+            <ul class="text-sm grid gap-2">
+              {indicators.map((i) => <li><span class="font-mono font-semibold">{i.code}</span> {i.name} <span class="text-muted">({i.level})</span></li>)}
+              {alsoAligned.map((a) => <li class="text-muted">{a}</li>)}
+            </ul>
+          )}
+        </div>
+      </aside>
+    </div>
+
+    {(prev || next) && (
+      <nav aria-label={`More in ${home}`} class="mt-10 grid gap-3 sm:grid-cols-2">
+        {prev ? (
+          <a href={`/teachers/${prev.id}/`} class={`group ${CARD} hover:border-(--course)`}>
+            <span class="text-xs text-muted">← Previous in {home}</span>
+            <span class="block text-lg font-semibold mt-1 group-hover:text-(--course)">{prev.data.title}</span>
+          </a>
+        ) : <span class="hidden sm:block"></span>}
+        {next && (
+          <a href={`/teachers/${next.id}/`} class={`group ${CARD} sm:text-right hover:border-(--course)`}>
+            <span class="text-xs text-muted">Next in {home} →</span>
+            <span class="block text-lg font-semibold mt-1 group-hover:text-(--course)">{next.data.title}</span>
+          </a>
+        )}
+      </nav>
+    )}
   </div>
 </Base>
+
+<script>
+  // Copy buttons: put a student or projector link on the clipboard. Nothing is sent anywhere.
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-url]').forEach((btn) => {
+    let reset: ReturnType<typeof setTimeout>;
+    btn.addEventListener('click', async () => {
+      const url = btn.dataset.copyUrl;
+      try {
+        await navigator.clipboard.writeText(url);
+        btn.textContent = 'Copied';
+      } catch {
+        window.prompt('Copy this link:', url);
+      }
+      clearTimeout(reset);
+      reset = setTimeout(() => (btn.textContent = btn.dataset.label), 2000);
+    });
+  });
+</script>
