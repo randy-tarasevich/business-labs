@@ -24,6 +24,7 @@ import CreditCard from './CreditCard.astro';
 import StartEarly from './StartEarly.astro';
 import AbTest from './AbTest.astro';
 import FeedRanking from './FeedRanking.astro';
+import TAccounts from './TAccounts.astro';
 
 export const TOOL_COMPONENTS = {
   BreakEven,
@@ -50,4 +51,5 @@ export const TOOL_COMPONENTS = {
   StartEarly,
   AbTest,
   FeedRanking,
+  TAccounts,
 };
