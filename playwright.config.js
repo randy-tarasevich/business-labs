@@ -17,7 +17,8 @@ export default defineConfig({
     permissions: ['clipboard-read', 'clipboard-write'],
   },
   webServer: {
-    command: `npx astro preview --port ${PORT}`,
+    // --ignore-lock: a preview server left over from another run must not stop this one from starting.
+    command: `npx astro preview --port ${PORT} --ignore-lock`,
     url: `http://localhost:${PORT}/`,
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,

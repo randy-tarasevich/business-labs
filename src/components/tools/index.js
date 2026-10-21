@@ -25,6 +25,7 @@ import StartEarly from './StartEarly.astro';
 import AbTest from './AbTest.astro';
 import FeedRanking from './FeedRanking.astro';
 import TAccounts from './TAccounts.astro';
+import AdjustingEntries from './AdjustingEntries.astro';
 
 export const TOOL_COMPONENTS = {
   BreakEven,
@@ -52,4 +53,5 @@ export const TOOL_COMPONENTS = {
   AbTest,
   FeedRanking,
   TAccounts,
+  AdjustingEntries,
 };

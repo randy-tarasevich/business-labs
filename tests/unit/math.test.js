@@ -135,3 +135,33 @@ test('comparative advantage: opportunity cost', () => {
   assert.equal(oppCost([20, 20]), 1);
   assert.equal(oppCost([0, 10]), Infinity);
 });
+
+test('adjusting entries: Maya, end of month 2', async () => {
+  const { ACCOUNTS: A, UNADJUSTED, ADJUSTMENTS, adjustedBalances, netIncome } = await import('../../src/scripts/tools/adjusting-entries.js');
+  const debitNormal = new Set(['A', 'D', 'X']);
+  const totals = (bal) => A.reduce(([d, c], a) => (debitNormal.has(a.type) ? [d + (bal[a.id] || 0), c] : [d, c + (bal[a.id] || 0)]), [0, 0]);
+  assert.deepEqual(totals(UNADJUSTED), [31200, 31200], 'unadjusted trial balance');
+
+  // Amounts worked out by hand (see the teacher notes).
+  assert.deepEqual(ADJUSTMENTS.map((t) => t.amt), [
+    1100 - 450, // supplies used
+    1200 / 6, // one month of a six-month policy
+    (20000 - 2000) / 5 / 12, // straight-line, one month
+    900 / 3, // one of three catering events
+    4 * 60, // four days of wages
+    (13500 * 0.08) / 12, // one month of interest
+    400, // earned, billed next month
+  ]);
+  ADJUSTMENTS.forEach((t, i) => assert.ok(t.dr !== 'cash' && t.cr !== 'cash', `adjustment ${i + 1} must not use Cash`));
+
+  const bal = adjustedBalances();
+  assert.deepEqual(totals(bal), [32230, 32230], 'adjusted trial balance');
+  assert.equal(netIncome(adjustedBalances(0)), 5200 - 1200 - 650); // 3,350
+  assert.equal(netIncome(bal), 3350 + 700 - 1480); // 2,570
+  // Accounting equation: assets (truck at book value) = liabilities + capital - drawing + net income
+  const assets = bal.cash + bal.ar + bal.supplies + bal.prepaid + bal.equipment - bal.accdep;
+  const liabilities = bal.ap + bal.wagespay + bal.intpay + bal.unearned + bal.loan;
+  assert.equal(assets, 27500);
+  assert.equal(liabilities, 15030);
+  assert.equal(assets, liabilities + bal.capital - bal.drawing + netIncome(bal));
+});
