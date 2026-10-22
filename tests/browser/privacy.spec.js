@@ -4,7 +4,7 @@
 import { test, expect } from '@playwright/test';
 import { SLUGS } from './helpers.js';
 
-const PAGES = ['/', '/standards/', '/privacy/', '/teachers/', ...SLUGS.map((s) => `/tools/${s}/`), ...SLUGS.map((s) => `/teachers/${s}/`)];
+const PAGES = ['/', '/standards/', '/privacy/', '/about/', '/teachers/', ...SLUGS.map((s) => `/tools/${s}/`), ...SLUGS.map((s) => `/teachers/${s}/`)];
 // Listed on the privacy page: the light/dark choice and the Business Plan Builder draft (plus its linked Drive file).
 const ALLOWED_STORAGE = ['theme', 'business-labs:business-plan'];
 const ALLOWED_DATABASES = ['business-labs'];
