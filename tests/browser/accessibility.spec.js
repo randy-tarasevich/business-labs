@@ -12,7 +12,7 @@ const MODES = [
   ['phone dark', '?theme=dark', 390],
   ['projector', '?embed=1', 1280],
 ];
-const PAGES = ['/', '/standards/', '/teachers/', ...SLUGS.map((s) => `/tools/${s}/`), ...SLUGS.map((s) => `/teachers/${s}/`)];
+const PAGES = ['/', '/standards/', '/privacy/', '/teachers/', ...SLUGS.map((s) => `/tools/${s}/`), ...SLUGS.map((s) => `/teachers/${s}/`)];
 
 async function violations(page) {
   const r = await new AxeBuilder({ page }).withTags(TAGS).analyze();

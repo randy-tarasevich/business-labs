@@ -1,0 +1,67 @@
+---
+// Privacy statement for teachers, families, and district technology reviewers.
+// Every claim here is backed by a check in tests/browser/privacy.spec.js. If a tool ever needs
+// to store or send something new, update this page and that test together.
+import Base from '../layouts/Base.astro';
+
+const UPDATED = 'October 22, 2026';
+const rows = [
+  ['Student names or ID numbers', 'No'],
+  ['Email addresses', 'No'],
+  ['Accounts, sign-ins, or passwords', 'No accounts exist'],
+  ['Grades, scores, or progress', 'No'],
+  ['Anything students type', 'No. It stays on their screen (see below)'],
+  ['Location', 'No'],
+  ['Cookies', 'None set by Business Labs'],
+  ['Analytics or tracking scripts', 'None'],
+  ['Advertising', 'None'],
+  ['Third-party scripts, fonts, or embeds', 'None. Everything loads from this site'],
+];
+const H2 = 'text-xl font-bold mt-10 mb-3';
+const P = 'mb-3 max-w-[70ch]';
+---
+<Base title="Privacy" description="Business Labs collects no student information. No accounts, no tracking, nothing sent anywhere.">
+  <h1 class="text-3xl sm:text-4xl font-extrabold mb-2">Privacy</h1>
+  <p class="text-muted mb-8">Last checked {UPDATED}</p>
+
+  <div class="rounded-xl border border-line bg-panel p-5 max-w-[70ch]">
+    <h2 class="text-lg font-bold mb-2">The short version</h2>
+    <ul class="list-disc pl-5 grid gap-1.5">
+      <li>There are no accounts. Students never sign in or give their name.</li>
+      <li>Business Labs collects no information about students.</li>
+      <li>There are no ads, no analytics, and no tracking.</li>
+      <li>Everything a tool does happens in the browser. Nothing students enter is sent to Business Labs or anyone else.</li>
+    </ul>
+  </div>
+
+  <h2 class={H2}>For district technology reviewers</h2>
+  <p class={P}>What Business Labs collects or stores about students:</p>
+  <div class="overflow-x-auto rounded-xl border border-line bg-panel max-w-[70ch]">
+    <table class="w-full text-sm">
+      <thead class="bg-bg text-left">
+        <tr><th scope="col" class="p-3">Information</th><th scope="col" class="p-3">Collected?</th></tr>
+      </thead>
+      <tbody>
+        {rows.map(([what, answer]) => (
+          <tr class="border-t border-line"><th scope="row" class="p-3 text-left font-normal">{what}</th><td class="p-3">{answer}</td></tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p class={`${P} mt-3`}>Because no student information is collected, there is nothing to share, sell, or delete.</p>
+
+  <h2 class={H2}>What stays in the browser</h2>
+  <p class={P}>A few things are kept on the student's own device. None of them are sent anywhere.</p>
+  <ul class="list-disc pl-5 grid gap-2 max-w-[70ch]">
+    <li><strong>Light or dark mode.</strong> If someone picks one, the browser remembers it.</li>
+    <li><strong>Business Plan Builder drafts.</strong> The plan a student writes is saved in that browser so it isn't lost. On Chromebooks, a student can also choose a file in their own Google Drive to save to. The browser remembers which file they picked so it can keep saving to it. Business Labs never sees that file; the browser writes it directly. Students can erase their draft with Start over.</li>
+    <li><strong>Answers typed into tools.</strong> Text in a tool's answer boxes stays on the page and is gone when the page is closed.</li>
+    <li><strong>Copy link and Copy results.</strong> These put text on the student's clipboard so they can paste it into a Google Form or Doc. A link contains only the numbers and choices in the tool, never anything the student typed.</li>
+  </ul>
+
+  <h2 class={H2}>Hosting</h2>
+  <p class={P}>The site is hosted on Cloudflare. Like any website, Cloudflare's servers receive each page request, including basic technical information such as the device's IP address, in order to deliver the page. Business Labs does not add analytics, logging, or tracking on top of that, and has no way to know who a visitor is.</p>
+
+  <h2 class={H2}>How you can check</h2>
+  <p class={P}>Open any page, then open your browser's developer tools and look at the Network tab. Every request goes to this site and nowhere else. This is also checked automatically: every change to the site runs a test that loads every page and fails if anything is requested from another site, if a cookie is set, or if the browser stores anything other than what's listed above.</p>
+</Base>
