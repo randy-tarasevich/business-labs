@@ -24,9 +24,24 @@ alsoAligned: []
 
 A 10–15 minute **predict, test, explain** activity:
 
-1. **Predict:** Before touching anything, students guess how many lemonade cups the stand has to sell to break even.
+1. **Predict:** Before touching anything, students guess how many lemonade cups the stand has to sell to break even. (Or start with the paper problem below.)
 2. **Test:** Load the preset and check. Then work the "Try it" questions in pairs.
 3. **Explain:** Each pair writes one sentence using *contribution margin* to explain why a $1 price change moves break-even so much.
+
+## Paper first
+
+5–10 minutes, before anyone opens the tool. Students should be able to find break-even with a pencil before a tool does it for them, and they'll trust (and question) the chart more once they have.
+
+**Put this on the board:** A phone case startup sells cases for $25. Each one costs $9 to make and ship. Fixed costs are $4,000 a month. The owner expects to sell 200 cases.
+
+1. What is the contribution margin per case?
+2. How many cases to break even? What is that in sales dollars?
+3. At 200 cases, is the business making or losing money? How much?
+4. If the price went up to $30, what would break-even be?
+
+**Answers:** (1) $25 − $9 = $16. (2) $4,000 ÷ $16 = 250 cases, or $6,250 in sales. (3) Losing $800: $16 × 200 = $3,200, minus $4,000. (4) $4,000 ÷ $21 = 190.5, so 191 cases. Watch for students who round down.
+
+**Then the tool:** load Phone case startup to check all four. What the tool adds is the "what if": drag the price and watch break-even move, which would take a page of arithmetic by hand. The Predict first cards and Try it questions take it from there.
 
 ## Answer notes
 
