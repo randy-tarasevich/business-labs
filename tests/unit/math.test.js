@@ -200,3 +200,16 @@ test('closing entries: Maya, end of month 2', async () => {
   assert.equal(assets, 27500);
   assert.equal(assets, bal.ap + bal.wagespay + bal.intpay + bal.unearned + bal.loan + bal.capital);
 });
+
+test('bank reconciliation: Maya, end of month 3', async () => {
+  const { BANK_START, BOOK_START, ITEMS, PLACES, balances } = await import('../../src/scripts/tools/bank-reconciliation.js');
+  // Worked out by hand (see the teacher notes).
+  assert.deepEqual(balances(0), { bank: 6087, book: 6240 });
+  assert.deepEqual(balances(), { bank: 6087 + 650 - 180 - 420, book: 6240 - 15 - 120 + 5 + 27 });
+  assert.equal(balances().bank, 6137);
+  assert.equal(balances().book, 6137);
+  assert.equal(ITEMS.find((t) => t.kind === 'Recording error').amt, 96 - 69);
+  // Only Maya's side gets journal entries, and every one of them does.
+  for (const t of ITEMS) assert.equal(!!t.entry, PLACES[t.place].side === 'book', `${t.label}: journal entry only on Maya's side`);
+  assert.equal(BOOK_START - BANK_START, 153);
+});

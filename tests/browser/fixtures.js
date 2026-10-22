@@ -48,3 +48,8 @@ export const CLOSING_SORT = ['sales', 'supexp', 'insexp', 'depexp', 'wagesexp', 
 export const CLOSING_ENTRIES = [
   ['sales', 'incsum', 5900], ['incsum', 'allexp', 3330], ['incsum', 'capital', 2570], ['capital', 'drawing', 800],
 ];
+
+// Bank Reconciliation Lab: [where it goes, amount] for each item, in order.
+export const BANK_REC_ITEMS = [
+  ['bank+', 650], ['bank-', 180], ['book-', 15], ['none', 0], ['book-', 120], ['bank-', 420], ['book+', 5], ['book+', 27],
+];

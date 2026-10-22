@@ -27,6 +27,7 @@ import FeedRanking from './FeedRanking.astro';
 import TAccounts from './TAccounts.astro';
 import AdjustingEntries from './AdjustingEntries.astro';
 import ClosingEntries from './ClosingEntries.astro';
+import BankReconciliation from './BankReconciliation.astro';
 
 export const TOOL_COMPONENTS = {
   BreakEven,
@@ -56,4 +57,5 @@ export const TOOL_COMPONENTS = {
   TAccounts,
   AdjustingEntries,
   ClosingEntries,
+  BankReconciliation,
 };
