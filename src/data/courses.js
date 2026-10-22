@@ -44,6 +44,7 @@ export const COURSE_GUIDES = {
       { id: 'comparative-advantage', why: 'Start with economics. Scarcity forces trade-offs, and trading lets both sides end up with more.' },
       { id: 'supply-demand', why: 'From countries to markets. Buyers and sellers meet at a price, and news from a drought to a viral trend moves it.' },
       { id: 'price-demand', why: 'Zoom in on one business. Measure how strongly its customers react when it changes its price.' },
+      { id: 'product-life-cycle-lab', why: 'Products age. The right marketing for a brand-new product is the wrong marketing for an old one.' },
       { id: 'marketing-funnel', why: 'Customers have to find you before they can buy. See how many people an ad reaches and whether it paid off.' },
       { id: 'break-even-lab', why: 'Now add costs. How many do you have to sell before the business makes money?' },
       { id: 'startup-runway', why: 'Break-even says how many sales you need. Runway says how long you have to get there.' },
@@ -75,9 +76,10 @@ export const COURSE_GUIDES = {
     ],
   },
   Marketing: {
-    intro: 'Tools for the numbers side of marketing: what to charge, whether the ads worked, and how prices change across borders.',
+    intro: 'Tools for the numbers side of marketing: where a product is in its life, what to charge, whether the ads worked, and how prices change across borders.',
     sequence: [
-      { id: 'price-demand', why: 'Open the pricing unit by showing how customers react to price.' },
+      { id: 'product-life-cycle-lab', why: 'Start with the product. Where it is in its life decides which price, promotion, and production moves make sense.' },
+      { id: 'price-demand', why: 'Move to pricing: how do customers react when the price changes?' },
       { id: 'break-even-lab', why: 'Now add costs. A price only works if enough people buy at it to cover them.' },
       { id: 'marketing-funnel', why: 'Move to promotion: how many people an ad reaches, and whether the campaign paid for itself.' },
       { id: 'currency-trade', why: 'Take pricing global. Exchange rates and tariffs change the shelf price without the company doing anything.' },

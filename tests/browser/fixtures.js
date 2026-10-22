@@ -53,3 +53,6 @@ export const CLOSING_ENTRIES = [
 export const BANK_REC_ITEMS = [
   ['bank+', 650], ['bank-', 180], ['book-', 15], ['none', 0], ['book-', 120], ['bank-', 420], ['book+', 5], ['book+', 27],
 ];
+
+// Product Life Cycle Lab: [stage, index of best marketing move, index of best production call] per product.
+export const PLC_ANSWERS = [['intro', 0, 0], ['growth', 0, 0], ['maturity', 0, 0], ['decline', 0, 0]];

@@ -1,7 +1,7 @@
 // Challenges, Predict first, and the T-Account Lab walkthrough.
 import { test, expect } from '@playwright/test';
 import { watchErrors, setValue } from './helpers.js';
-import { CHALLENGE_ANSWERS, PREDICTION_ANSWERS, T_ACCOUNT_ENTRIES, ADJUSTING_ENTRIES, CLOSING_SORT, CLOSING_ENTRIES, BANK_REC_ITEMS } from './fixtures.js';
+import { CHALLENGE_ANSWERS, PREDICTION_ANSWERS, T_ACCOUNT_ENTRIES, ADJUSTING_ENTRIES, CLOSING_SORT, CLOSING_ENTRIES, BANK_REC_ITEMS, PLC_ANSWERS } from './fixtures.js';
 import { CHALLENGES } from '../../src/data/challenges.js';
 import { PREDICTIONS } from '../../src/data/predictions.js';
 
@@ -211,6 +211,40 @@ test('Bank Reconciliation Lab: targeted hints, all 8 items, and matching balance
   await expect(page.locator('[data-r="book-adj"]')).toHaveText('$6,137');
   await expect(page.locator('[data-r="verdict"]')).toContainText('Reconciled');
   await expect(page.locator('[data-r="je"] tr')).toHaveCount(8);
+  await expect(page.locator('[data-act="restart"]')).toBeVisible();
+  await expect(page.locator('[data-share]')).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
+test('Product Life Cycle Lab: stages, moves with projections, production calls, and the curve', async ({ page }) => {
+  const errors = watchErrors(page);
+  await page.goto('/tools/product-life-cycle-lab/');
+  const fb = page.locator('[data-r="feedback"]');
+  const pick = async (value) => {
+    await page.locator(`[data-r="options"] input[value="${value}"]`).check();
+    await page.click('[data-act="check"]');
+  };
+  // Product 1: a wrong stage, a wrong move (projection drawn), then the right answers.
+  await pick('growth');
+  await expect(fb).toContainText('Growth looks like this');
+  for (const [i, [stage, move, ops]] of PLC_ANSWERS.entries()) {
+    await pick(stage);
+    await expect(fb).toContainText('Correct');
+    await expect(page.locator('[data-r="curve-key"] li')).toHaveCount(i + 1);
+    await page.click('[data-act="next"]');
+    if (i === 0) {
+      await pick('1');
+      await expect(fb).toContainText('Not the best move');
+      await expect(page.locator('[data-chart] polyline')).toHaveCount(2);
+    }
+    await pick(String(move));
+    await expect(fb).toContainText('Best move');
+    await page.click('[data-act="next"]');
+    await pick(String(ops));
+    await expect(fb).toContainText('Good call');
+    await page.click('[data-act="next"]');
+  }
+  await expect(page.locator('[data-r="about"]')).toContainText('named 3 of 4 stages, picked 3 of 4 best marketing moves, and made 4 of 4');
   await expect(page.locator('[data-act="restart"]')).toBeVisible();
   await expect(page.locator('[data-share]')).toHaveCount(0);
   expect(errors).toEqual([]);
