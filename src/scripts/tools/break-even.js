@@ -105,6 +105,12 @@ export function initBreakEven(root) {
       : `${head}<span>= ${money(F, 0)} ÷ ${money(cm, 2)} → no break-even (margin is zero or negative)</span>`;
 
     drawChart({ P, V, F, Q, be });
+
+    // What the chart shows, in words, for screen readers.
+    const forecast = `Your forecast of ${n(Q)} units is ${profit >= 0 ? `a profit of ${money(profit, 0)}` : `a loss of ${money(-profit, 0)}`}.`;
+    $('[data-chart]').setAttribute('aria-label', Number.isFinite(be)
+      ? `Break-even chart. The revenue and cost lines cross at ${n(beUnits)} units, or ${money(beUnits * P, 0)} in sales. Below that is a loss, above it is a profit. ${forecast}`
+      : `Break-even chart. The revenue line never rises above the cost line, so there is no break-even point. ${forecast}`);
   }
 
   function drawChart({ P, V, F, Q, be }) {

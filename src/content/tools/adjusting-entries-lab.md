@@ -26,7 +26,7 @@ Point at the worksheet after adjustment (c). Accumulated Depreciation already ha
 
 ## Answer notes
 
-| | Adjustment | Debit | Credit | Amount | How to get it |
+| Item | Adjustment | Debit | Credit | Amount | How to get it |
 |---|---|---|---|---|---|
 | a | Supplies used | Supplies Expense | Supplies | $650 | $1,100 − $450 on hand |
 | b | Prepaid insurance | Insurance Expense | Prepaid Insurance | $200 | $1,200 ÷ 6 months |
