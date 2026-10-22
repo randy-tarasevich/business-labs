@@ -1,0 +1,63 @@
+---
+// Unit Economics Lab: markup only. Behavior lives in src/scripts/tools/unit-economics.js
+import RangeField from '../ui/RangeField.astro';
+import Stat from '../ui/Stat.astro';
+import TryIt from '../ui/TryIt.astro';
+import { TOOL, PANEL, PANEL_TIGHT, LOWER, H2, H3, PROSE, PRESETS, CHART_KEY, RESULTS, VERDICT, FORMULA, FIELDSET, LEGEND } from '../../scripts/lib/ui.js';
+---
+<div class={TOOL} data-tool="unit-economics">
+  <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Business inputs">
+      <h2 class={H2}>Your business</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example businesses"></div>
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>Winning customers</legend>
+        <RangeField id="ue-spend" label="Marketing spend per month" unit="$" step="50" max={10000} aria="Marketing spend per month in dollars" hint="Ads, flyers, promo codes: everything spent to bring in new customers." />
+        <RangeField id="ue-newc" label="New customers per month" step="1" max={500} aria="New customers per month" hint="How many first-time customers that spending brings in." />
+      </fieldset>
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>Keeping customers</legend>
+        <RangeField id="ue-aov" label="Average order" unit="$" step="1" max={200} aria="Average order in dollars" hint="What a customer spends each time they buy." />
+        <RangeField id="ue-freq" label="Orders per month" step="0.25" max={10} aria="Orders per customer per month" hint="How often one customer buys. 0.5 means every other month." />
+        <RangeField id="ue-margin" label="Gross margin" unit="%" step="1" max={100} aria="Gross margin in percent" hint="Percent of each sale left after paying for the product." />
+        <RangeField id="ue-months" label="Months a customer stays" step="1" max={36} aria="Months a customer stays" hint="How long a typical customer keeps buying before they stop." />
+      </fieldset>
+    </div>
+
+    <div class={PANEL_TIGHT}>
+      <h2 class={H3}>One customer, month by month</h2>
+      <div class={CHART_KEY} aria-hidden="true">
+        <span><i class="w-[18px] h-[3px] rounded-[2px] inline-block bg-accent"></i>Running profit from one customer</span>
+        <span><i class="w-3 h-3 rounded-[2px] inline-block bg-bad-soft border border-bad"></i>Still paying back</span>
+        <span><i class="w-3 h-3 rounded-[2px] inline-block bg-good-soft border border-good"></i>Profit</span>
+      </div>
+      <div class="w-full"><svg data-chart role="img" aria-label="Chart of one customer's profit over time" class="block w-full h-auto [&_text]:font-mono [&_text]:text-[11px] [&_text]:fill-muted"></svg></div>
+      <div class={RESULTS}>
+        <Stat label="Cost to win a customer (CAC)" r="cac" />
+        <Stat label="Lifetime value (LTV)" r="ltv" />
+        <Stat label="LTV to CAC" r="ratio" box="ratio-box" keyed live />
+        <Stat label="Payback time" r="payback" box="payback-box" live />
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}><strong>Lifetime value</strong> is the profit one customer brings in for as long as they keep buying. <strong>Customer acquisition cost</strong> is what it takes to win them in the first place. If a customer is worth less than they cost, every new customer loses money. Many businesses aim for a customer to be worth at least 3 times what they cost.</p>
+    </div>
+    <TryIt items={[
+      { q: 'Load the snack box. The owner wants to double the marketing budget and win twice as many customers. Will that fix the problem? Test it.', a: 'No. The cost to win each customer stays $40, and each one still brings in only $30. Twice as many customers means twice the losses: $10 lost on every one.' },
+      { q: 'Still on the snack box: how many months would a customer have to stay to reach 3 to 1? How cheap would each customer have to be instead? Which seems easier to pull off?', a: '16 months ($7.50 × 16 = $120 = 3 × $40), or a cost to win of $10 with 4 months. Either is a big change, which is the point: a small tweak won\'t save this business.' },
+      { q: 'Load the food truck. A punch card keeps customers coming back for 9 months instead of 6. What happens to the ratio? Why can keeping a customer be worth as much as winning a new one?', a: 'It goes from 2.64 to 3.96. Every extra month adds $13.20 of profit for free, because Maya already paid to win that customer.' },
+      { q: 'Tutoring spends $150 to win each customer. The food truck can barely afford $30. Why can tutoring afford to spend so much more?', a: 'Each tutoring customer brings in $112 of profit a month, so even $150 pays back in about six weeks. What a business can spend to win a customer depends on what that customer is worth.' },
+    ]} />
+  </section>
+</div>
+
+<script>
+  import { initUnitEconomics } from '../../scripts/tools/unit-economics.js';
+  document.querySelectorAll('[data-tool="unit-economics"]').forEach(initUnitEconomics);
+</script>
