@@ -106,6 +106,7 @@ if (!Tool) throw new Error(`No component "${tool.data.component}" registered in 
   import { initChallenges } from '../../scripts/lib/challenges.js';
   import { initPredictions } from '../../scripts/lib/predictions.js';
   import { summary } from '../../scripts/lib/copy-results.js';
+  import { sliderText, scrollRegions } from '../../scripts/lib/a11y.js';
 
   // The Project button opens projector view with the numbers currently on screen.
   const project = document.querySelector<HTMLAnchorElement>('[data-project]');
@@ -114,6 +115,8 @@ if (!Tool) throw new Error(`No component "${tool.data.component}" registered in 
 
   document.querySelectorAll<HTMLElement>('[data-tool]').forEach((root) => {
     initLiveBar(root);
+    sliderText(root);
+    scrollRegions(root);
     initProjector(root);
     initPrint(root);
     if (shareOk) initShareState(root, { onChange: syncProject });

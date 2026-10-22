@@ -30,10 +30,10 @@ const totalText = timed.length ? (total[0] === total[1] ? hours(total[0]) : `${h
 ---
 <Base title={`${course} tools`} description={`Interactive ${course} tools for high school, in a suggested teaching order with class time for each.`}>
   <div style={courseStyle(course)}>
-  <section class="site-chrome grid gap-3 mb-8">
-    <a href="/" class="text-sm text-muted hover:text-ink">← All tools</a>
+  <section class="grid gap-3 mb-8">
+    <a href="/" class="site-chrome text-sm text-muted hover:text-ink">← All tools</a>
     <h1 class="flex items-center gap-3 text-4xl font-extrabold"><span class="size-4 shrink-0 rounded-full bg-(--course)" aria-hidden="true"></span>{course}</h1>
-    {guide.intro && <p class="text-muted max-w-[62ch] text-lg">{guide.intro}</p>}
+    {guide.intro && <p class="site-chrome text-muted max-w-[62ch] text-lg">{guide.intro}</p>}
   </section>
 
   <section class="mb-10">

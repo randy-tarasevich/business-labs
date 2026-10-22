@@ -120,6 +120,11 @@ const COPY_BTN = 'inline-flex items-center justify-center gap-2 rounded-lg borde
 </Base>
 
 <script>
+  // Wide answer tables scroll sideways on a phone; let the keyboard reach them too.
+  import { scrollRegions } from '../../scripts/lib/a11y.js';
+  const main = document.querySelector('main');
+  if (main) scrollRegions(main, 'table');
+
   // Copy buttons: put a student or projector link on the clipboard. Nothing is sent anywhere.
   document.querySelectorAll<HTMLButtonElement>('[data-copy-url]').forEach((btn) => {
     let reset: ReturnType<typeof setTimeout>;

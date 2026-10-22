@@ -6,7 +6,8 @@
 // Opt in per tool by adding data-live to one or two elements in the results area:
 //   - a stat (STAT / STAT_KEY wrapper, or <Stat live />): shows its label and value, keeps its tone
 //   - anything else (e.g. the VERDICT line): shows its text, keeps its tone
-// The bar copies text only. The originals keep role="status", so screen readers hear each update once.
+// The bar copies text only. The originals keep role="status", so screen readers hear each update once,
+// and the bar's spoken name is just its visible "See chart" label.
 
 import { LIVE_BAR, LIVE_ITEMS, LIVE_STAT, LIVE_K, LIVE_V, LIVE_TEXT, LIVE_JUMP } from './ui.js';
 
@@ -22,14 +23,15 @@ export function initLiveBar(root) {
   bar.type = 'button';
   bar.className = LIVE_BAR;
   bar.hidden = true;
-  bar.setAttribute('aria-label', 'Jump to the results');
   const items = document.createElement('span');
   items.className = LIVE_ITEMS;
   items.setAttribute('aria-hidden', 'true');
   const jump = document.createElement('span');
   jump.className = LIVE_JUMP;
-  jump.setAttribute('aria-hidden', 'true');
-  jump.textContent = 'See chart ↓';
+  const arrow = document.createElement('span');
+  arrow.setAttribute('aria-hidden', 'true');
+  arrow.textContent = ' ↓';
+  jump.append('See chart', arrow);
   bar.append(items, jump);
   document.body.appendChild(bar);
 
