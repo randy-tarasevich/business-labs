@@ -215,3 +215,28 @@ test('Bank Reconciliation Lab: targeted hints, all 8 items, and matching balance
   await expect(page.locator('[data-share]')).toHaveCount(0);
   expect(errors).toEqual([]);
 });
+
+test('Unit Economics Lab: examples, ratio colors, and edge cases', async ({ page }) => {
+  const errors = watchErrors(page);
+  await page.goto('/tools/unit-economics-lab/');
+  const ratio = page.locator('[data-r="ratio"]');
+  const box = page.locator('[data-r="ratio-box"]');
+  const verdict = page.locator('[data-r="verdict"]');
+  await expect(ratio).toHaveText('2.64 to 1');
+  await expect(box).toHaveAttribute('data-tone', 'warn');
+  await page.getByRole('button', { name: 'Snack subscription box' }).click();
+  await expect(ratio).toHaveText('0.75 to 1');
+  await expect(box).toHaveAttribute('data-tone', 'bad');
+  await expect(page.locator('[data-r="payback-box"]')).toHaveAttribute('data-tone', 'bad');
+  await expect(verdict).toContainText('You lose $10.00 on every customer');
+  await setValue(page, 'ue-months', 16);
+  await expect(ratio).toHaveText('3.00 to 1');
+  await expect(box).toHaveAttribute('data-tone', 'good');
+  await page.getByRole('button', { name: 'Online tutoring' }).click();
+  await expect(page.locator('[data-r="ltv"]')).toHaveText('$560.00');
+  await setValue(page, 'ue-newc', 0);
+  await expect(page.locator('[data-r="cac"]')).toHaveText('–');
+  await expect(verdict).toContainText('Add some new customers');
+  await expect(page.locator('[data-chart]')).toHaveAttribute('aria-label', /Add new customers/);
+  expect(errors).toEqual([]);
+});
