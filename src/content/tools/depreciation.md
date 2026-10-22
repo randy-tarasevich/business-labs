@@ -16,13 +16,27 @@ alsoAligned: []
 
 ## How I use it
 
-**Level: Advanced Accounting.** 15–20 minutes, after students have done one straight-line schedule by hand.
+**Level: Advanced Accounting.** 15–20 minutes, after students have done one straight-line schedule by hand (the paper problem below works for that).
 
 1. **Predict:** Students sketch what they think the book value line looks like for each method before loading the food truck.
 2. **Test:** Compare their sketches to the chart, then work the "Try it" questions. The schedule tabs show every year in detail, in cents, so students can check homework.
 3. **Explain:** Each pair writes one sentence on why a business might pick double-declining for taxes but straight-line for the report it shows the bank.
 
 The tool calculates full years only (no partial first year). Double-declining never drops below salvage, and its final year is whatever brings book value down to salvage. If your textbook switches to straight-line partway through instead, say so; the totals still match.
+
+## Paper first
+
+10–15 minutes, the day before or at the start of class. The tool shows every method instantly, so students need to have built at least one schedule themselves to know what it's doing.
+
+**Put this on the board:** A bakery buys a delivery van for $35,000. It expects to use it for 5 years and sell it for $5,000 at the end.
+
+1. Using straight-line, how much depreciation each year?
+2. Make a 5-year schedule: depreciation, accumulated depreciation, and book value at the end of each year.
+3. Using double-declining balance, what is the rate? Find depreciation for years 1 and 2.
+
+**Answers:** (1) ($35,000 − $5,000) ÷ 5 = $6,000 a year. (2) Book value: $29,000, $23,000, $17,000, $11,000, $5,000. Accumulated: $6,000, $12,000, $18,000, $24,000, $30,000. (3) Rate is 2 ÷ 5 = 40%. Year 1: $35,000 × 40% = $14,000. Year 2: ($35,000 − $14,000) × 40% = $8,400. The most common mistake is applying 40% to $30,000 (cost minus salvage) instead of book value.
+
+**Then the tool:** load Delivery van and open the schedule tabs to check. What the tool adds: the rest of the double-declining schedule (year 4 stops at salvage, which is fiddly by hand), sum-of-years without the arithmetic, and the chart comparing all three on one screen.
 
 ## Answer notes
 
