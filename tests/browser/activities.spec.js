@@ -1,7 +1,7 @@
 // Challenges, Predict first, and the T-Account Lab walkthrough.
 import { test, expect } from '@playwright/test';
 import { watchErrors, setValue } from './helpers.js';
-import { CHALLENGE_ANSWERS, PREDICTION_ANSWERS, T_ACCOUNT_ENTRIES, ADJUSTING_ENTRIES, CLOSING_SORT, CLOSING_ENTRIES } from './fixtures.js';
+import { CHALLENGE_ANSWERS, PREDICTION_ANSWERS, T_ACCOUNT_ENTRIES, ADJUSTING_ENTRIES, CLOSING_SORT, CLOSING_ENTRIES, BANK_REC_ITEMS } from './fixtures.js';
 import { CHALLENGES } from '../../src/data/challenges.js';
 import { PREDICTIONS } from '../../src/data/predictions.js';
 
@@ -171,6 +171,46 @@ test('Closing Entries Lab: the sort, targeted hints, all 4 entries, and the post
   await expect(page.locator('[data-r="pc-cr"]')).toHaveText('$28,100');
   await expect(page.locator('[data-r="tb-verdict"]')).toContainText('Post-closing trial balance');
   await expect(page.locator('[data-r="text"]')).toContainText('$12,470');
+  await expect(page.locator('[data-act="restart"]')).toBeVisible();
+  await expect(page.locator('[data-share]')).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
+test('Bank Reconciliation Lab: targeted hints, all 8 items, and matching balances', async ({ page }) => {
+  const errors = watchErrors(page);
+  await page.goto('/tools/bank-reconciliation-lab/');
+  const fb = page.locator('[data-r="feedback"]');
+  const place = async (where, amt) => {
+    await page.selectOption('#br-place', where);
+    if (where !== 'none') await page.fill('#br-amt', String(amt));
+    await page.click('[data-act="check"]');
+  };
+  await expect(page.locator('[data-r="diff"]')).toHaveText('$153');
+  await place('book+', 650);
+  await expect(fb).toContainText('Maya already recorded this');
+  for (const [i, [where, amt]] of BANK_REC_ITEMS.entries()) {
+    if (i === 1) {
+      await place('book-', 180);
+      await expect(fb).toContainText('already subtracted this check');
+    }
+    if (i === 3) {
+      await place('bank-', 300);
+      await expect(fb).toContainText('Does it explain any of the difference');
+    }
+    if (i === 7) {
+      await place('book+', 96);
+      await expect(fb).toContainText('difference between what she recorded');
+      await place('book-', 27);
+      await expect(fb).toContainText('too much or too little');
+    }
+    await place(where, amt);
+    await expect(fb).toContainText('Correct');
+    await page.click('[data-act="next"]');
+  }
+  await expect(page.locator('[data-r="bank-adj"]')).toHaveText('$6,137');
+  await expect(page.locator('[data-r="book-adj"]')).toHaveText('$6,137');
+  await expect(page.locator('[data-r="verdict"]')).toContainText('Reconciled');
+  await expect(page.locator('[data-r="je"] tr')).toHaveCount(8);
   await expect(page.locator('[data-act="restart"]')).toBeVisible();
   await expect(page.locator('[data-share]')).toHaveCount(0);
   expect(errors).toEqual([]);
