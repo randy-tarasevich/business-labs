@@ -1,33 +1,148 @@
 ---
 // Teacher notes index. Bookmark this URL; it is not linked from student pages.
+// Every course lists every tool that fits it, in the course page's order, so a teacher
+// can plan a unit from this page without opening each tool.
 import Base from '../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 import { COURSES } from '../../content.config.js';
+import { MIN_TOOLS, courseSlug, courseStyle, courseOrder, minutesText, hoursText } from '../../data/courses.js';
 
 const tools = (await getCollection('tools', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
-const courses = COURSES.filter((c) => tools.some((t) => t.data.courses[0] === c));
+const courses = COURSES.filter((c) => tools.some((t) => t.data.courses.includes(c)));
+const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
+const totalTime = (list) => {
+  const timed = list.filter((t) => t.data.minutes);
+  if (!timed.length) return '';
+  const [a, b] = timed.reduce(([a, b], t) => [a + t.data.minutes[0], b + t.data.minutes[1]], [0, 0]);
+  return a === b ? hoursText(a) : `${hoursText(a)} to ${hoursText(b)}`;
+};
+// Text the search box matches: title, summary, unit, courses, and every standards code and name,
+// so "FI:384" or "jump$tart" finds the right tools.
+const searchText = (t) =>
+  [t.data.title, t.data.summary, t.data.unit, ...t.data.courses, ...t.data.indicators.flatMap((i) => [i.code, i.name]), ...t.data.alsoAligned]
+    .join(' ')
+    .toLowerCase();
 ---
 <Base title="Teacher notes" description="Teacher notes for Business Labs tools." noindex>
-  <section class="grid gap-3 mb-10">
+  <section class="grid gap-3 mb-8">
     <h1 class="text-4xl font-extrabold">Teacher notes</h1>
-    <p class="text-muted max-w-[60ch]">Routines, answer keys, and common misconceptions for every tool. Share tool links with students, not these pages.</p>
+    <p class="text-muted max-w-[60ch] text-lg">Routines, answer keys, and common misconceptions for every tool. Share tool links with students, not these pages.</p>
   </section>
 
-  {courses.map((course) => (
-    <section class="mb-8">
-      <h2 class="text-sm uppercase tracking-wider font-sans font-semibold text-muted mb-3">{course}</h2>
-      <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {tools.filter((t) => t.data.courses[0] === course).map((t) => (
-          <li class="rounded-xl border border-line bg-panel p-5 grid gap-2">
-            <h3 class="text-lg font-semibold">{t.data.title}</h3>
-            <p class="text-muted text-sm">{t.data.unit}</p>
-            <div class="flex gap-4 text-sm font-semibold">
-              <a class="text-accent" href={`/teachers/${t.id}/`}>Teacher notes</a>
-              <a class="text-muted hover:text-ink" href={`/tools/${t.id}/`}>Open tool</a>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </section>
-  ))}
+  <div class="mb-5 max-w-xl">
+    <label for="notes-search" class="block text-sm font-semibold mb-1.5">Find a tool or standard</label>
+    <div class="relative">
+      <svg class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 size-[18px] text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="notes-search" type="search" autocomplete="off" spellcheck="false" placeholder="Try depreciation or FI:384" class="w-full rounded-lg border border-line bg-panel py-2.5 pl-10 pr-3 text-[16px] text-ink placeholder:text-muted" />
+    </div>
+    <p class="mt-2 text-sm text-muted empty:hidden" data-search-status role="status"></p>
+  </div>
+
+  <nav aria-label="Courses" class="mb-12" data-course-nav>
+    <h2 class="sr-only">Courses</h2>
+    <ul class="grid gap-3 grid-cols-2 md:grid-cols-3">
+      {courses.map((course) => (
+        <li style={courseStyle(course)}>
+          <a href={`#${courseSlug(course)}`} class="group flex h-full flex-col justify-between gap-2 rounded-xl border border-line border-l-4 border-l-(--course) bg-panel px-4 py-3.5 hover:border-(--course) transition-colors">
+            <span class="font-display font-semibold text-[17px] leading-snug group-hover:text-(--course)">{course}</span>
+            <span class="text-[13px] text-muted">{plural(courseOrder(course, tools).length, 'tool')}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+
+  {courses.map((course) => {
+    const list = courseOrder(course, tools);
+    const time = totalTime(list);
+    return (
+      <section id={courseSlug(course)} class="mb-12 scroll-mt-6" style={courseStyle(course)} data-course-section>
+        <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 mb-4">
+          <div>
+            <h2 class="flex items-center gap-2.5 text-2xl font-bold">
+              <span class="size-3 shrink-0 rounded-full bg-(--course)" aria-hidden="true"></span>{course}
+            </h2>
+            <p class="text-sm text-muted mt-1">{plural(list.length, 'tool')}{time && ` · about ${time} of class time`}</p>
+          </div>
+          {list.length >= MIN_TOOLS && (
+            <a href={`/courses/${courseSlug(course)}/`} class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-panel px-3.5 py-2 text-sm font-semibold text-(--course) hover:border-(--course)">
+              Suggested order and class time →
+            </a>
+          )}
+        </div>
+        <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {list.map((t) => (
+            <li data-search={searchText(t)} data-id={t.id} class="flex flex-col gap-3 rounded-xl border border-line border-t-[3px] border-t-(--course) bg-panel p-5">
+              <div>
+                <span class="text-xs text-muted">{t.data.unit}{t.data.minutes && <> · <span class="font-mono">{minutesText(t.data.minutes)}</span></>}</span>
+                <h3 class="text-xl font-semibold mt-1">
+                  <a href={`/teachers/${t.id}/`} class="hover:text-(--course)">{t.data.title}</a>
+                </h3>
+                {t.data.courses[0] !== course && (
+                  <p class="text-xs text-muted mt-1" style={courseStyle(t.data.courses[0])}>
+                    <span class="inline-block size-2 rounded-full bg-(--course) mr-1" aria-hidden="true"></span>Home course: {t.data.courses[0]}
+                  </p>
+                )}
+              </div>
+              {t.data.indicators.length > 0 ? (
+                <ul class="flex flex-wrap gap-1.5" aria-label="MBA Research standards">
+                  {t.data.indicators.map((i) => (
+                    <li class="rounded-md border border-line bg-bg px-2 py-0.5 font-mono text-xs" title={i.name}>{i.code}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p class="text-xs text-muted">No MBA Research codes yet</p>
+              )}
+              <div class="mt-auto flex flex-wrap gap-x-4 gap-y-1 text-sm font-semibold">
+                <a class="text-(--course) hover:underline" href={`/teachers/${t.id}/`}>Teacher notes</a>
+                <a class="text-muted hover:text-ink" href={`/tools/${t.id}/`}>Open tool</a>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    );
+  })}
+  <p class="hidden text-muted text-lg py-6" data-search-empty>No tools match that. Try a shorter word, or a code like <span class="font-mono">FI:384</span>.</p>
 </Base>
+
+<script>
+  // Find a tool or standard: hides cards that don't contain every word typed, and any course
+  // left empty. Runs entirely in the browser; nothing typed is saved or sent anywhere.
+  const input = document.querySelector<HTMLInputElement>('#notes-search');
+  const status = document.querySelector('[data-search-status]');
+  const empty = document.querySelector('[data-search-empty]');
+  const nav = document.querySelector<HTMLElement>('[data-course-nav]');
+  const sections = [...document.querySelectorAll<HTMLElement>('[data-course-section]')];
+
+  function filter() {
+    const words = input.value.toLowerCase().split(/\s+/).filter(Boolean);
+    const searching = words.length > 0;
+    const shown = new Set();
+    sections.forEach((section) => {
+      let any = false;
+      section.querySelectorAll<HTMLElement>('[data-search]').forEach((el) => {
+        const hit = words.every((w) => el.dataset.search.includes(w));
+        el.hidden = !hit;
+        if (hit) {
+          any = true;
+          shown.add(el.dataset.id);
+        }
+      });
+      section.hidden = !any;
+    });
+    nav.hidden = searching;
+    empty.classList.toggle('hidden', !searching || shown.size > 0);
+    const n = shown.size;
+    status.textContent = searching && n ? `${n} tool${n === 1 ? '' : 's'} match.` : '';
+  }
+
+  input.addEventListener('input', filter);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && input.value) {
+      input.value = '';
+      filter();
+    }
+  });
+  if (input.value) filter();
+</script>
