@@ -1,0 +1,127 @@
+---
+// For teachers: what Business Labs is, how a lesson runs, and how to use it in class.
+// The page to send a teacher, a department head, or a hiring committee. Counts build from the content
+// collection, so they stay current. This page is public: never link /teachers/ from it (CLAUDE.md).
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { COURSES } from '../content.config.js';
+import { MIN_TOOLS, courseSlug, courseStyle } from '../data/courses.js';
+
+const tools = await getCollection('tools', ({ data }) => !data.draft);
+const codes = new Set(tools.flatMap((t) => t.data.indicators.map((i) => i.code)));
+const courses = COURSES.map((name) => ({ name, count: tools.filter((t) => t.data.courses.includes(name)).length })).filter((c) => c.count > 0);
+
+const stats = [
+  [tools.length, 'interactive tools'],
+  [courses.length, 'courses'],
+  [codes.size, 'MBA Research indicators, each checked word for word'],
+  [0, 'student accounts or data'],
+];
+const steps = [
+  ['Predict', 'Students guess what will happen before they touch anything: will break-even go up or down if the price rises?'],
+  ['Test', 'They change the numbers and see the result right away. Every tool shows the math, not just the answer.'],
+  ['Explain', 'Try it questions push them to say why. Some have one answer; others ask them to decide and defend a choice.'],
+];
+const features = [
+  ['Project it', 'The Project button gives a clean, full-width view for the board, with the numbers you set up.'],
+  ['Post a scenario', 'Copy link saves the tool\'s exact numbers. Post it in Google Classroom and everyone starts from the same place.'],
+  ['Exit tickets', 'Copy results puts a student\'s numbers and result on the clipboard, ready to paste into a Google Form or Doc.'],
+  ['Print a worksheet', 'Print gives a clean copy with the student\'s numbers and lines to answer each Try it question.'],
+  ['Chromebooks and phones', 'Every tool is tested at phone width, in light and dark mode, and works with a trackpad or touch.'],
+  ['Accessible', 'Works with a keyboard and screen readers. Automated accessibility checks run on every page with every change.'],
+];
+const H2 = 'text-2xl font-bold mt-12 mb-4';
+const CARD = 'rounded-xl border border-line bg-panel p-5';
+---
+<Base title="For teachers" description="Free interactive tools for high school business and personal finance. How they work in class, what they cover, and how to use them.">
+  <h1 class="text-3xl sm:text-4xl font-extrabold mb-3">For teachers</h1>
+  <p class="text-lg max-w-[62ch] mb-8">Business Labs is a free set of interactive tools for high school business and personal finance classes. Students change the numbers, see what happens, and explain why. No accounts, no sign-ins, nothing to install.</p>
+
+  <dl class="grid grid-cols-4 gap-3 max-[760px]:grid-cols-2 mb-10">
+    {stats.map(([n, label]) => (
+      <div class:list={[CARD, 'grid content-start']}>
+        <dt class="text-sm text-muted order-2">{label}</dt>
+        <dd class="font-display text-3xl font-bold m-0 order-1">{n}</dd>
+      </div>
+    ))}
+  </dl>
+
+  <figure class="m-0 max-w-[960px]">
+    <video data-demo class="block w-full h-auto rounded-xl border border-line bg-panel" muted loop playsinline preload="metadata" poster="/demo/break-even.jpg" width="960" height="512" aria-describedby="demo-caption">
+      <source src="/demo/break-even.webm" type="video/webm" />
+      <source src="/demo/break-even.mp4" type="video/mp4" />
+    </video>
+    <figcaption id="demo-caption" class="text-sm text-muted mt-2">
+      Break-Even Lab, 15 seconds, no sound. As the food truck lowers its price, break-even climbs past the sales forecast and the profit turns into a loss. <a href="/tools/break-even-lab/" class="text-accent underline">Try it yourself</a>.
+    </figcaption>
+  </figure>
+
+  <h2 class={H2}>How a lesson runs</h2>
+  <ol class="grid grid-cols-3 gap-4 max-[760px]:grid-cols-1 list-none p-0 m-0">
+    {steps.map(([name, text], i) => (
+      <li class={CARD}>
+        <span class="font-display text-sm font-bold text-accent">{i + 1}</span>
+        <h3 class="text-lg font-bold mt-1 mb-1.5">{name}</h3>
+        <p class="m-0">{text}</p>
+      </li>
+    ))}
+  </ol>
+  <p class="max-w-[70ch] mt-4">Most activities take 10 to 40 minutes. Each tool has teacher notes with a short classroom routine and worked answers, and most list the mistakes students commonly make. Those live on separate pages that students aren't linked to, so answer keys never end up on a student's screen.</p>
+
+  <h2 class={H2}>Built for a real classroom</h2>
+  <ul class="grid grid-cols-3 gap-4 max-[900px]:grid-cols-2 max-[560px]:grid-cols-1 list-none p-0 m-0">
+    {features.map(([name, text]) => (
+      <li class={CARD}>
+        <h3 class="font-bold mb-1">{name}</h3>
+        <p class="m-0 text-[15px]">{text}</p>
+      </li>
+    ))}
+  </ul>
+  <p class="max-w-[70ch] mt-4"><strong>Private by design.</strong> Students never give their name, and nothing they enter is sent anywhere. <a href="/privacy/" class="text-accent underline">Read the privacy page</a>, written for district technology reviewers.</p>
+
+  <h2 class={H2}>Courses</h2>
+  <ul class="flex flex-wrap gap-2.5 list-none p-0 m-0">
+    {courses.map((c) => (
+      <li style={courseStyle(c.name)}>
+        {c.count >= MIN_TOOLS
+          ? <a href={`/courses/${courseSlug(c.name)}/`} class="inline-flex items-center gap-2 rounded-full border border-line bg-panel px-3.5 py-2 font-medium hover:border-(--course)"><span class="size-2.5 rounded-full bg-(--course)" aria-hidden="true"></span>{c.name} <span class="text-muted text-sm">{c.count} tools</span></a>
+          : <span class="inline-flex items-center gap-2 rounded-full border border-line bg-panel px-3.5 py-2 font-medium"><span class="size-2.5 rounded-full bg-(--course)" aria-hidden="true"></span>{c.name} <span class="text-muted text-sm">{c.count} tools</span></span>}
+      </li>
+    ))}
+  </ul>
+  <p class="max-w-[70ch] mt-4">Each course page suggests an order and says why each tool comes where it does. Every tool is aligned to MBA Research performance indicators, the standards Connecticut uses for Business, Finance, and Marketing. <a href="/standards/" class="text-accent underline">See the full standards list</a>.</p>
+
+  <h2 class={H2}>Putting a tool in your slides</h2>
+  <ol class="list-decimal pl-5 grid gap-2 max-w-[70ch]">
+    <li>Open the tool and set up the numbers you want the class to start from.</li>
+    <li>Click <strong>Project</strong> (on a laptop or desktop). The address bar now holds a projector link with your numbers in it.</li>
+    <li>Copy that address. In Google Slides or PowerPoint, select some text or a shape and insert it as a link.</li>
+    <li>During the presentation, click the link. The tool opens full width with your numbers. Close the tab to get back to your slides.</li>
+  </ol>
+  <p class="max-w-[70ch] mt-3 text-muted">Make one link per scenario. A "before" and an "after" slide, each with its own link, makes a good predict-then-reveal.</p>
+
+  <h2 class={H2}>How it's checked</h2>
+  <p class="max-w-[70ch]">Answer keys are worked out by hand, and every change to the site runs automatic checks before it's reviewed: the tools' math against independently worked answers, every page at phone width in light and dark mode and in projector view, accessibility, and privacy.</p>
+
+  <h2 class={H2}>Who made this</h2>
+  <p class="max-w-[70ch]">Business Labs is built by Randy Tarasevich, a Connecticut Business Education teacher candidate in the state's ARC certification program, for his own classes and for any teacher who wants to use it. It's free.</p>
+
+  <script>
+    // Play the demo on loop, unless the visitor prefers reduced motion. Then it waits with controls.
+    const v = document.querySelector<HTMLVideoElement>('[data-demo]');
+    if (v) {
+      const still = matchMedia('(prefers-reduced-motion: reduce)');
+      const set = () => {
+        if (still.matches) {
+          v.pause();
+          v.controls = true;
+        } else {
+          v.controls = false;
+          v.play().catch(() => (v.controls = true));
+        }
+      };
+      set();
+      still.addEventListener('change', set);
+    }
+  </script>
+</Base>

@@ -2,7 +2,7 @@
 import { test, expect } from '@playwright/test';
 import { SLUGS, watchErrors } from './helpers.js';
 
-const OTHER_PAGES = ['/', '/standards/', '/privacy/', '/teachers/'];
+const OTHER_PAGES = ['/', '/standards/', '/privacy/', '/about/', '/teachers/'];
 
 for (const path of [...OTHER_PAGES, ...SLUGS.map((s) => `/tools/${s}/`), ...SLUGS.map((s) => `/teachers/${s}/`)]) {
   test(`loads without errors: ${path}`, async ({ page }) => {
