@@ -237,3 +237,28 @@ test('product life cycle: stage signs and move outcomes', async () => {
   const dvdBest = dvd.moves.find((m) => m.best).next.at(-1);
   assert.ok(dvd.moves.filter((m) => !m.best).every((m) => m.next.at(-1) > dvdBest));
 });
+
+test('unit economics: CAC, LTV, ratio, payback', async () => {
+  const { PRESETS, unitEconomics } = await import('../../src/scripts/tools/unit-economics.js');
+  const close = (a, b) => assert.ok(Math.abs(a - b) < 1e-9, `${a} should be ${b}`);
+  // Worked out by hand (see the teacher notes).
+  const [truck, snack, tutor] = PRESETS.map(unitEconomics);
+  close(truck.cac, 900 / 30);
+  close(truck.monthly, 12 * 2 * 0.55);
+  close(truck.ltv, 13.2 * 6);
+  close(truck.ratio, 79.2 / 30);
+  close(truck.payback, 30 / 13.2);
+  close(snack.cac, 40);
+  close(snack.ltv, 7.5 * 4);
+  close(snack.ratio, 0.75);
+  close(snack.perCustomer, -10);
+  assert.ok(snack.payback > PRESETS[1].months, 'snack box customers leave before paying back');
+  close(tutor.ltv, 40 * 4 * 0.7 * 5);
+  close(tutor.ratio, 560 / 150);
+  // Try it #3: food truck customers stay 9 months.
+  close(unitEconomics({ ...PRESETS[0], months: 9 }).ratio, (13.2 * 9) / 30);
+  // Edge cases: no new customers, free customers, no margin.
+  assert.ok(Number.isNaN(unitEconomics({ ...PRESETS[0], newc: 0 }).cac));
+  assert.equal(unitEconomics({ ...PRESETS[0], spend: 0 }).ratio, Infinity);
+  assert.equal(unitEconomics({ ...PRESETS[0], margin: 0 }).payback, Infinity);
+});

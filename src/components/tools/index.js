@@ -29,6 +29,7 @@ import AdjustingEntries from './AdjustingEntries.astro';
 import ClosingEntries from './ClosingEntries.astro';
 import BankReconciliation from './BankReconciliation.astro';
 import ProductLifeCycle from './ProductLifeCycle.astro';
+import UnitEconomics from './UnitEconomics.astro';
 
 export const TOOL_COMPONENTS = {
   BreakEven,
@@ -60,4 +61,5 @@ export const TOOL_COMPONENTS = {
   ClosingEntries,
   BankReconciliation,
   ProductLifeCycle,
+  UnitEconomics,
 };

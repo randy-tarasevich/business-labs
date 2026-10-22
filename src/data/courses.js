@@ -76,12 +76,13 @@ export const COURSE_GUIDES = {
     ],
   },
   Marketing: {
-    intro: 'Tools for the numbers side of marketing: where a product is in its life, what to charge, whether the ads worked, and how prices change across borders.',
+    intro: 'Tools for the numbers side of marketing: where a product is in its life, what to charge, whether the ads worked, what a customer is worth over time, and how prices change across borders.',
     sequence: [
       { id: 'product-life-cycle-lab', why: 'Start with the product. Where it is in its life decides which price, promotion, and production moves make sense.' },
       { id: 'price-demand', why: 'Move to pricing: how do customers react when the price changes?' },
       { id: 'break-even-lab', why: 'Now add costs. A price only works if enough people buy at it to cover them.' },
       { id: 'marketing-funnel', why: 'Move to promotion: how many people an ad reaches, and whether the campaign paid for itself.' },
+      { id: 'unit-economics-lab', why: 'The campaign brought in customers. Now ask what each one is worth over time, and whether that beats what it cost to win them.' },
       { id: 'currency-trade', why: 'Take pricing global. Exchange rates and tariffs change the shelf price without the company doing anything.' },
     ],
   },
@@ -92,6 +93,7 @@ export const COURSE_GUIDES = {
       { id: 'break-even-lab', why: 'With a price set, find how many sales it takes to cover costs.' },
       { id: 'startup-runway', why: 'Add startup costs and see how long the money lasts while sales grow.' },
       { id: 'marketing-funnel', why: 'Plan how to find customers and what each one will cost to win.' },
+      { id: 'unit-economics-lab', why: 'Before scaling up the marketing, check that each customer is worth more than they cost to win. Investors will ask.' },
       { id: 'investor-deal-lab', why: 'If the runway is short, students pitch for money and learn what their ask says the business is worth.' },
       { id: 'ratio-dashboard', why: 'Read the business the way a lender or investor will.' },
       { id: 'business-plan', why: 'The capstone. Students put their own idea and every number from the earlier tools into one complete plan.' },
@@ -114,6 +116,7 @@ export const COURSE_GUIDES = {
       { id: 'influencer-deal-lab', why: 'Use engagement rate to compare creators. The biggest account is often not the best deal.' },
       { id: 'ab-post-test', why: 'Before spending money on a post, test two versions. Learn when a winner is real and when it is just luck.' },
       { id: 'marketing-funnel', why: 'Follow a paid campaign from views to sales and find out if it paid for itself.' },
+      { id: 'unit-economics-lab', why: 'Look past the first sale. A follower who buys once is worth less than one who keeps coming back.' },
     ],
   },
 };
