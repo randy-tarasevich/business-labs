@@ -165,3 +165,38 @@ test('adjusting entries: Maya, end of month 2', async () => {
   assert.equal(liabilities, 15030);
   assert.equal(assets, liabilities + bal.capital - bal.drawing + netIncome(bal));
 });
+
+test('closing entries: Maya, end of month 2', async () => {
+  const { ACCOUNTS: A, ADJUSTED, ENTRIES, SORTABLE, isTemporary, closedBalances, totals } = await import('../../src/scripts/tools/closing-entries.js');
+  assert.deepEqual(totals(ADJUSTED), [32230, 32230], 'starts from the adjusted trial balance');
+
+  // Sort: 8 temporary accounts close, 12 permanent ones carry over.
+  const temp = SORTABLE.filter(isTemporary).sort();
+  assert.deepEqual(temp, ['depexp', 'drawing', 'fuel', 'insexp', 'intexp', 'sales', 'supexp', 'wagesexp']);
+  assert.equal(SORTABLE.length - temp.length, 12);
+  for (const id of ['unearned', 'accdep', 'capital']) assert.equal(isTemporary(id), false, `${id} is permanent`);
+
+  // Amounts worked out by hand (see the teacher notes).
+  assert.deepEqual(ENTRIES.map((e) => e.amt), [
+    5200 + 300 + 400, // adjusted revenue
+    650 + 200 + 300 + 1440 + 90 + 650, // adjusted expenses
+    5900 - 3330, // net income
+    800, // drawing
+  ]);
+  ENTRIES.forEach((e, i) => assert.ok(e.dr !== 'cash' && e.cr !== 'cash', `entry ${i + 1} must not use Cash`));
+
+  // Still balanced after every entry.
+  for (let n = 0; n <= ENTRIES.length; n++) {
+    const [d, c] = totals(closedBalances(n));
+    assert.equal(d, c, `balanced after ${n} entries`);
+  }
+  assert.equal(closedBalances(2).incsum, 2570, 'Income Summary holds net income after entry 2');
+
+  const bal = closedBalances();
+  for (const a of A) if (isTemporary(a.id)) assert.equal(bal[a.id], 0, `${a.name} closed`);
+  assert.equal(bal.capital, 10700 + 2570 - 800);
+  assert.deepEqual(totals(bal), [28100, 28100], 'post-closing trial balance');
+  const assets = bal.cash + bal.ar + bal.supplies + bal.prepaid + bal.equipment - bal.accdep;
+  assert.equal(assets, 27500);
+  assert.equal(assets, bal.ap + bal.wagespay + bal.intpay + bal.unearned + bal.loan + bal.capital);
+});

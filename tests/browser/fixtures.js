@@ -42,3 +42,9 @@ export const ADJUSTING_ENTRIES = [
   ['supexp', 'supplies', 650], ['insexp', 'prepaid', 200], ['depexp', 'accdep', 300], ['unearned', 'sales', 300],
   ['wagesexp', 'wagespay', 240], ['intexp', 'intpay', 90], ['ar', 'sales', 400],
 ];
+
+// Closing Entries Lab: accounts that close in the sort, then [debit, credit, amount] for each closing entry.
+export const CLOSING_SORT = ['sales', 'supexp', 'insexp', 'depexp', 'wagesexp', 'intexp', 'fuel', 'drawing'];
+export const CLOSING_ENTRIES = [
+  ['sales', 'incsum', 5900], ['incsum', 'allexp', 3330], ['incsum', 'capital', 2570], ['capital', 'drawing', 800],
+];
