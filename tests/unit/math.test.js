@@ -214,6 +214,30 @@ test('bank reconciliation: Maya, end of month 3', async () => {
   assert.equal(BOOK_START - BANK_START, 153);
 });
 
+test('product life cycle: stage signs and move outcomes', async () => {
+  const { PRODUCTS, STAGES, yearChange } = await import('../../src/scripts/tools/product-life-cycle.js');
+  assert.deepEqual(PRODUCTS.map((p) => p.stage), ['intro', 'growth', 'maturity', 'decline']);
+  // Year-over-year change, worked out by hand (see the teacher notes).
+  const pct = PRODUCTS.map((p) => Math.round(yearChange(p.sales) * 100) || 0);
+  assert.deepEqual(pct, [Math.round((4000 / 3000 - 1) * 100), Math.round((128000 / 46000 - 1) * 100), 0, Math.round((100000 / 205000 - 1) * 100)]);
+  assert.deepEqual(pct, [33, 178, 0, -51]);
+  // The data have to show each stage's signs.
+  const [ring, nuggets, drink, dvd] = PRODUCTS;
+  assert.ok(ring.profit < 0 && nuggets.profit > nuggets.profitBefore && drink.profit < drink.profitBefore && dvd.profit < dvd.profitBefore);
+  for (const p of PRODUCTS) {
+    assert.ok(STAGES[p.stage]);
+    for (const list of [p.moves, p.ops]) assert.equal(list.filter((m) => m.best).length, 1, `${p.name}: exactly one best option`);
+    for (const m of p.moves) assert.equal(m.next.length, 4);
+  }
+  // Best move wins on sales everywhere except decline, where it is the profitable exit with the lowest sales.
+  for (const p of [ring, nuggets, drink]) {
+    const best = p.moves.find((m) => m.best).next.at(-1);
+    for (const m of p.moves.filter((x) => !x.best)) assert.ok(best > m.next.at(-1), `${p.name}: best move sells most`);
+  }
+  const dvdBest = dvd.moves.find((m) => m.best).next.at(-1);
+  assert.ok(dvd.moves.filter((m) => !m.best).every((m) => m.next.at(-1) > dvdBest));
+});
+
 test('unit economics: CAC, LTV, ratio, payback', async () => {
   const { PRESETS, unitEconomics } = await import('../../src/scripts/tools/unit-economics.js');
   const close = (a, b) => assert.ok(Math.abs(a - b) < 1e-9, `${a} should be ${b}`);

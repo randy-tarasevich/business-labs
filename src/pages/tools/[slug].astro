@@ -22,7 +22,7 @@ const Tool = TOOL_COMPONENTS[tool.data.component];
 const printable = !['ClassTimer', 'BusinessPlan'].includes(tool.data.component);
 // Share links save a tool's inputs in the URL (src/scripts/lib/share-state.js). These tools keep their
 // state in something other than plain inputs, so they don't get a Copy link button.
-const SKIP_SHARE = ['ClassTimer', 'BusinessPlan', 'BudgetBalancer', 'AccountingEquation', 'TAccounts', 'AdjustingEntries', 'ClosingEntries', 'BankReconciliation'];
+const SKIP_SHARE = ['ClassTimer', 'BusinessPlan', 'BudgetBalancer', 'AccountingEquation', 'TAccounts', 'AdjustingEntries', 'ClosingEntries', 'BankReconciliation', 'ProductLifeCycle'];
 const shareable = !SKIP_SHARE.includes(tool.data.component);
 if (!Tool) throw new Error(`No component "${tool.data.component}" registered in src/components/tools/index.js`);
 ---

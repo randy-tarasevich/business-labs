@@ -1,0 +1,71 @@
+---
+// Product Life Cycle Lab: markup only. Behavior lives in src/scripts/tools/product-life-cycle.js
+import TryIt from '../ui/TryIt.astro';
+import { PANEL, PANEL_TIGHT, H2, H3, HINT, BTN, BTN_GHOST, CHART_KEY, STAT, STAT_K, STAT_V, FIELDSET, LEGEND } from '../../scripts/lib/ui.js';
+const FACT_V = `${STAT_V} text-[17px]`;
+---
+<div class="grid gap-[18px]" data-tool="product-life-cycle">
+  <section class="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-[18px] items-start max-[900px]:grid-cols-1">
+    <div class:list={[PANEL, 'group/card']} data-r="card">
+      <div class="grid gap-1.5 text-[13px] text-muted font-medium">
+        <span data-r="progress">Product 1 of 4: Name the stage</span>
+        <div class="h-1 bg-grid rounded-[2px] overflow-hidden" aria-hidden="true"><div class="h-full w-0 bg-accent transition-[width] duration-300" data-r="bar"></div></div>
+      </div>
+      <div class="grid gap-1" aria-live="polite">
+        <h2 class="font-display text-[clamp(19px,2.4vw,23px)] font-semibold leading-tight" data-r="name"></h2>
+        <p class="text-[15px] max-w-[65ch]" data-r="about"></p>
+      </div>
+      <fieldset class:list={[FIELDSET, 'group-data-done/card:hidden']}>
+        <legend class={LEGEND} data-r="legend"></legend>
+        <div class="grid gap-2" data-r="options"></div>
+      </fieldset>
+      <p class="rounded-lg py-2.5 px-3.5 text-[14.5px] tone-good:bg-good-soft tone-bad:bg-bad-soft tone-info:bg-bg" data-r="feedback" role="status" hidden></p>
+      <p class="text-[15px] border-l-[3px] border-accent pl-3 max-w-[65ch]" data-r="why" hidden></p>
+      <div class="flex flex-wrap gap-2">
+        <button type="button" class={BTN} data-act="check">Check</button>
+        <button type="button" class={BTN_GHOST} data-act="reveal">Show answer</button>
+        <button type="button" class={BTN} data-act="next" hidden>Next step</button>
+        <button type="button" class={BTN_GHOST} data-act="restart" hidden>Start over</button>
+      </div>
+    </div>
+
+    <div class={PANEL_TIGHT}>
+      <h2 class={H3}>Units sold each quarter</h2>
+      <div class={CHART_KEY} aria-hidden="true">
+        <span><i class="w-[18px] h-[3px] rounded-[2px] inline-block bg-accent"></i>Last two years</span>
+        <span><i class="w-[18px] h-0 border-t-[3px] border-dashed border-good inline-block"></i>Next year, best move</span>
+        <span><i class="w-[18px] h-0 border-t-[3px] border-dashed border-bad inline-block"></i>Next year, other moves</span>
+      </div>
+      <div class="w-full"><svg data-chart role="img" aria-label="Sales chart" class="block w-full h-auto [&_text]:font-mono [&_text]:text-[11px] [&_text]:fill-muted"></svg></div>
+      <dl class="grid grid-cols-2 gap-x-4 gap-y-3 m-0" aria-label="Facts about this product">
+        <div class={STAT}><dt class={STAT_K}>Sales last quarter</dt><dd class:list={[FACT_V, 'm-0']} data-r="f-sales"></dd></div>
+        <div class={STAT}><dt class={STAT_K}>Sales vs. a year ago</dt><dd class:list={[FACT_V, 'm-0']} data-r="f-change"></dd></div>
+        <div class={STAT}><dt class={STAT_K}>Profit last quarter</dt><dd class:list={[FACT_V, 'm-0']} data-r="f-profit"></dd><dd class="m-0 text-[12px] text-muted" data-r="f-profit-before"></dd></div>
+        <div class={STAT}><dt class={STAT_K}>Competitors</dt><dd class:list={[FACT_V, 'm-0 font-sans! text-[15px]!']} data-r="f-comp"></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class={PANEL} data-r="curve-panel" aria-labelledby="plc-curve-h">
+    <h2 id="plc-curve-h" class={H2}>The product life cycle</h2>
+    <div class={CHART_KEY} aria-hidden="true">
+      <span><i class="w-[18px] h-[3px] rounded-[2px] inline-block bg-accent"></i>Sales</span>
+      <span><i class="w-[18px] h-0 border-t-[3px] border-dashed border-good inline-block"></i>Profit</span>
+    </div>
+    <div class="w-full"><svg data-curve role="img" aria-label="Product life cycle curve" class="block w-full h-auto [&_text]:font-mono [&_text]:text-[11px] [&_text]:fill-muted"></svg></div>
+    <ol class="m-0 p-0 list-none flex flex-wrap gap-x-5 gap-y-1 text-[13.5px]" data-r="curve-key" aria-label="Products placed so far"></ol>
+    <p class={HINT}>Each product lands on the curve once you name its stage. Every product follows its own timing: some race through growth in months, others stay mature for decades.</p>
+  </section>
+
+  <TryIt items={[
+    { q: 'Profit is negative in introduction even when the product is good. Why?', a: 'The company has paid to design, build, and launch the product, and it spends heavily on promotion, but sales are still small. Those costs come before the revenue does.' },
+    { q: 'Cutting the price was the wrong move for both the smart ring and the sports drink, but for different reasons. What were they?', a: 'The ring: people didn\'t know what the product was, so price wasn\'t the problem. The sports drink: rivals match the price, so nobody gains customers and everyone earns less.' },
+    { q: 'Pick a product you own. Which stage is it in? What makes you think so?', a: 'Look for the signs: how fast sales are growing, whether there are many competitors, and whether prices are being cut. A strong answer names at least two signs.' },
+    { q: 'Can a product in decline go back to growth? Think of one that did.', a: 'Sometimes, if the product finds a new use or new customers. Vinyl records and film cameras both came back with younger buyers. It\'s rare, and it usually takes a change, not just more ads.' },
+  ]} />
+</div>
+
+<script>
+  import { initProductLifeCycle } from '../../scripts/tools/product-life-cycle.js';
+  document.querySelectorAll('[data-tool="product-life-cycle"]').forEach(initProductLifeCycle);
+</script>
