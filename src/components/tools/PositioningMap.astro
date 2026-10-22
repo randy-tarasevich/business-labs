@@ -1,0 +1,56 @@
+---
+// Positioning Map Lab: markup only. Behavior lives in src/scripts/tools/positioning-map.js
+import RangeField from '../ui/RangeField.astro';
+import Stat from '../ui/Stat.astro';
+import TryIt from '../ui/TryIt.astro';
+import { TOOL, PANEL, PANEL_TIGHT, LOWER, H2, H3, PROSE, PRESETS, CHART_KEY, RESULTS, VERDICT } from '../../scripts/lib/ui.js';
+---
+<div class={TOOL} data-tool="positioning-map">
+  <section class="grid grid-cols-[320px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Market and your brand">
+      <h2 class={H2}>The market</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Markets"></div>
+      <h3 class={H3}>Place your new brand</h3>
+      <RangeField id="pm-x" label="Price" step="0.5" max={10} aria="Your price, 0 to 10" hint="0 = cheapest in town, 10 = most expensive." />
+      <RangeField id="pm-y" label="Quality" labelRef="y-label" step="0.5" max={10} aria="Your position on the up-down feature, 0 to 10" hintRef="y-hint" />
+      <p class="text-[13px] text-muted">Or click anywhere on the map.</p>
+    </div>
+
+    <div class={PANEL_TIGHT}>
+      <div class={CHART_KEY} aria-hidden="true">
+        <span><i class="w-3 h-3 rounded-full inline-block bg-accent/15 border border-accent/60"></i>Customers (bigger = more)</span>
+        <span><i class="w-2.5 h-2.5 rotate-45 rounded-[2px] inline-block bg-muted"></i>Rival brand</span>
+        <span><i class="w-3 h-3 rounded-full inline-block bg-accent"></i>You</span>
+        <span><i class="w-4 h-4 rounded-full inline-block border border-dashed border-accent/70"></i>How far customers will look</span>
+      </div>
+      <div class="w-full"><svg data-chart role="img" aria-label="Positioning map" class="block w-full h-auto cursor-crosshair [&_text]:font-mono [&_text]:text-[11px] [&_text]:fill-muted"></svg></div>
+      <div class={RESULTS}>
+        <Stat label="Customers you win" r="won" box="won-box" keyed live />
+        <Stat label="Share of the market" r="share" live />
+        <Stat label="Closest rival" r="rival" />
+        <Stat label="Customers no one serves" r="unserved" />
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>How it works</h2>
+      <p class={PROSE}>A <strong>positioning map</strong> (also called a perceptual map) shows how customers see the brands in a market, here by price and one other feature. Each bubble is a group of customers and what they want.</p>
+      <p class={PROSE}>Customers only look at brands that are close to what they want: inside the dashed circle. When several brands are close, customers split between them, and brands that are already established keep more of their regulars than a newcomer can win.</p>
+      <p class={PROSE}>The best spot is usually a <strong>gap</strong>: customers waiting and no brand close to them. But a gap only matters if people are there, and if you can make that product at that price.</p>
+    </div>
+    <TryIt items={[
+      { q: 'In Pizza in town, put your brand right on top of the Families bubble. How many customers do you win? Now move to the empty bubble at the top. Why the difference?', a: 'About 236 next to Planet Pie, but all 350 in the empty spot. Families split between you and the brands they already know. The "Good pizza, fair price" group has no brand close enough, so you get all of them.' },
+      { q: 'In Snack bars, try the top-left corner: very cheap and very healthy. Why does it win nothing? Could you even make that product?', a: 'No customer group is close enough to it. And healthy ingredients cost more, so a very healthy bar at the lowest price would be hard to make at a profit.' },
+      { q: 'In Running shoes, three brands crowd the top right. Why might they all be there? What happens if you join them?', a: 'Serious racers pay the most, so brands chase them. Joining wins only about 83 customers, because 250 racers are split four ways.' },
+      { q: 'An empty spot on a positioning map is not always an opportunity. Give two reasons a spot might be empty.', a: 'Nobody wants that combination, or nobody can make it at that price and still profit. Good answers test both before jumping in.' },
+    ]} />
+  </section>
+</div>
+
+<script>
+  import { initPositioningMap } from '../../scripts/tools/positioning-map.js';
+  document.querySelectorAll('[data-tool="positioning-map"]').forEach(initPositioningMap);
+</script>

@@ -30,6 +30,7 @@ import ClosingEntries from './ClosingEntries.astro';
 import BankReconciliation from './BankReconciliation.astro';
 import ProductLifeCycle from './ProductLifeCycle.astro';
 import UnitEconomics from './UnitEconomics.astro';
+import PositioningMap from './PositioningMap.astro';
 
 export const TOOL_COMPONENTS = {
   BreakEven,
@@ -62,4 +63,5 @@ export const TOOL_COMPONENTS = {
   BankReconciliation,
   ProductLifeCycle,
   UnitEconomics,
+  PositioningMap,
 };

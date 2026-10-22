@@ -274,3 +274,29 @@ test('Unit Economics Lab: examples, ratio colors, and edge cases', async ({ page
   await expect(page.locator('[data-chart]')).toHaveAttribute('aria-label', /Add new customers/);
   expect(errors).toEqual([]);
 });
+
+test('Positioning Map Lab: start corner, crowded spot, the gap, and clicking the map', async ({ page }) => {
+  const errors = watchErrors(page);
+  await page.goto('/tools/positioning-map-lab/');
+  const won = page.locator('[data-r="won"]');
+  const verdict = page.locator('[data-r="verdict"]');
+  await expect(won).toHaveText('0');
+  await expect(verdict).toContainText('No customers are close enough');
+  await setValue(page, 'pm-x', 4);
+  await setValue(page, 'pm-y', 4.5);
+  await expect(won).toHaveText('236');
+  await expect(verdict).toContainText('splitting them with');
+  await setValue(page, 'pm-x', 4.5);
+  await setValue(page, 'pm-y', 8);
+  await expect(won).toHaveText('350');
+  await expect(verdict).toContainText('You own "Good pizza, fair price"');
+  await page.getByRole('button', { name: 'Running shoes' }).click();
+  await expect(won).toHaveText('0');
+  await expect(page.locator('[data-r="y-label"]')).toHaveText('Performance');
+  // Click the middle of the plot: lands near (5, 5) and moves both boxes.
+  const box = await page.locator('[data-chart]').boundingBox();
+  await page.mouse.click(box.x + box.width * 0.5, box.y + box.height * 0.45);
+  await expect(page.locator('#pm-x-n')).not.toHaveValue('9');
+  await expect(page).toHaveURL(/pm-x=/);
+  expect(errors).toEqual([]);
+});
