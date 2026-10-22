@@ -262,3 +262,30 @@ test('unit economics: CAC, LTV, ratio, payback', async () => {
   assert.equal(unitEconomics({ ...PRESETS[0], spend: 0 }).ratio, Infinity);
   assert.equal(unitEconomics({ ...PRESETS[0], margin: 0 }).payback, Infinity);
 });
+
+test('positioning map: customer splits and the gap lesson', async () => {
+  const { MARKETS, compete, START } = await import('../../src/scripts/tools/positioning-map.js');
+  const [pizza, snacks, shoes] = MARKETS;
+  const won = (m, x, y) => Math.round(compete(m, { x, y }).yours);
+  // One split by hand: you at Families (4, 4.5). Weight = pull ÷ (distance + 0.5)², pull 1 for you, 3 for rivals.
+  const w = (pull, d) => pull / (d + 0.5) ** 2;
+  const you = w(1, 0);
+  const rivals = w(3, Math.hypot(0.5, 0.5)) + w(3, Math.hypot(2, 0.5)) + w(3, Math.hypot(2, 2)); // Planet Pie, Crust & Co., Slice Shack
+  assert.equal(won(pizza, 4, 4.5), Math.round((400 * you) / (you + rivals))); // 236
+  // The gap beats copying a crowded spot in every market, and the start corner wins nothing.
+  assert.equal(won(pizza, 4.5, 8), 350);
+  assert.equal(won(snacks, 3.5, 7.5), 300);
+  assert.equal(won(shoes, 5, 6.5), 400);
+  assert.ok(won(pizza, 4, 4.5) < 350 && won(snacks, 2.5, 2.5) < 300 && won(shoes, 2.5, 3) < 400 && won(shoes, 8.5, 8.5) < 100);
+  for (const m of MARKETS) assert.equal(won(m, START.x, START.y), 0, `${m.name}: start wins nothing`);
+  assert.equal(won(snacks, 1, 9.5), 0, 'corner with no customers in reach');
+  // Hard-to-afford flag: feature 5+ above price.
+  assert.equal(compete(pizza, { x: 2, y: 9 }).stretch, true);
+  assert.equal(compete(pizza, { x: 4.5, y: 8 }).stretch, false);
+  // Every customer is counted once: split + unserved = market size.
+  for (const m of MARKETS) for (const [x, y] of [[5, 5], [0, 10], [9, 9]]) {
+    const c = compete(m, { x, y });
+    const counted = c.groups.reduce((t, g) => t + g.split.reduce((a, b) => a + b, 0) + g.unserved, 0);
+    assert.ok(Math.abs(counted - c.total) < 1e-9);
+  }
+});

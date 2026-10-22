@@ -76,9 +76,10 @@ export const COURSE_GUIDES = {
     ],
   },
   Marketing: {
-    intro: 'Tools for the numbers side of marketing: where a product is in its life, what to charge, whether the ads worked, what a customer is worth over time, and how prices change across borders.',
+    intro: 'Tools for the numbers side of marketing: where a product is in its life, where it fits against rivals, what to charge, whether the ads worked, what a customer is worth over time, and how prices change across borders.',
     sequence: [
       { id: 'product-life-cycle-lab', why: 'Start with the product. Where it is in its life decides which price, promotion, and production moves make sense.' },
+      { id: 'positioning-map-lab', why: 'Before setting a price, decide where the product fits against rivals and which customers it is for.' },
       { id: 'price-demand', why: 'Move to pricing: how do customers react when the price changes?' },
       { id: 'break-even-lab', why: 'Now add costs. A price only works if enough people buy at it to cover them.' },
       { id: 'marketing-funnel', why: 'Move to promotion: how many people an ad reaches, and whether the campaign paid for itself.' },
@@ -89,7 +90,8 @@ export const COURSE_GUIDES = {
   Entrepreneurship: {
     intro: 'A path that follows a student business idea from first price to first investor. Each tool can use the numbers from a student\'s own business plan.',
     sequence: [
-      { id: 'price-demand', why: 'Before building anything: what will customers actually pay?' },
+      { id: 'positioning-map-lab', why: 'Start with the idea. Is there a group of customers no one is serving well?' },
+      { id: 'price-demand', why: 'Then find out what those customers will actually pay.' },
       { id: 'break-even-lab', why: 'With a price set, find how many sales it takes to cover costs.' },
       { id: 'startup-runway', why: 'Add startup costs and see how long the money lasts while sales grow.' },
       { id: 'marketing-funnel', why: 'Plan how to find customers and what each one will cost to win.' },
