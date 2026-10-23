@@ -23,6 +23,7 @@ import { paycheck } from '../scripts/tools/paycheck.js';
 import { outlook } from '../scripts/tools/investing-risk.js';
 import { compare } from '../scripts/tools/insurance.js';
 import { compareCars } from '../scripts/tools/car-buying.js';
+import { runPayroll } from '../scripts/tools/payroll.js';
 
 const near = (a, b, tol = 0.005) => Math.abs(a - b) <= tol;
 
@@ -69,6 +70,15 @@ const invest = (s) => outlook({ amount: s.v('ir-amount'), years: Math.max(1, Mat
 const ins = (s) => compare({ aDed: s.v('in-a-ded'), aPrem: s.v('in-a-prem'), bDed: s.v('in-b-ded'), bPrem: s.v('in-b-prem'), cost: s.v('in-cost'), claims: Math.round(s.v('in-claims')), savings: s.v('in-savings') });
 
 const car = (s) => compareCars({ newPrice: s.v('cb-new-price'), usedPrice: s.v('cb-used-price'), down: s.v('cb-down'), term: s.v('cb-term'), credit: s.v('cb-credit'), pay: s.v('cb-pay'), other: s.v('cb-other') });
+
+const payroll = (s) =>
+  runPayroll({
+    employees: ['a', 'b', 'c'].map((w) => ({ hours: s.v(`pr-${w}-hours`), rate: s.v(`pr-${w}-rate`) })),
+    freq: s.v('pr-freq'),
+    k: s.v('pr-k'),
+    state: s.v('pr-state'),
+    suta: s.v('pr-suta'),
+  });
 
 export const CHALLENGES = {
   'break-even-lab': [
@@ -411,6 +421,39 @@ export const CHALLENGES = {
         { text: 'The used car still costs $16,000.', ok: (s) => s.v('cb-used-price') === 16000 },
         { text: 'Down payment stays at $2,000.', ok: (s) => s.v('cb-down') === 2000 },
         { text: 'Loan length stays at 60 months.', ok: (s) => s.v('cb-term') === 60 },
+      ],
+    },
+  ],
+
+  'payroll-lab': [
+    {
+      title: 'Same hours, lower cost',
+      goal: 'The coffee shop\'s payroll costs $1,721.28 for 90 hours of work. Get the total cost to $1,650 or less without cutting any hours.',
+      start: { g0: 0 },
+      met: (s) => payroll(s).cost <= 1650,
+      rules: [
+        { text: 'Total hours stay at 90.', ok: (s) => s.v('pr-a-hours') + s.v('pr-b-hours') + s.v('pr-c-hours') === 90 },
+        { text: 'Nobody\'s hourly pay changes.', ok: (s) => s.v('pr-a-rate') === 16 && s.v('pr-b-rate') === 15.5 && s.v('pr-c-rate') === 19 },
+      ],
+    },
+    {
+      title: 'Stay on budget',
+      goal: 'The landscaping crew has a $4,800 payroll budget, but this payroll really costs $4,930.62. Cut Cara\'s hours until the total cost fits the budget.',
+      start: { g0: 1 },
+      met: (s) => payroll(s).cost <= 4800,
+      rules: [
+        { text: 'Ana and Ben keep 80 hours each.', ok: (s) => s.v('pr-a-hours') === 80 && s.v('pr-b-hours') === 80 },
+        { text: 'Nobody\'s hourly pay changes.', ok: (s) => s.v('pr-a-rate') === 22 && s.v('pr-b-rate') === 20 && s.v('pr-c-rate') === 18 },
+      ],
+    },
+    {
+      title: 'A raise for Cara',
+      goal: 'At the small office, Cara takes home $654.32 a paycheck. Find the hourly pay that gets her take-home to $700 or more.',
+      start: { g0: 2 },
+      met: (s) => payroll(s).checks[2].net >= 700,
+      rules: [
+        { text: 'Cara still works 40 hours.', ok: (s) => s.v('pr-c-hours') === 40 },
+        { text: '401(k) savings stay at 5%.', ok: (s) => s.v('pr-k') === 5 },
       ],
     },
   ],
