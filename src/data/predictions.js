@@ -19,6 +19,7 @@ import { plan } from '../scripts/tools/student-loans.js';
 import { payoff } from '../scripts/tools/credit-card.js';
 import { grow } from '../scripts/tools/start-early.js';
 import { paycheck } from '../scripts/tools/paycheck.js';
+import { outlook } from '../scripts/tools/investing-risk.js';
 
 const beUnits = (s) => {
   const cm = s.v('be-price') - s.v('be-vc');
@@ -43,6 +44,8 @@ const saver = (s, who) =>
   grow(s.v('se-monthly'), who === 'a' ? s.v('se-rate') : s.v('se-bRate'), Math.round(s.v(`se-${who}Start`)), Math.round(s.v(`se-${who}Stop`)));
 
 const pay = (s) => paycheck({ hourly: s.v('pc-hourly'), hours: s.v('pc-hours'), k: s.v('pc-k'), state: s.v('pc-state') });
+
+const invest = (s) => outlook({ amount: s.v('ir-amount'), years: Math.max(1, Math.round(s.v('ir-years'))), stocks: s.v('ir-stocks'), bonds: s.v('ir-bonds') });
 
 export const PREDICTIONS = {
   'break-even-lab': [
@@ -147,6 +150,21 @@ export const PREDICTIONS = {
       start: { g0: 0 },
       change: { 'pc-hours': 15 },
       measure: { label: 'Social Security share of pay', value: (s) => { const p = pay(s); return p.gross ? Math.round((p.ss / p.gross) * 1000) / 10 : 0; }, fmt: (n) => `${num(n, 1)}%` },
+    },
+  ],
+
+  'investing-risk-lab': [
+    {
+      question: 'Your car fund is all in stocks. You decide to wait 20 years instead of 2. What happens to the chance you end up with less than you put in?',
+      start: { g0: 0 },
+      change: { 'ir-years': 20 },
+      measure: { label: 'Chance of losing money', value: (s) => Math.round(invest(s).lossChance * 1000) / 10, fmt: (n) => `${num(n, 1)}%` },
+    },
+    {
+      question: 'Your college fund (60% stocks, 40% bonds, 10 years) gets a gift: you invest $10,000 instead of $5,000. What happens to the chance you end up with less than you put in?',
+      start: { g0: 1 },
+      change: { 'ir-amount': 10000 },
+      measure: { label: 'Chance of losing money', value: (s) => Math.round(invest(s).lossChance * 1000) / 10, fmt: (n) => `${num(n, 1)}%` },
     },
   ],
 };

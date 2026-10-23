@@ -16,6 +16,7 @@ import { TRANSACTIONS, ACCOUNTS, balances } from '../../src/scripts/tools/t-acco
 import { oppCost } from '../../src/scripts/tools/comparative-advantage.js';
 import { plan, payment } from '../../src/scripts/tools/student-loans.js';
 import { paycheck } from '../../src/scripts/tools/paycheck.js';
+import { outlook, normalCdf, normalizeMix, Z90 } from '../../src/scripts/tools/investing-risk.js';
 
 const near = (actual, expected, tol, msg) =>
   assert.ok(Math.abs(actual - expected) <= tol, `${msg ?? ''} expected ${expected}, got ${actual}`);
@@ -362,4 +363,34 @@ test('paycheck: Social Security stops at the wage base; extra Medicare starts ov
 test('paycheck: pay under the standard deduction owes no federal income tax', () => {
   // $17 x 15 x 52 = 13,260, under 16,100.
   assert.equal(paycheck({ hourly: 17, hours: 15, k: 0, state: 3 }).fed, 0);
+});
+
+test('investing risk: normal table values', () => {
+  near(normalCdf(0), 0.5, 1e-7);
+  near(normalCdf(1), 0.8413, 0.0001); // z-table
+  near(normalCdf(-1.96), 0.025, 0.0001); // z-table
+  near(normalCdf(-Z90), 0.10, 1e-6);
+});
+
+test('investing risk: car fund, $5,000 all in stocks for 2 years', () => {
+  // Lognormal from an 11.82% average and 19.46% standard deviation:
+  // sigma^2 = ln(1 + 0.1946^2 / 1.1182^2) = ln(1.030286) = 0.029837; mu = ln(1.1182) - 0.029837 / 2 = 0.096798
+  const o = outlook({ amount: 5000, years: 2, stocks: 100, bonds: 0 });
+  near(o.sigma, Math.sqrt(0.029837), 0.0001);
+  near(o.mu, 0.096798, 0.00001);
+  near(o.middle, 5000 * Math.exp(2 * 0.096798), 0.5); // about 6,068
+  // Chance of losing money = P(Z < -0.096798 x sqrt(2) / 0.17273) = P(Z < -0.7925). z-table: 0.214
+  near(o.lossChance, 0.214, 0.001);
+});
+
+test('investing risk: all cash never loses and grows at the cash rate', () => {
+  const o = outlook({ amount: 5000, years: 40, stocks: 0, bonds: 0 });
+  assert.equal(o.lossChance, 0);
+  near(o.middle, o.bad, 1e-6);
+  near(o.middle, 5000 * 1.0333 ** 40, 0.01); // about 18,536
+});
+
+test('investing risk: stocks and bonds can never add past 100%', () => {
+  assert.deepEqual(normalizeMix(70, 50), { stocks: 70, bonds: 30, cash: 0 });
+  assert.deepEqual(normalizeMix(60, 0), { stocks: 60, bonds: 0, cash: 40 });
 });

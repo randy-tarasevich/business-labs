@@ -53,13 +53,14 @@ export const COURSE_GUIDES = {
     ],
   },
   'Personal Finance': {
-    intro: 'Money decisions students will face soon: reading a paycheck, building a budget that works, using a credit card without getting buried, paying for college without borrowing more than you can repay, and why the years you save matter as much as the dollars.',
+    intro: 'Money decisions students will face soon: reading a paycheck, building a budget that works, using a credit card without getting buried, paying for college without borrowing more than you can repay, why the years you save matter as much as the dollars, and how to invest without taking more risk than your timeline allows.',
     sequence: [
       { id: 'paycheck-lab', why: 'Start with what actually lands in your account. Taxes and savings come out before you see a dollar.' },
       { id: 'budget-balancer', why: 'Build a budget from that take-home pay. Every later choice about credit and saving comes out of it.' },
       { id: 'credit-card-payoff-lab', why: 'See what happens when spending goes on a card and only the minimum gets paid.' },
       { id: 'student-loan-simulator', why: 'The biggest loan many students take on comes next. Plan a college budget and check whether the payment fits a starting paycheck.' },
       { id: 'start-early-lab', why: 'Flip it around: when interest works for you instead of against you, starting early is the biggest advantage.' },
+      { id: 'investing-risk-lab', why: 'Start Early assumed a smooth 7% every year. Real markets swing, so see how time and the right mix make the swings safer.' },
     ],
   },
   Accounting: {
