@@ -19,6 +19,7 @@ import { funnel } from '../scripts/tools/marketing-funnel.js';
 import { plan, repay, TAKE_HOME } from '../scripts/tools/student-loans.js';
 import { payoff } from '../scripts/tools/credit-card.js';
 import { grow } from '../scripts/tools/start-early.js';
+import { paycheck } from '../scripts/tools/paycheck.js';
 
 const near = (a, b, tol = 0.005) => Math.abs(a - b) <= tol;
 
@@ -57,6 +58,8 @@ const takeHomeShare = (s) => repay(loans(s), s.v('sl-rate'), 10).monthly / ((s.v
 const card = (s, plan_) => payoff({ balance: s.v('cc-balance'), apr: s.v('cc-apr'), fixed: s.v('cc-fixed') }, plan_);
 const saver = (s, who) =>
   grow(s.v('se-monthly'), who === 'a' ? s.v('se-rate') : s.v('se-bRate'), Math.round(s.v(`se-${who}Start`)), Math.round(s.v(`se-${who}Stop`))).final;
+
+const pay = (s) => paycheck({ hourly: s.v('pc-hourly'), hours: s.v('pc-hours'), k: s.v('pc-k'), state: s.v('pc-state') });
 
 export const CHALLENGES = {
   'break-even-lab': [
@@ -261,6 +264,40 @@ export const CHALLENGES = {
       rules: [
         { text: 'Saver A stays the same: 22 to 65 at 7%.', ok: (s) => s.v('se-aStart') === 22 && s.v('se-aStop') === 65 && s.v('se-rate') === 7 },
         { text: 'Saver B still saves from 22 to 65.', ok: (s) => s.v('se-bStart') === 22 && s.v('se-bStop') === 65 },
+      ],
+    },
+  ],
+
+  'paycheck-lab': [
+    {
+      title: 'Clear $1,500 a paycheck',
+      goal: 'At your first full-time job, you take home about $1,400 every 2 weeks. Get take-home pay to $1,500 or more a paycheck.',
+      start: { g0: 1 },
+      met: (s) => pay(s).net / s.v('pc-freq') >= 1500,
+      rules: [
+        { text: 'Hourly pay stays at $22.', ok: (s) => s.v('pc-hourly') === 22 },
+        { text: '401(k) savings stay at 3% or more.', ok: (s) => s.v('pc-k') >= 3 },
+        { text: 'State tax stays at 3%.', ok: (s) => s.v('pc-state') === 3 },
+      ],
+    },
+    {
+      title: 'No federal income tax',
+      goal: 'Your part-time job pays $158 a year in federal income tax. Get it to $0 without working less.',
+      start: { g0: 0 },
+      met: (s) => pay(s).fed < 0.005,
+      rules: [
+        { text: 'Hourly pay stays at $17.', ok: (s) => s.v('pc-hourly') === 17 },
+        { text: 'Hours stay at 20 a week.', ok: (s) => s.v('pc-hours') === 20 },
+      ],
+    },
+    {
+      title: 'Back to the 12% bracket',
+      goal: 'The skilled job puts you in the 22% federal bracket. Get your top bracket down to 12% without earning less.',
+      start: { g0: 2 },
+      met: (s) => pay(s).gross > 0 && pay(s).marginal <= 12,
+      rules: [
+        { text: 'Hourly pay stays at $40.', ok: (s) => s.v('pc-hourly') === 40 },
+        { text: 'Hours stay at 40 a week.', ok: (s) => s.v('pc-hours') === 40 },
       ],
     },
   ],

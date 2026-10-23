@@ -15,6 +15,7 @@ import { grow } from '../../src/scripts/tools/start-early.js';
 import { TRANSACTIONS, ACCOUNTS, balances } from '../../src/scripts/tools/t-accounts.js';
 import { oppCost } from '../../src/scripts/tools/comparative-advantage.js';
 import { plan, payment } from '../../src/scripts/tools/student-loans.js';
+import { paycheck } from '../../src/scripts/tools/paycheck.js';
 
 const near = (actual, expected, tol, msg) =>
   assert.ok(Math.abs(actual - expected) <= tol, `${msg ?? ''} expected ${expected}, got ${actual}`);
@@ -323,4 +324,42 @@ test('student loans: monthly payment matches textbook amortization tables', () =
   near(payment(10000, 6, 120), 111.02, 0.01); // $10,000 at 6% for 10 years
   near(payment(10000, 10, 120), 132.15, 0.01); // $10,000 at 10% for 10 years
   near(payment(12000, 0, 120), 100, 0.001); // no interest: just split it up
+});
+
+test('paycheck: first full-time job ($22 x 40 hours, 3% 401(k), 3% state)', () => {
+  const y = paycheck({ hourly: 22, hours: 40, k: 3, state: 3 });
+  // Gross 22 x 40 x 52 = 45,760. 401(k) 3% = 1,372.80.
+  assert.equal(y.gross, 45760);
+  near(y.k401, 1372.8, 0.001);
+  // Taxable = 45,760 - 1,372.80 - 16,100 = 28,287.20.
+  // Federal = 10% x 12,400 + 12% x (28,287.20 - 12,400) = 1,240 + 1,906.46 = 3,146.46
+  near(y.fed, 3146.464, 0.001);
+  assert.equal(y.marginal, 12);
+  // FICA on all 45,760: 6.2% = 2,837.12; 1.45% = 663.52. State 3% x 44,387.20 = 1,331.62.
+  near(y.ss, 2837.12, 0.001);
+  near(y.medicare, 663.52, 0.001);
+  near(y.state, 1331.616, 0.001);
+  near(y.net, 45760 - 1372.8 - 3146.464 - 2837.12 - 663.52 - 1331.616, 0.001);
+});
+
+test('paycheck: a raise into the 22% bracket only taxes the dollars above the line', () => {
+  // $33 x 40 x 52 = 68,640; 3% 401(k) = 2,059.20; taxable = 50,480.80, so $80.80 sits in the 22% bracket.
+  // Federal = 1,240 + 12% x 38,000 + 22% x 80.80 = 1,240 + 4,560 + 17.776 = 5,817.776
+  const y = paycheck({ hourly: 33, hours: 40, k: 3, state: 3 });
+  near(y.fed, 5817.776, 0.001);
+  assert.equal(y.marginal, 22);
+  assert.ok(y.net > paycheck({ hourly: 32, hours: 40, k: 3, state: 3 }).net, 'the raise still raises take-home pay');
+});
+
+test('paycheck: Social Security stops at the wage base; extra Medicare starts over $200,000', () => {
+  // $125 x 40 x 52 = 260,000. Social Security = 6.2% x 184,500 = 11,439.
+  // Medicare = 1.45% x 260,000 + 0.9% x 60,000 = 3,770 + 540 = 4,310.
+  const y = paycheck({ hourly: 125, hours: 40, k: 0, state: 0 });
+  near(y.ss, 11439, 0.001);
+  near(y.medicare, 4310, 0.001);
+});
+
+test('paycheck: pay under the standard deduction owes no federal income tax', () => {
+  // $17 x 15 x 52 = 13,260, under 16,100.
+  assert.equal(paycheck({ hourly: 17, hours: 15, k: 0, state: 3 }).fed, 0);
 });
