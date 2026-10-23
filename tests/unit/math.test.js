@@ -20,6 +20,7 @@ import { outlook, normalCdf, normalizeMix, Z90 } from '../../src/scripts/tools/i
 import { compare, breakEven, yearCost } from '../../src/scripts/tools/insurance.js';
 import { compareCars, payment as carPayment } from '../../src/scripts/tools/car-buying.js';
 import { employeeCheck, runPayroll, entryTotals } from '../../src/scripts/tools/payroll.js';
+import { badDebts } from '../../src/scripts/tools/bad-debts.js';
 
 const near = (actual, expected, tol, msg) =>
   assert.ok(Math.abs(actual - expected) <= tol, `${msg ?? ''} expected ${expected}, got ${actual}`);
@@ -479,4 +480,27 @@ test('payroll: 401(k) savings do not change the employer payroll taxes', () => {
   const E = [{ hours: 30, rate: 16 }, { hours: 20, rate: 15.5 }, { hours: 40, rate: 19 }];
   const base = { employees: E, freq: 52, state: 3, suta: 2.8 };
   assert.equal(runPayroll({ ...base, k: 0 }).t.employer, runPayroll({ ...base, k: 5 }).t.employer);
+});
+
+test('bad debts: furniture store, both methods', () => {
+  const s = { sales: 400000, before: 1200, pctSales: 1, ages: [60000, 18000, 8000, 4000], pcts: [1, 5, 20, 50] };
+  // Aging: 600 + 900 + 1,600 + 2,000 = 5,100 target; expense = 5,100 - 1,200 = 3,900.
+  const aging = badDebts(s, 'aging');
+  assert.equal(aging.ar, 90000);
+  assert.equal(aging.target, 5100);
+  assert.equal(aging.expense, 3900);
+  assert.equal(aging.after, 5100);
+  assert.equal(aging.nrv, 84900);
+  // Percent of sales: 1% x 400,000 = 4,000; allowance = 1,200 + 4,000 = 5,200.
+  const sales = badDebts(s, 'sales');
+  assert.equal(sales.expense, 4000);
+  assert.equal(sales.after, 5200);
+  assert.equal(sales.nrv, 84800);
+});
+
+test('bad debts: a debit balance raises the aging expense but not the allowance', () => {
+  const s = { sales: 400000, before: -800, pctSales: 1, ages: [60000, 18000, 8000, 4000], pcts: [1, 5, 20, 50] };
+  assert.equal(badDebts(s, 'aging').expense, 5900); // 5,100 + 800
+  assert.equal(badDebts(s, 'aging').after, 5100);
+  assert.equal(badDebts(s, 'sales').after, 3200); // -800 + 4,000
 });

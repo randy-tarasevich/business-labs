@@ -43,6 +43,7 @@ import { dealMath } from '../scripts/tools/investor-deal.js';
 import { unitEconomics } from '../scripts/tools/unit-economics.js';
 import { PRESETS as SD_MARKETS, at as sdAt, equilibrium } from '../scripts/tools/supply-demand.js';
 import { runPayroll } from '../scripts/tools/payroll.js';
+import { badDebts } from '../scripts/tools/bad-debts.js';
 
 const near = (a, b, tol = 0.005) => Math.abs(a - b) <= tol;
 
@@ -208,6 +209,18 @@ const payroll = (s) =>
     state: s.v('pr-state'),
     suta: s.v('pr-suta'),
   });
+
+const bd = (s, method) =>
+  badDebts(
+    {
+      sales: s.v('bd-sales'),
+      before: s.v('bd-before'),
+      pctSales: s.v('bd-pct-sales'),
+      ages: [0, 1, 2, 3].map((i) => s.v(`bd-age-${i}`)),
+      pcts: [0, 1, 2, 3].map((i) => s.v(`bd-pct-${i}`)),
+    },
+    method ?? (s.pick(1) === 0 ? 'sales' : 'aging')
+  );
 
 export const CHALLENGES = {
   'break-even-lab': [
@@ -1146,6 +1159,26 @@ export const CHALLENGES = {
         { text: 'Cara still works 40 hours.', ok: (s) => s.v('pr-c-hours') === 40 },
         { text: '401(k) savings stay at 5%.', ok: (s) => s.v('pr-k') === 5 },
       ],
+    },
+  ],
+
+  'bad-debts-lab': [
+    {
+      title: 'Collect the old accounts',
+      goal: 'The aging method records $3,900 of Bad Debt Expense. The oldest accounts are the riskiest. Get the expense under $2,500 by getting late customers to pay, while total receivables stay at $90,000.',
+      start: { g0: 0, g1: 1 },
+      met: (s) => bd(s, 'aging').expense < 2500,
+      rules: [
+        { text: 'Total receivables stay at $90,000.', ok: (s) => [0, 1, 2, 3].reduce((t, i) => t + s.v(`bd-age-${i}`), 0) === 90000 },
+        { text: 'The percent for each age group stays the same.', ok: (s) => [1, 5, 20, 50].every((p, i) => s.v(`bd-pct-${i}`) === p) },
+      ],
+    },
+    {
+      title: 'Bring percent of sales back in line',
+      goal: 'Collections got better, but percent of sales still adds $4,000, so the allowance ends at $5,200 while the aging schedule says only $2,250 won\'t be collected. Get the allowance within $100 of $2,250.',
+      start: { g0: 2, g1: 0 },
+      met: (s) => Math.abs(bd(s).after - bd(s, 'aging').target) <= 100,
+      rules: [{ text: 'Stay on the percent of sales method.', ok: (s) => s.pick(1) === 0 }],
     },
   ],
 };
