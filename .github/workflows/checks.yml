@@ -1,9 +1,10 @@
 # Runs on every pull request and every push to main. A red X on a PR means something broke:
 # open "Details" to see which check failed and why. See the README's "Checks" section.
 #
-# The browser tests are split across 3 machines that run at the same time (shards), so a PR finishes
-# in a few minutes instead of about 9. The last job is named "checks": it passes only when every
-# other job passed, and it's the one branch protection on main requires. Keep that job name.
+# The browser tests are split across 3 machines that run at the same time (shards), each inside
+# Playwright's ready-made container, so a PR finishes in a few minutes instead of about 9.
+# The last job is named "checks": it passes only when every other job passed, and it's the one
+# branch protection on main requires. Keep that job name.
 
 name: Checks
 
@@ -36,6 +37,13 @@ jobs:
     name: Browser tests (${{ matrix.shard }} of 3)
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # Playwright's own image already has the test browser and every system library it needs, so
+    # nothing is downloaded or installed per run (that install used to stall for 10+ minutes).
+    # The image tag must match @playwright/test in package.json. When you update Playwright,
+    # update this tag too; the "Container matches Playwright" step fails with a clear message if not.
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+      options: --user 1001
     strategy:
       fail-fast: false
       matrix:
@@ -48,25 +56,12 @@ jobs:
           cache: npm
       - name: Install
         run: npm ci
+      - name: Container matches Playwright
+        run: |
+          want="$(node -p "require('@playwright/test/package.json').version")"
+          test "$want" = "1.56.0" || { echo "package.json has Playwright $want; update the container image tag in .github/workflows/checks.yml to v$want-noble"; exit 1; }
       - name: Build
         run: npm run build
-
-      # The test browser is the same every run until Playwright's version changes, so keep a copy.
-      - name: Playwright version
-        id: pw
-        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
-      - name: Cache the test browser
-        id: pw-cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
-      - name: Install browser
-        if: steps.pw-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium
-      - name: Install browser system libraries
-        if: steps.pw-cache.outputs.cache-hit == 'true'
-        run: npx playwright install-deps chromium
 
       - name: Browser tests (every page, phone width, share links, Copy results, challenges, predictions)
         run: npx playwright test --shard=${{ matrix.shard }}/3
