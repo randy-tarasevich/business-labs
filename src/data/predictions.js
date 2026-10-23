@@ -40,6 +40,7 @@ import { dealMath } from '../scripts/tools/investor-deal.js';
 import { unitEconomics } from '../scripts/tools/unit-economics.js';
 import { PRESETS as SD_MARKETS, equilibrium } from '../scripts/tools/supply-demand.js';
 import { runPayroll } from '../scripts/tools/payroll.js';
+import { badDebts } from '../scripts/tools/bad-debts.js';
 
 const beUnits = (s) => {
   const cm = s.v('be-price') - s.v('be-vc');
@@ -134,6 +135,18 @@ const payroll = (s) =>
     state: s.v('pr-state'),
     suta: s.v('pr-suta'),
   });
+
+const bd = (s, method) =>
+  badDebts(
+    {
+      sales: s.v('bd-sales'),
+      before: s.v('bd-before'),
+      pctSales: s.v('bd-pct-sales'),
+      ages: [0, 1, 2, 3].map((i) => s.v(`bd-age-${i}`)),
+      pcts: [0, 1, 2, 3].map((i) => s.v(`bd-pct-${i}`)),
+    },
+    method ?? (s.pick(1) === 0 ? 'sales' : 'aging')
+  );
 
 export const PREDICTIONS = {
   'break-even-lab': [
@@ -553,6 +566,21 @@ export const PREDICTIONS = {
       start: { g0: 0 },
       change: { 'pr-b-hours': 40 },
       measure: { label: 'Ben\'s federal withholding', value: (s) => payroll(s).checks[1].fed, fmt: (n) => money(n, 2) },
+    },
+  ],
+
+  'bad-debts-lab': [
+    {
+      question: 'Using the aging method, it turns out more accounts were written off this year: the allowance starts with an $800 debit balance instead of a $1,200 credit balance. What happens to the allowance\'s balance after adjusting?',
+      start: { g0: 0, g1: 1 },
+      change: { 'bd-before': -800 },
+      measure: { label: 'Allowance after adjusting', value: (s) => bd(s, 'aging').after, fmt: (n) => money(n, 2) },
+    },
+    {
+      question: 'Using the aging method, the furniture store\'s customers start paying faster, so most receivables move into "not yet due." What happens to Bad Debt Expense?',
+      start: { g0: 0, g1: 1 },
+      change: { g0: 2 },
+      measure: { label: 'Bad Debt Expense', value: (s) => bd(s, 'aging').expense, fmt: (n) => money(n, 2) },
     },
   ],
 };

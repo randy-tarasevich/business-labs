@@ -1,0 +1,97 @@
+---
+// Bad Debts Lab: markup only. Behavior lives in src/scripts/tools/bad-debts.js
+import RangeField from '../ui/RangeField.astro';
+import Stat from '../ui/Stat.astro';
+import TryIt from '../ui/TryIt.astro';
+import { TOOL, PANEL, PANEL_TIGHT, LOWER, H2, H3, PROSE, PRESETS, HINT, CHART_KEY, SWATCH, SVG, RESULTS, VERDICT, FORMULA, FIELDSET, LEGEND, NUM_INPUT_SM, NUM_UNIT, TABLE_BOX, TABLE } from '../../scripts/lib/ui.js';
+import { BUCKETS } from '../../scripts/tools/bad-debts.js';
+
+const TABS =
+  'flex flex-wrap gap-1.5 *:font-sans *:font-medium *:text-[13px] *:leading-[normal] *:text-ink *:bg-transparent *:border *:border-line *:rounded-full *:min-h-8 *:py-[5px] *:px-[11px] *:cursor-pointer *:aria-pressed:border-ink *:aria-pressed:bg-bg *:aria-pressed:font-semibold';
+
+const tryIt = [
+  {
+    q: 'Load the furniture store. On the aging method, why is Bad Debt Expense $3,900 when the aging schedule says $5,100 won\'t be collected?',
+    a: 'The allowance already has a $1,200 credit balance. The aging method sets the allowance to $5,100, so it only needs to add $3,900.',
+  },
+  {
+    q: 'Switch to percent of sales. Now the expense is $4,000 and the allowance ends at $5,200. Why don\'t the two methods agree?',
+    a: 'Percent of sales estimates from this year\'s sales and adds that to whatever the allowance already had. Aging estimates from the receivables still out there and sets the allowance to match. They answer different questions, so they rarely agree exactly.',
+  },
+  {
+    q: 'Load Write-offs ran high. The allowance starts with an $800 debit balance. What does that mean, and how does the aging method handle it?',
+    a: 'More accounts were written off this year than the allowance had set aside. The aging method still targets $5,100, so the expense jumps to $5,900 to cover the $800 shortfall too.',
+  },
+  {
+    q: 'Later, a customer who owes $1,500 goes out of business. What entry writes off the account, and what happens to net realizable value?',
+    a: 'Debit Allowance for Doubtful Accounts $1,500, credit Accounts Receivable $1,500. Net realizable value doesn\'t change: A/R and the allowance both drop by $1,500. The expense was already recorded when it was estimated.',
+  },
+];
+---
+<div class={TOOL} data-tool="bad-debts">
+  <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Bad debt inputs">
+      <h2 class={H2}>End of the year</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example businesses"></div>
+      <RangeField id="bd-sales" label="Credit sales this year" unit="$" step="1000" max={2000000} aria="Credit sales this year in dollars" />
+      <RangeField id="bd-before" label="Allowance before adjusting" unit="$" step="50" min={-10000} max={20000} aria="Allowance for Doubtful Accounts balance before adjusting, in dollars" hint="A credit balance is normal. Enter a negative number for a debit balance (more was written off than was set aside)." />
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>Aging of receivables</legend>
+        <p class={HINT}>How much customers owe, by how late they are, and the share of each group you expect never to collect.</p>
+        {BUCKETS.map((b, i) => (
+          <div class="grid gap-1">
+            <span class="font-semibold text-[13.5px]">{b}</span>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class={NUM_UNIT}>$</span>
+              <input id={`bd-age-${i}`} type="number" step="100" min="0" inputmode="decimal" aria-label={`${b}: amount owed in dollars`} class={`${NUM_INPUT_SM} w-[96px]`} />
+              <input id={`bd-pct-${i}`} type="number" step="1" min="0" max="100" inputmode="decimal" aria-label={`${b}: percent expected uncollectible`} class={`${NUM_INPUT_SM} w-[60px]`} />
+              <span class={NUM_UNIT}>%</span>
+            </div>
+            <span class={HINT} data-r={`est-${i}`}></span>
+          </div>
+        ))}
+      </fieldset>
+    </div>
+
+    <div class={PANEL_TIGHT}>
+      <div class={TABS} data-tabs role="group" aria-label="Estimate method"></div>
+      <div data-r="pct-sales-row" hidden>
+        <RangeField id="bd-pct-sales" label="Percent of credit sales expected uncollectible" unit="%" step="0.05" max={10} width="w-[80px]" aria="Percent of credit sales expected uncollectible" />
+      </div>
+      <h3 class={H3}>Accounts receivable by age</h3>
+      <div class={CHART_KEY} aria-hidden="true">
+        <span><i class={SWATCH} style="background:var(--accent)"></i>Expected to collect</span>
+        <span><i class={SWATCH} style="background:var(--bad);opacity:0.75"></i>Expected uncollectible</span>
+      </div>
+      <div class="w-full min-w-0"><svg class={SVG} data-chart viewBox="0 0 640 250" role="img"></svg></div>
+      <div class={RESULTS}>
+        <Stat label="Accounts receivable" r="ar" />
+        <Stat label="Bad Debt Expense" r="expense" keyed live />
+        <Stat label="Allowance after adjusting" r="after" />
+        <Stat label="Net realizable value" r="nrv" live />
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+      <h3 class={H3}>Adjusting entry</h3>
+      <div class={TABLE_BOX}>
+        <table data-copy-table class={TABLE}>
+          <thead><tr><th scope="col" class="text-left!">Account</th><th scope="col">Debit</th><th scope="col">Credit</th></tr></thead>
+          <tbody data-r="entry"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}>Some customers who buy on credit will never pay. Under the <strong>allowance method</strong>, a business estimates that amount at the end of the year and records it as <strong>Bad Debt Expense</strong>, in the same year as the sales. The other side of the entry goes to <strong>Allowance for Doubtful Accounts</strong>, a contra asset that's subtracted from Accounts Receivable. What's left is the <strong>net realizable value</strong>: the amount the business really expects to collect. <strong>Percent of sales</strong> estimates the expense from this year's sales. <strong>Aging</strong> estimates what the allowance should be from the receivables still unpaid.</p>
+    </div>
+    <TryIt items={tryIt} />
+  </section>
+</div>
+
+<script>
+  import { initBadDebts } from '../../scripts/tools/bad-debts.js';
+  document.querySelectorAll('[data-tool="bad-debts"]').forEach(initBadDebts);
+</script>
