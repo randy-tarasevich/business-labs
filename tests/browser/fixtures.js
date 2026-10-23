@@ -26,6 +26,16 @@ export const CHALLENGE_ANSWERS = {
     { solve: { 'sl-rate': 6.5 }, break: { 'sl-aid': 8000 } },
     { solve: { 'sl-salary': 177000 }, break: { 'sl-cost': 25000 } },
   ],
+  'credit-card-payoff-lab': [
+    { solve: { 'cc-fixed': 114 }, break: { 'cc-balance': 1000 } },
+    { solve: { 'cc-apr': 21 }, break: { 'cc-fixed': 160 } },
+    { solve: { 'cc-fixed': 156 }, break: { 'cc-balance': 3000 } },
+  ],
+  'start-early-lab': [
+    { solve: { 'se-monthly': 200 }, break: { 'se-monthly': 300 } },
+    { solve: { 'se-bStart': 26 }, break: { 'se-bRate': 8 } },
+    { solve: { 'se-bRate': 5 }, break: { 'se-rate': 3 } },
+  ],
 };
 
 // Predictions: the right answer for each card, in order ('up', 'down', or 'same').
@@ -34,6 +44,8 @@ export const PREDICTION_ANSWERS = {
   depreciation: ['same', 'down'],
   'marketing-funnel': ['up', 'same'],
   'student-loan-simulator': ['down', 'same'],
+  'credit-card-payoff-lab': ['same', 'up'],
+  'start-early-lab': ['same', 'up'],
 };
 
 // T-Account Lab: [debit account, credit account, amount] for each transaction.

@@ -44,6 +44,21 @@ Be honest about the 7%. It's a common estimate for long-run stock market average
 - The tool compounds monthly: each month the balance grows by the yearly return ÷ 12, then the deposit goes in. "Stops at 28" means the last deposit is made at age 27.
 - Taxes, fees, and inflation are left out to keep the comparison clear.
 
+## Predict first
+
+Two prediction cards sit above the challenges. Students pick Goes up, Goes down, or Stays the same; the tool makes the change on screen and shows before and after.
+
+- **Double the deposit** (start at 16 vs. 26, $50 to $100 a month): the share of Saver A's money that is growth **stays the same** at 88.4%. Doubling every deposit doubles the deposits and the growth, so the split doesn't change. Follow-up: what *does* change the share? (Years and rate.)
+- **Wait 5 more years** (Saver B starts at 31 instead of 26): the gap behind Saver A **goes up**, from $131,646 to $170,057. Five years of waiting costs Saver B about $38,000 at 65, far more than the $3,000 of deposits skipped.
+
+## Challenges
+
+Three challenge cards sit under the tool. Each Start button loads its scenario and makes a link you can post. Sample solutions (there are others):
+
+- **Become a millionaire** (Saver A to $1,000,000, deposit $200 or less, return 7% or less): $200 a month from 16 to 65 gives about $1,013,845. Starting at 14 with $200 also works. Ask how much was deposited ($117,600).
+- **The late starter catches up** (Saver B at least equal to Saver A, who saves 18 to 28): Saver B has to start at 26, overlapping with A, to finish with $243,630 against A's $228,988. Starting at 27 falls just short ($226,050).
+- **Beat the savings account** (Saver B to half of Saver A, both saving 22 to 65): raise Saver B's return to 5% ($181,118 vs. A's $327,613). 4% isn't enough ($137,057). Good lead-in to why long-term money goes in investments, not a savings account.
+
 ## Common misconceptions
 
 - **"Whoever puts in more money ends up with more."** Time can beat deposits. Saver A in the second preset put in $32,400 less and still won.

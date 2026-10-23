@@ -45,6 +45,21 @@ Real cards use different minimum payment formulas. This tool uses interest plus 
 - Try it #3: the maxed-out card's first month of interest is $5,000 × 28% ÷ 12 = $116.67, so a $100 payment never pays it off.
 - Try it #4: the car repair's fixed plan saves $3,005 in interest.
 
+## Predict first
+
+Two prediction cards sit above the challenges. Students pick Goes up, Goes down, or Stays the same; the tool makes the change on screen and shows before and after.
+
+- **Double the payment** (spring break trip, $100 to $200): the first month's interest **stays the same** at $24.00. Interest is charged on the balance before your payment comes off, so paying more only lowers *next* month's interest. Follow-up: so why does a bigger payment save so much over time? (Every month after that starts from a smaller balance.)
+- **Cut the payment in half** (maxed-out card, $250 to $125): total interest **goes up**, from $1,814 to $9,676, more than five times as much. Most students guess it doubles. Follow-up: why not just double? (A $125 payment barely beats the $116.67 of monthly interest, so almost nothing goes to the balance for years.)
+
+## Challenges
+
+Three challenge cards sit under the tool. Each Start button loads its scenario and makes a link you can post. Sample solutions (there are others):
+
+- **Done in a year** (spring break trip, 12 months or less, balance and APR stay): a $114 fixed payment, paid off in 12 months with $161 of interest.
+- **Shop for a better rate** (car repair, interest under $500, payment stays $150): drop the APR to 21% ($482 of interest). Good debrief: how could someone actually get a lower rate? (Call the card company, a credit union card, a balance transfer.)
+- **Stop the balance from growing** (maxed-out card starting at $100 a month, paid off in 60 months or less): $156 a month (60 months, about $4,319 of interest). Ask what payment makes *any* progress at all (just over $116.67).
+
 ## Common misconceptions
 
 - **"Paying the minimum keeps me in good shape."** It keeps the account in good standing, but most of each payment goes to interest at first, and the minimum shrinks as the balance shrinks.

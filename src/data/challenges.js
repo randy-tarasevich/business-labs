@@ -17,6 +17,8 @@
 import { schedule } from '../scripts/tools/depreciation.js';
 import { funnel } from '../scripts/tools/marketing-funnel.js';
 import { plan, repay, TAKE_HOME } from '../scripts/tools/student-loans.js';
+import { payoff } from '../scripts/tools/credit-card.js';
+import { grow } from '../scripts/tools/start-early.js';
 
 const near = (a, b, tol = 0.005) => Math.abs(a - b) <= tol;
 
@@ -50,6 +52,11 @@ const loans = (s) =>
     sub: s.v('sl-sub') === 1,
   });
 const takeHomeShare = (s) => repay(loans(s), s.v('sl-rate'), 10).monthly / ((s.v('sl-salary') * TAKE_HOME) / 12);
+
+// Credit Card Payoff Lab and Start Early Lab: the tools' own math, read from the inputs.
+const card = (s, plan_) => payoff({ balance: s.v('cc-balance'), apr: s.v('cc-apr'), fixed: s.v('cc-fixed') }, plan_);
+const saver = (s, who) =>
+  grow(s.v('se-monthly'), who === 'a' ? s.v('se-rate') : s.v('se-bRate'), Math.round(s.v(`se-${who}Start`)), Math.round(s.v(`se-${who}Stop`))).final;
 
 export const CHALLENGES = {
   'break-even-lab': [
@@ -188,6 +195,72 @@ export const CHALLENGES = {
         { text: 'Cost stays at $45,000 a year.', ok: (s) => s.v('sl-cost') === 45000 },
         { text: 'Grants stay at $8,000 a year.', ok: (s) => s.v('sl-aid') === 8000 },
         { text: 'Family help stays at $10,000 a year.', ok: (s) => s.v('sl-family') === 10000 },
+      ],
+    },
+  ],
+
+  'credit-card-payoff-lab': [
+    {
+      title: 'Done in a year',
+      goal: 'The spring break trip takes over a year to pay off at $100 a month. Pay it off in 12 months or less.',
+      start: { g0: 0 },
+      met: (s) => card(s, 'fixed').months <= 12,
+      rules: [
+        { text: 'Balance stays at $1,200.', ok: (s) => s.v('cc-balance') === 1200 },
+        { text: 'APR stays at 24%.', ok: (s) => s.v('cc-apr') === 24 },
+      ],
+    },
+    {
+      title: 'Shop for a better rate',
+      goal: 'Paying $150 a month on the car repair costs over $500 in interest. Get it under $500 without paying more each month.',
+      start: { g0: 1 },
+      met: (s) => card(s, 'fixed').done && card(s, 'fixed').interest < 500,
+      rules: [
+        { text: 'Payment stays at $150.', ok: (s) => s.v('cc-fixed') === 150 },
+        { text: 'Balance stays at $2,500.', ok: (s) => s.v('cc-balance') === 2500 },
+      ],
+    },
+    {
+      title: 'Stop the balance from growing',
+      goal: 'At $100 a month, the maxed-out card is never paid off. Find a payment that clears it in 5 years (60 months) or less.',
+      start: { g0: 2, 'cc-fixed': 100 },
+      met: (s) => card(s, 'fixed').months <= 60,
+      rules: [
+        { text: 'Balance stays at $5,000.', ok: (s) => s.v('cc-balance') === 5000 },
+        { text: 'APR stays at 28%.', ok: (s) => s.v('cc-apr') === 28 },
+      ],
+    },
+  ],
+
+  'start-early-lab': [
+    {
+      title: 'Become a millionaire',
+      goal: 'Saver A has about $250,000 at 65. Get Saver A to $1,000,000 or more.',
+      start: { g0: 0 },
+      met: (s) => saver(s, 'a') >= 1000000,
+      rules: [
+        { text: 'Monthly deposit stays at $200 or less.', ok: (s) => s.v('se-monthly') <= 200 },
+        { text: 'Saver A\'s return stays at 7% or less.', ok: (s) => s.v('se-rate') <= 7 },
+      ],
+    },
+    {
+      title: 'The late starter catches up',
+      goal: 'Saver A saves from 18 to 28 and beats Saver B, who saves from 28 to 65. Change Saver B\'s plan so B ends up with at least as much as A.',
+      start: { g0: 1 },
+      met: (s) => saver(s, 'b') >= saver(s, 'a'),
+      rules: [
+        { text: 'Saver A still saves from 18 to 28 at 7%.', ok: (s) => s.v('se-aStart') === 18 && s.v('se-aStop') === 28 && s.v('se-rate') === 7 },
+        { text: 'Saver B\'s return stays at 7% or less.', ok: (s) => s.v('se-bRate') <= 7 },
+      ],
+    },
+    {
+      title: 'Beat the savings account',
+      goal: 'Saver B keeps everything in a 0.5% savings account and ends with less than a fifth of Saver A. Get Saver B to at least half of Saver A.',
+      start: { g0: 2 },
+      met: (s) => saver(s, 'b') >= saver(s, 'a') / 2,
+      rules: [
+        { text: 'Saver A stays the same: 22 to 65 at 7%.', ok: (s) => s.v('se-aStart') === 22 && s.v('se-aStop') === 65 && s.v('se-rate') === 7 },
+        { text: 'Saver B still saves from 22 to 65.', ok: (s) => s.v('se-bStart') === 22 && s.v('se-bStop') === 65 },
       ],
     },
   ],
