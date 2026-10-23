@@ -21,6 +21,7 @@ import { payoff } from '../scripts/tools/credit-card.js';
 import { grow } from '../scripts/tools/start-early.js';
 import { paycheck } from '../scripts/tools/paycheck.js';
 import { outlook } from '../scripts/tools/investing-risk.js';
+import { compare } from '../scripts/tools/insurance.js';
 
 const near = (a, b, tol = 0.005) => Math.abs(a - b) <= tol;
 
@@ -63,6 +64,8 @@ const saver = (s, who) =>
 const pay = (s) => paycheck({ hourly: s.v('pc-hourly'), hours: s.v('pc-hours'), k: s.v('pc-k'), state: s.v('pc-state') });
 
 const invest = (s) => outlook({ amount: s.v('ir-amount'), years: Math.max(1, Math.round(s.v('ir-years'))), stocks: s.v('ir-stocks'), bonds: s.v('ir-bonds') });
+
+const ins = (s) => compare({ aDed: s.v('in-a-ded'), aPrem: s.v('in-a-prem'), bDed: s.v('in-b-ded'), bPrem: s.v('in-b-prem'), cost: s.v('in-cost'), claims: Math.round(s.v('in-claims')), savings: s.v('in-savings') });
 
 export const CHALLENGES = {
   'break-even-lab': [
@@ -336,6 +339,40 @@ export const CHALLENGES = {
         { text: 'Still 10 years.', ok: (s) => s.v('ir-years') === 10 },
         { text: 'You still invest $5,000.', ok: (s) => s.v('ir-amount') === 5000 },
         { text: 'The middle outcome stays at $10,000 or more.', ok: (s) => invest(s).middle >= 10000 },
+      ],
+    },
+  ],
+
+  'insurance-deductible-lab': [
+    {
+      title: 'How high can Plan B go?',
+      goal: 'After one $1,500 fender bender, Plan A is cheaper. Lower Plan B\'s deductible until Plan B is the cheaper plan this year.',
+      start: { g0: 1 },
+      met: (s) => ins(s).cheaper === 'B',
+      rules: [
+        { text: 'Premiums stay at $230 and $195 a month.', ok: (s) => s.v('in-a-prem') === 230 && s.v('in-b-prem') === 195 },
+        { text: 'Plan A\'s deductible stays at $250.', ok: (s) => s.v('in-a-ded') === 250 },
+        { text: 'The repair still costs $1,500.', ok: (s) => s.v('in-cost') === 1500 },
+      ],
+    },
+    {
+      title: 'A rough year',
+      goal: 'Two $4,000 accidents make Plan A cheaper by over $1,000. How low would Plan B\'s monthly premium have to be to win anyway?',
+      start: { g0: 2 },
+      met: (s) => ins(s).cheaper === 'B',
+      rules: [
+        { text: 'Deductibles stay at $250 and $1,000.', ok: (s) => s.v('in-a-ded') === 250 && s.v('in-b-ded') === 1000 },
+        { text: 'Still two accidents of $4,000.', ok: (s) => s.v('in-claims') === 2 && s.v('in-cost') === 4000 },
+      ],
+    },
+    {
+      title: 'Make the low deductible worth it',
+      goal: 'Plan A only pays off if you file more than 0.56 claims a year. Change Plan A\'s price so it pays off at 0.25 claims a year or fewer (one claim every 4 years).',
+      start: { g0: 0 },
+      met: (s) => ins(s).breakEven <= 0.25,
+      rules: [
+        { text: 'Deductibles stay at $250 and $1,000.', ok: (s) => s.v('in-a-ded') === 250 && s.v('in-b-ded') === 1000 },
+        { text: 'Plan B still costs $195 a month.', ok: (s) => s.v('in-b-prem') === 195 },
       ],
     },
   ],
