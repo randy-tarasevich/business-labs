@@ -35,6 +35,7 @@ import StudentLoans from './StudentLoans.astro';
 import Paycheck from './Paycheck.astro';
 import InvestingRisk from './InvestingRisk.astro';
 import Insurance from './Insurance.astro';
+import CarBuying from './CarBuying.astro';
 
 export const TOOL_COMPONENTS = {
   BreakEven,
@@ -72,4 +73,5 @@ export const TOOL_COMPONENTS = {
   Paycheck,
   InvestingRisk,
   Insurance,
+  CarBuying,
 };

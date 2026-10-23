@@ -22,6 +22,7 @@ import { grow } from '../scripts/tools/start-early.js';
 import { paycheck } from '../scripts/tools/paycheck.js';
 import { outlook } from '../scripts/tools/investing-risk.js';
 import { compare } from '../scripts/tools/insurance.js';
+import { compareCars } from '../scripts/tools/car-buying.js';
 
 const near = (a, b, tol = 0.005) => Math.abs(a - b) <= tol;
 
@@ -66,6 +67,8 @@ const pay = (s) => paycheck({ hourly: s.v('pc-hourly'), hours: s.v('pc-hours'), 
 const invest = (s) => outlook({ amount: s.v('ir-amount'), years: Math.max(1, Math.round(s.v('ir-years'))), stocks: s.v('ir-stocks'), bonds: s.v('ir-bonds') });
 
 const ins = (s) => compare({ aDed: s.v('in-a-ded'), aPrem: s.v('in-a-prem'), bDed: s.v('in-b-ded'), bPrem: s.v('in-b-prem'), cost: s.v('in-cost'), claims: Math.round(s.v('in-claims')), savings: s.v('in-savings') });
+
+const car = (s) => compareCars({ newPrice: s.v('cb-new-price'), usedPrice: s.v('cb-used-price'), down: s.v('cb-down'), term: s.v('cb-term'), credit: s.v('cb-credit'), pay: s.v('cb-pay'), other: s.v('cb-other') });
 
 export const CHALLENGES = {
   'break-even-lab': [
@@ -373,6 +376,41 @@ export const CHALLENGES = {
       rules: [
         { text: 'Deductibles stay at $250 and $1,000.', ok: (s) => s.v('in-a-ded') === 250 && s.v('in-b-ded') === 1000 },
         { text: 'Plan B still costs $195 a month.', ok: (s) => s.v('in-b-prem') === 195 },
+      ],
+    },
+  ],
+
+  'car-buying-lab': [
+    {
+      title: 'Pass 20/4/10 with a used car',
+      goal: 'Neither car meets any part of the 20/4/10 guideline. Change the used car deal until it meets all three parts.',
+      start: { g0: 0 },
+      met: (s) => { const u = car(s).used.check; return u.down && u.term && u.budget; },
+      rules: [
+        { text: 'Pay stays at $45,760 a year.', ok: (s) => s.v('cb-pay') === 45760 },
+        { text: 'Insurance, gas, and upkeep stay at $250 a month or more.', ok: (s) => s.v('cb-other') >= 250 },
+        { text: 'Your credit score stays Prime.', ok: (s) => s.v('cb-credit') === 1 },
+      ],
+    },
+    {
+      title: 'Cut the new car\'s interest',
+      goal: 'The new car\'s loan costs $4,268 in interest. Get it under $3,000.',
+      start: { g0: 0 },
+      met: (s) => car(s).new.interest < 3000,
+      rules: [
+        { text: 'The new car still costs $28,000.', ok: (s) => s.v('cb-new-price') === 28000 },
+        { text: 'Your credit score stays Prime.', ok: (s) => s.v('cb-credit') === 1 },
+      ],
+    },
+    {
+      title: 'Credit is worth money',
+      goal: 'With near prime credit, the used car\'s loan costs $7,836 in interest. Get it under $3,000 without changing the deal.',
+      start: { g0: 2 },
+      met: (s) => car(s).used.interest < 3000,
+      rules: [
+        { text: 'The used car still costs $16,000.', ok: (s) => s.v('cb-used-price') === 16000 },
+        { text: 'Down payment stays at $2,000.', ok: (s) => s.v('cb-down') === 2000 },
+        { text: 'Loan length stays at 60 months.', ok: (s) => s.v('cb-term') === 60 },
       ],
     },
   ],

@@ -21,6 +21,7 @@ import { grow } from '../scripts/tools/start-early.js';
 import { paycheck } from '../scripts/tools/paycheck.js';
 import { outlook } from '../scripts/tools/investing-risk.js';
 import { compare } from '../scripts/tools/insurance.js';
+import { compareCars } from '../scripts/tools/car-buying.js';
 
 const beUnits = (s) => {
   const cm = s.v('be-price') - s.v('be-vc');
@@ -49,6 +50,8 @@ const pay = (s) => paycheck({ hourly: s.v('pc-hourly'), hours: s.v('pc-hours'), 
 const invest = (s) => outlook({ amount: s.v('ir-amount'), years: Math.max(1, Math.round(s.v('ir-years'))), stocks: s.v('ir-stocks'), bonds: s.v('ir-bonds') });
 
 const ins = (s) => compare({ aDed: s.v('in-a-ded'), aPrem: s.v('in-a-prem'), bDed: s.v('in-b-ded'), bPrem: s.v('in-b-prem'), cost: s.v('in-cost'), claims: Math.round(s.v('in-claims')), savings: s.v('in-savings') });
+
+const car = (s) => compareCars({ newPrice: s.v('cb-new-price'), usedPrice: s.v('cb-used-price'), down: s.v('cb-down'), term: s.v('cb-term'), credit: s.v('cb-credit'), pay: s.v('cb-pay'), other: s.v('cb-other') });
 
 export const PREDICTIONS = {
   'break-even-lab': [
@@ -183,6 +186,21 @@ export const PREDICTIONS = {
       start: { g0: 1 },
       change: { 'in-cost': 600 },
       measure: { label: 'Plan B this year', value: (s) => ins(s).b.total, fmt: (n) => money(n, 0) },
+    },
+  ],
+
+  'car-buying-lab': [
+    {
+      question: 'You stretch the new car loan from 60 months to 84 months to get a lower payment. What happens to the total interest you pay?',
+      start: { g0: 0 },
+      change: { 'cb-term': 84 },
+      measure: { label: 'New car interest', value: (s) => car(s).new.interest, fmt: (n) => money(n, 0) },
+    },
+    {
+      question: 'Your credit score climbs from Prime to Super prime before you buy. What happens to the used car\'s monthly payment?',
+      start: { g0: 0 },
+      change: { 'cb-credit': 0 },
+      measure: { label: 'Used car monthly payment', value: (s) => car(s).used.monthly, fmt: (n) => money(n, 2) },
     },
   ],
 };

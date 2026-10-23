@@ -59,6 +59,7 @@ export const COURSE_GUIDES = {
       { id: 'budget-balancer', why: 'Build a budget from that take-home pay. Every later choice about credit and saving comes out of it.' },
       { id: 'credit-card-payoff-lab', why: 'See what happens when spending goes on a card and only the minimum gets paid.' },
       { id: 'student-loan-simulator', why: 'The biggest loan many students take on comes next. Plan a college budget and check whether the payment fits a starting paycheck.' },
+      { id: 'car-buying-lab', why: 'The other big loan most students face early. Compare a new and a used car, and see what loan length and credit score really cost.' },
       { id: 'start-early-lab', why: 'Flip it around: when interest works for you instead of against you, starting early is the biggest advantage.' },
       { id: 'investing-risk-lab', why: 'Start Early assumed a smooth 7% every year. Real markets swing, so see how time and the right mix make the swings safer.' },
       { id: 'insurance-deductible-lab', why: 'Close by protecting what you have built. Insurance trades a small sure cost for protection from a big surprise one.' },
