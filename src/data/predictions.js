@@ -16,6 +16,8 @@ import { schedule } from '../scripts/tools/depreciation.js';
 import { funnel } from '../scripts/tools/marketing-funnel.js';
 import { money, num } from '../scripts/lib/util.js';
 import { plan } from '../scripts/tools/student-loans.js';
+import { payoff } from '../scripts/tools/credit-card.js';
+import { grow } from '../scripts/tools/start-early.js';
 
 const beUnits = (s) => {
   const cm = s.v('be-price') - s.v('be-vc');
@@ -35,6 +37,9 @@ const borrowed = (s) =>
     rate: s.v('sl-rate'),
     sub: s.v('sl-sub') === 1,
   }).borrowed;
+
+const saver = (s, who) =>
+  grow(s.v('se-monthly'), who === 'a' ? s.v('se-rate') : s.v('se-bRate'), Math.round(s.v(`se-${who}Start`)), Math.round(s.v(`se-${who}Stop`)));
 
 export const PREDICTIONS = {
   'break-even-lab': [
@@ -94,6 +99,36 @@ export const PREDICTIONS = {
       start: { g0: 1, 'sl-sub': 1 },
       change: { 'sl-sub': 0 },
       measure: { label: 'Total borrowed', value: borrowed, fmt: (n) => money(n, 0) },
+    },
+  ],
+
+  'credit-card-payoff-lab': [
+    {
+      question: 'On the spring break trip, you double your fixed payment from $100 to $200. What happens to the interest charged in the first month?',
+      start: { g0: 0 },
+      change: { 'cc-fixed': 200 },
+      measure: { label: 'First month\'s interest', value: (s) => (s.v('cc-balance') * s.v('cc-apr')) / 1200, fmt: (n) => money(n, 2) },
+    },
+    {
+      question: 'On the maxed-out card, you cut your fixed payment in half, from $250 to $125. What happens to the total interest you pay?',
+      start: { g0: 2 },
+      change: { 'cc-fixed': 125 },
+      measure: { label: 'Total interest, fixed plan', value: (s) => payoff({ balance: s.v('cc-balance'), apr: s.v('cc-apr'), fixed: s.v('cc-fixed') }, 'fixed').interest, fmt: (n) => money(n, 0) },
+    },
+  ],
+
+  'start-early-lab': [
+    {
+      question: 'Both savers double their monthly deposit from $50 to $100. What happens to the share of Saver A\'s money at 65 that is growth, not deposits?',
+      start: { g0: 0 },
+      change: { 'se-monthly': 100 },
+      measure: { label: 'Growth share of Saver A', value: (s) => { const a = saver(s, 'a'); return Math.round((a.growth / Math.max(a.final, 1)) * 1000) / 10; }, fmt: (n) => `${num(n, 1)}%` },
+    },
+    {
+      question: 'Saver B waits 5 more years and starts at 31 instead of 26. What happens to how far behind Saver A they finish?',
+      start: { g0: 0 },
+      change: { 'se-bStart': 31 },
+      measure: { label: 'Saver A minus Saver B at 65', value: (s) => saver(s, 'a').final - saver(s, 'b').final, fmt: (n) => money(n, 0) },
     },
   ],
 };
