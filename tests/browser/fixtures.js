@@ -21,6 +21,11 @@ export const CHALLENGE_ANSWERS = {
     { solve: { 'fn-conv': 3.2 }, break: { 'fn-cpm': 3 } },
     { solve: { 'fn-conv': 3.6 }, break: { 'fn-aov': 400 } },
   ],
+  'student-loan-simulator': [
+    { solve: { 'sl-family': 11000 }, break: { 'sl-cost': 27000 } },
+    { solve: { 'sl-rate': 6.5 }, break: { 'sl-aid': 8000 } },
+    { solve: { 'sl-salary': 177000 }, break: { 'sl-cost': 25000 } },
+  ],
 };
 
 // Predictions: the right answer for each card, in order ('up', 'down', or 'same').
@@ -28,6 +33,7 @@ export const PREDICTION_ANSWERS = {
   'break-even-lab': ['same', 'up'],
   depreciation: ['same', 'down'],
   'marketing-funnel': ['up', 'same'],
+  'student-loan-simulator': ['down', 'same'],
 };
 
 // T-Account Lab: [debit account, credit account, amount] for each transaction.
