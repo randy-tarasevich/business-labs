@@ -34,6 +34,7 @@ import PositioningMap from './PositioningMap.astro';
 import StudentLoans from './StudentLoans.astro';
 import Paycheck from './Paycheck.astro';
 import InvestingRisk from './InvestingRisk.astro';
+import Insurance from './Insurance.astro';
 
 export const TOOL_COMPONENTS = {
   BreakEven,
@@ -70,4 +71,5 @@ export const TOOL_COMPONENTS = {
   StudentLoans,
   Paycheck,
   InvestingRisk,
+  Insurance,
 };

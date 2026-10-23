@@ -46,6 +46,11 @@ export const CHALLENGE_ANSWERS = {
     { solve: { 'ir-stocks': 25 }, break: { 'ir-amount': 15000 } },
     { solve: { 'ir-stocks': 50, 'ir-bonds': 50 }, break: { 'ir-amount': 6000 } },
   ],
+  'insurance-deductible-lab': [
+    { solve: { 'in-b-ded': 600 }, break: { 'in-cost': 600 } },
+    { solve: { 'in-b-prem': 100 }, break: { 'in-claims': 0 } },
+    { solve: { 'in-a-prem': 210 }, break: { 'in-b-prem': 215 } },
+  ],
 };
 
 // Predictions: the right answer for each card, in order ('up', 'down', or 'same').
@@ -58,6 +63,7 @@ export const PREDICTION_ANSWERS = {
   'start-early-lab': ['same', 'up'],
   'paycheck-lab': ['up', 'same'],
   'investing-risk-lab': ['down', 'same'],
+  'insurance-deductible-lab': ['same', 'down'],
 };
 
 // T-Account Lab: [debit account, credit account, amount] for each transaction.

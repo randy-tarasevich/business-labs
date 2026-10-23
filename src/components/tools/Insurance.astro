@@ -1,0 +1,84 @@
+---
+// Insurance Deductible Lab: markup only. Behavior lives in src/scripts/tools/insurance.js
+import RangeField from '../ui/RangeField.astro';
+import Stat from '../ui/Stat.astro';
+import TryIt from '../ui/TryIt.astro';
+import { TOOL, PANEL, PANEL_TIGHT, LOWER, H2, H3, PROSE, PRESETS, HINT, CHART_KEY, SWATCH, SVG, RESULTS, VERDICT, FORMULA, FIELDSET, LEGEND } from '../../scripts/lib/ui.js';
+
+const NOTE = 'rounded-lg py-2 px-3 text-[13.5px] tone-good:bg-good-soft tone-warn:bg-warn-soft';
+
+const tryIt = [
+  {
+    q: 'Load the quiet year (no accidents). Which plan costs less, and by how much?',
+    a: 'Plan B, the $1,000 deductible, by $420. You paid $35 more a month for Plan A and never used it.',
+  },
+  {
+    q: 'Load one fender bender ($1,500 repair). Now which plan wins? Why did it flip?',
+    a: 'Plan A wins by $330. You pay only $250 on the claim instead of $1,000, and that $750 saved is more than the $420 of extra premiums.',
+  },
+  {
+    q: 'Read the break-even. About how often would you need to file a claim for Plan A to be worth it?',
+    a: 'More than 0.56 claims a year, or about one claim every 1.8 years. Most drivers file far less often, which is why a higher deductible usually saves money over time.',
+  },
+  {
+    q: 'Plan B is often cheaper, so what is the catch? Look at the savings box.',
+    a: 'With only $500 saved, a single accident on Plan B means paying $1,000 on the spot. A high deductible only works if you have savings to cover it.',
+  },
+];
+---
+<div class={TOOL} data-tool="insurance">
+  <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Insurance inputs">
+      <h2 class={H2}>Two car insurance plans</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example years"></div>
+      <p class={HINT}>Example prices, not real quotes. Ask a family member to look up what you'd really pay.</p>
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>Plan A: low deductible</legend>
+        <RangeField id="in-a-ded" label="Deductible" unit="$" step="50" max={2500} aria="Plan A deductible in dollars" />
+        <RangeField id="in-a-prem" label="Monthly premium" unit="$" step="5" max={500} aria="Plan A monthly premium in dollars" />
+      </fieldset>
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>Plan B: high deductible</legend>
+        <RangeField id="in-b-ded" label="Deductible" unit="$" step="50" max={2500} aria="Plan B deductible in dollars" />
+        <RangeField id="in-b-prem" label="Monthly premium" unit="$" step="5" max={500} aria="Plan B monthly premium in dollars" />
+      </fieldset>
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>Your year</legend>
+        <RangeField id="in-claims" label="Accidents you file a claim for" step="1" max={3} width="w-[70px]" aria="Number of claims this year" />
+        <RangeField id="in-cost" label="Repair cost per accident" unit="$" step="100" max={10000} aria="Repair cost per accident in dollars" />
+        <RangeField id="in-savings" label="Your emergency savings" unit="$" step="100" max={5000} aria="Emergency savings in dollars" />
+      </fieldset>
+    </div>
+
+    <div class={PANEL_TIGHT}>
+      <h3 class={H3}>What each plan costs you in a year</h3>
+      <div class={CHART_KEY} aria-hidden="true">
+        <span><i class={SWATCH} style="background:var(--accent)"></i>Plan A (low deductible)</span>
+        <span><i class={SWATCH} style="background:var(--warn)"></i>Plan B (high deductible)</span>
+      </div>
+      <div class="w-full min-w-0"><svg class={SVG} data-chart viewBox="0 0 640 280" role="img"></svg></div>
+      <div class={RESULTS}>
+        <Stat label="Plan A this year" r="a-total" box="a-box" />
+        <Stat label="Plan B this year" r="b-total" box="b-box" />
+        <Stat label="Cheaper plan" r="diff" keyed live />
+        <Stat label="Plan A pays off at" r="even" />
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+      <p class={NOTE} data-r="savings-note" data-copy="Savings check"></p>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}>The <strong>premium</strong> is what you pay every month, whether or not anything happens. The <strong>deductible</strong> is what you pay first when you file a claim; insurance pays the rest of the repair. A lower deductible means a higher premium. The <strong>break-even</strong> tells you how many claims a year it takes for the low deductible to pay for itself.</p>
+    </div>
+    <TryIt items={tryIt} />
+  </section>
+</div>
+
+<script>
+  import { initInsurance } from '../../scripts/tools/insurance.js';
+  document.querySelectorAll('[data-tool="insurance"]').forEach(initInsurance);
+</script>

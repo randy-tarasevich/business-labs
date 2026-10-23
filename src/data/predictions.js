@@ -20,6 +20,7 @@ import { payoff } from '../scripts/tools/credit-card.js';
 import { grow } from '../scripts/tools/start-early.js';
 import { paycheck } from '../scripts/tools/paycheck.js';
 import { outlook } from '../scripts/tools/investing-risk.js';
+import { compare } from '../scripts/tools/insurance.js';
 
 const beUnits = (s) => {
   const cm = s.v('be-price') - s.v('be-vc');
@@ -46,6 +47,8 @@ const saver = (s, who) =>
 const pay = (s) => paycheck({ hourly: s.v('pc-hourly'), hours: s.v('pc-hours'), k: s.v('pc-k'), state: s.v('pc-state') });
 
 const invest = (s) => outlook({ amount: s.v('ir-amount'), years: Math.max(1, Math.round(s.v('ir-years'))), stocks: s.v('ir-stocks'), bonds: s.v('ir-bonds') });
+
+const ins = (s) => compare({ aDed: s.v('in-a-ded'), aPrem: s.v('in-a-prem'), bDed: s.v('in-b-ded'), bPrem: s.v('in-b-prem'), cost: s.v('in-cost'), claims: Math.round(s.v('in-claims')), savings: s.v('in-savings') });
 
 export const PREDICTIONS = {
   'break-even-lab': [
@@ -165,6 +168,21 @@ export const PREDICTIONS = {
       start: { g0: 1 },
       change: { 'ir-amount': 10000 },
       measure: { label: 'Chance of losing money', value: (s) => Math.round(invest(s).lossChance * 1000) / 10, fmt: (n) => `${num(n, 1)}%` },
+    },
+  ],
+
+  'insurance-deductible-lab': [
+    {
+      question: 'After one fender bender, the repair bill doubles from $1,500 to $3,000. What happens to how much Plan A saves you compared with Plan B?',
+      start: { g0: 1 },
+      change: { 'in-cost': 3000 },
+      measure: { label: 'Plan B minus Plan A', value: (s) => { const c = ins(s); return c.b.total - c.a.total; }, fmt: (n) => money(n, 0) },
+    },
+    {
+      question: 'The fender bender turns out to be a small one: a $600 repair instead of $1,500. What happens to Plan B\'s cost for the year?',
+      start: { g0: 1 },
+      change: { 'in-cost': 600 },
+      measure: { label: 'Plan B this year', value: (s) => ins(s).b.total, fmt: (n) => money(n, 0) },
     },
   ],
 };

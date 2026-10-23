@@ -17,6 +17,7 @@ import { oppCost } from '../../src/scripts/tools/comparative-advantage.js';
 import { plan, payment } from '../../src/scripts/tools/student-loans.js';
 import { paycheck } from '../../src/scripts/tools/paycheck.js';
 import { outlook, normalCdf, normalizeMix, Z90 } from '../../src/scripts/tools/investing-risk.js';
+import { compare, breakEven, yearCost } from '../../src/scripts/tools/insurance.js';
 
 const near = (actual, expected, tol, msg) =>
   assert.ok(Math.abs(actual - expected) <= tol, `${msg ?? ''} expected ${expected}, got ${actual}`);
@@ -393,4 +394,27 @@ test('investing risk: all cash never loses and grows at the cash rate', () => {
 test('investing risk: stocks and bonds can never add past 100%', () => {
   assert.deepEqual(normalizeMix(70, 50), { stocks: 70, bonds: 30, cash: 0 });
   assert.deepEqual(normalizeMix(60, 0), { stocks: 60, bonds: 0, cash: 40 });
+});
+
+test('insurance: $250 / $230 a month vs. $1,000 / $195 a month', () => {
+  const plans = { aDed: 250, aPrem: 230, bDed: 1000, bPrem: 195 };
+  // Quiet year: 230 x 12 = 2,760 vs. 195 x 12 = 2,340.
+  let c = compare({ ...plans, claims: 0, cost: 3000 });
+  assert.equal(c.a.total, 2760);
+  assert.equal(c.b.total, 2340);
+  assert.equal(c.cheaper, 'B');
+  // One $1,500 claim: 2,760 + 250 = 3,010 vs. 2,340 + 1,000 = 3,340.
+  c = compare({ ...plans, claims: 1, cost: 1500 });
+  assert.equal(c.a.total, 3010);
+  assert.equal(c.b.total, 3340);
+  // Break-even: 35 x 12 = 420 extra a year, 750 saved per claim -> 0.56 claims a year.
+  near(c.breakEven, 0.56, 1e-9);
+  // A $600 repair is under Plan B's deductible: you pay all $600 on B, $250 on A. 420 / 350 = 1.2.
+  near(breakEven({ ...plans, cost: 600 }), 1.2, 1e-9);
+});
+
+test('insurance: a repair bigger than both deductibles costs the same either way', () => {
+  const plans = { aDed: 250, aPrem: 230, bDed: 1000, bPrem: 195, claims: 1 };
+  assert.equal(yearCost(195, 1000, 1, 3000).outOfPocket, 1000);
+  assert.equal(compare({ ...plans, cost: 3000 }).diff, compare({ ...plans, cost: 9000 }).diff);
 });
