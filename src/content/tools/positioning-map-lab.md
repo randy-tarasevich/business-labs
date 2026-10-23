@@ -45,6 +45,21 @@ Students sometimes squeeze out a few more customers by sitting between the gap a
 
 The brands and numbers are made up for teaching. Real positioning maps come from surveys of what customers think, not from what the company says about itself.
 
+## Predict first
+
+Two prediction cards sit above the challenges. Students pick Goes up, Goes down, or Stays the same; the tool makes the change on screen and shows before and after.
+
+- **From the biggest group to an empty one** (pizza, Families bubble at 4, 4.5 to the "Good pizza, fair price" bubble at 4.5, 8): customers **go up**, about 236 to 350. On the Families bubble you split 400 customers with Planet Pie, who already has regulars. Up top, nobody else is close, so you get the whole group. Follow-up: why might that spot be empty? (Good pizza at a fair price is hard to make cheaply.)
+- **Even healthier bar** (snack bars, 8, 8 to 8, 10): customers **go down**, about 127 to 13. Gym regulars sit at 8, 8; moving away from them hands them to Peak Protein. Follow-up: "better" product, fewer customers. Why? (Customers want what fits them, not the most of everything.)
+
+## Challenges
+
+Three challenge cards sit under the tool. Each Start button loads its scenario and makes a link you can post. Sample solutions (there are others):
+
+- **Find the gap** (pizza, no stretch): price 4.5, quality 8 wins all 350 of "Good pizza, fair price." Price 4.5, quality 5 wins about 429 by picking up some families too. Ask which spot is easier to defend.
+- **Premium shoes** (running shoes, price 7 or more): price 7.5, performance 8 wins about 411. It sits between the new runners and the racers, so it picks up customers from both. Compare with joining the crowd at 8.5, 8.5.
+- **Win the gym crowd** (snack bars, price 7 or more and healthiness 7 or more): price 8, healthiness 8 wins about 127. It is the only spot that works; half a step away drops to about 60. Debrief: why is a niche so sensitive to small moves?
+
 ## Common misconceptions
 
 - **"Go where the most customers are."** The biggest group is usually the most crowded. Winning a slice of 400 can be worse than owning all of 300.

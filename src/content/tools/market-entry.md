@@ -40,6 +40,21 @@ alsoAligned: []
 - Subsidiary passes exporting at about **$730,000** in year 1 sales (with no risks turned on).
 - In the risky market, each risk hurts a different mode: the 25% tariff cuts exporting to 2%, political trouble stops the joint venture and subsidiary after year 2, and the 30% sales miss hurts everyone. Franchising is the only option none of them hit hard.
 
+## Predict first
+
+Two prediction cards sit above the challenges. Students pick Goes up, Goes down, or Stays the same; the tool makes the change on screen and shows before and after.
+
+- **Political risk goes away** (big but risky market): licensing **stays the same** at about $636,036. A licensee owns the foreign operation, so a government forcing out foreign owners doesn't touch your royalties. Follow-up: which ways in did change? (The joint venture and own subsidiary, a lot.)
+- **Sales fall 30% short** (small test market): your own subsidiary **goes down**, about −$142,117 to −$279,482. Owning everything means owning the bad news too. Follow-up: what happened to licensing? (It earns less too, but it never risked $600,000.)
+
+## Challenges
+
+Three challenge cards sit under the tool. Each Start button loads its scenario and makes a link you can post. Sample solutions (there are others):
+
+- **Make the subsidiary pay** (small test market, growth 10% or less, no shortfall): first-year sales of about $393,000 break even, so $400,000 on the slider. Over a third more than the forecast. Ask whether a small market is the place to build your own operation.
+- **Tariffs and exporting** (big but risky market, shortfall, political risk, sales, and growth locked): a tariff of 10% or less. At 10%, exporting keeps 8% of sales, the same as franchising, and wins by $10,000 because it costs less to start.
+- **Grow into a joint venture** (small test market, sales $300,000, no shortfall): about 15% growth a year or more (14% still loses about $2,000). Debrief: how sure would you need to be of that growth before signing?
+
 ## Common misconceptions
 
 - Students assume owning everything is always best because you keep all the profit. The small market shows the upfront cost can sink it.

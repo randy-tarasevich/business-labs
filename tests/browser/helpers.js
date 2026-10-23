@@ -15,15 +15,26 @@ export function watchErrors(page) {
   return errors;
 }
 
-/** Type a value into a number box (or click a tab) the way a student would. */
+/**
+ * Type a value into a number box (or click a tab, or tick a checkbox) the way a student would.
+ * Keys are share-link keys: an input id without "-n", or f0, f1, ... for inputs without an id,
+ * counted the same way src/scripts/lib/share-state.js counts them.
+ */
 export async function setValue(page, key, value) {
   if (key === 'tab') {
     await page.locator('[data-tool] [data-tabs] > *').nth(value).click();
     return;
   }
   await page.evaluate(([k, v]) => {
-    const el = document.querySelector(`[data-tool] #${k}-n`) || document.querySelector(`[data-tool] #${k}`);
-    el.value = String(v);
+    const root = document.querySelector('[data-tool]');
+    const unnamed = () =>
+      [...root.querySelectorAll('input, select')].filter(
+        (el) => !el.closest('[data-no-share]') && !el.id && el.type !== 'radio' && (el.type === 'range' || ['number', 'checkbox', 'select-one'].includes(el.type))
+      );
+    const el = root.querySelector(`#${k}-n`) || root.querySelector(`#${k}`) || (/^f\d+$/.test(k) ? unnamed()[+k.slice(1)] : null);
+    if (!el) throw new Error(`setValue: no input for "${k}"`);
+    if (el.type === 'checkbox') el.checked = Number(v) === 1;
+    else el.value = String(v);
     el.dispatchEvent(new Event('input', { bubbles: true }));
     el.dispatchEvent(new Event('change', { bubbles: true }));
   }, [key, value]);

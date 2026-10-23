@@ -36,6 +36,21 @@ For business plan projects, students replace the preset line items with their ow
 - **T-shirt shop:** safe the whole way. Cash never drops below about $2,500.
 - **Dog walking:** in the black from month 1, so runway never matters. Good contrast: low startup cost businesses are easier to survive.
 
+## Predict first
+
+Two prediction cards sit above the challenges. Students pick Goes up, Goes down, or Stays the same; the tool makes the change on screen and shows before and after.
+
+- **More starting cash** (food truck, $75,000 to $95,000): the first profitable month **stays the same**, month 11. Cash in the bank doesn't change sales or costs; it only decides whether you survive until profit arrives. Follow-up: what did change? (The truck never runs out; the lowest balance goes from about −$2,989 to about $17,011.)
+- **Cut the ads in half** (phone case startup, $2,000 to $1,000 a month, sales unchanged): the lowest cash balance **goes up**, about −$10,862 to −$1,556. It still runs out (month 5 instead of 3). Follow-up: is "sales unchanged" realistic when you cut ads? (Probably not, which is why this decision is hard.)
+
+## Challenges
+
+Three challenge cards sit under the tool. Each Start button loads its scenario and makes a link you can post. Sample solutions (there are others):
+
+- **Raise enough cash** (food truck, costs and sales plan locked): $78,000 or more. At $78,000 the lowest balance is about $11 in month 10, which is cutting it close. Ask: how much extra would you raise for safety?
+- **No new money** (phone case startup, cash, month 1 sales, and growth locked): cut online ads to $800 a month or less (lowest balance about $14). Cutting variable costs or other fixed costs also works. Debrief: which cut hurts the business least?
+- **Keep a cushion** (food truck, cash and sales plan locked): buy a cheaper truck, $32,000 or less (a $30,000 truck gives a low of about $12,011). Cutting part-time help to $1,500 a month gives about $7,976, not enough on its own. Startup costs matter because they come out before day one.
+
 ## Common misconceptions
 
 - Students treat "profitable" and "has cash" as the same thing. The food truck is profitable by month 11 and still below zero from month 7 through month 13. In real life, it would have closed in month 7.

@@ -39,6 +39,21 @@ The tool sticks to the mechanics: how rates convert prices, who pays a tariff to
 - **Guitars to Japan:** ($800 + $60) × 150 = ¥129,000, shelf ¥180,600 vs. ¥170,000 for a Japanese guitar. The dollar would have to weaken to about ¥141 per $1 for the U.S. guitar to match.
 - **Kayaks to Canada:** shelf CA$1,745 vs. CA$1,700. At about CA$1.33 per $1 they'd match.
 
+## Predict first
+
+Two prediction cards sit above the challenges. Students pick Goes up, Goes down, or Stays the same; the tool makes the change on screen and shows before and after.
+
+- **Stronger dollar, importing** (olive oil, 0.90 to 1.00 euros per dollar): the shelf price **goes down**, about $14.13 to $12.96. Each dollar buys more euros, so the same €6 bottle costs fewer dollars. Follow-up: who is hurt by this? (U.S. olive oil makers, whose rival just got cheaper.)
+- **Stronger dollar, exporting** (kayaks, 1.37 to 1.50 Canadian dollars per U.S. dollar): the price in Canada **goes up**, about C$1,745 to C$1,911. Same kayak, same U.S. price, but Canadians need more of their dollars to pay for it. Follow-up: is a strong dollar good or bad? (Depends on whether you import or export.)
+
+## Challenges
+
+Three challenge cards sit under the tool. Each Start button loads its scenario and makes a link you can post. Sample solutions (there are others):
+
+- **When imports get pricey** (olive oil, only the exchange rate changes): 0.77 euros per dollar or lower puts it over $16 (about $16.11 at 0.77). A weaker dollar makes imports cost more.
+- **Tariff war** (sneakers from Vietnam): a 40% tariff brings the pair to exactly $60. Ask who pays the tariff in the end. (The shopper, through the shelf price.)
+- **Sell more guitars in Japan** (U.S. price $800 and markup 40% locked): an exchange rate of ¥141 per dollar or fewer (about ¥169,764), or cut shipping to $9.50 or less. A weaker dollar helps exporters.
+
 ## Common misconceptions
 
 - "Stronger dollar" sounds good for everyone. It helps importers and American shoppers, and hurts exporters.

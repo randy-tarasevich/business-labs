@@ -49,6 +49,21 @@ The three campaigns are built to break any single rule. Phone cases says "smalle
 - Sneaker mid creator (Try it #3): breaks even at about 35.7% fake followers. At 5% fake, it makes about $286.
 - Phone cases big creator (Try it #5): its real fans bring in about $1,572 of profit, so any fee above that loses money.
 
+## Predict first
+
+Two prediction cards sit above the challenges. Students pick Goes up, Goes down, or Stays the same; the tool makes the change on screen and shows before and after.
+
+- **Higher price** (phone cases, $30 to $40 average order, big creator): customers **stay the same**, about 80.6. In this model, price changes how much each customer spends, not how many fans click and buy. Follow-up: is that realistic? (Not entirely; a higher price would likely lose some buyers. Good discussion.)
+- **Double the engagement, double the fee** (phone cases, mid creator, 4% to 8% and $350 to $700): profit **goes up**, about $167 to $333. Twice the real fans doubles the sales, and the fee was the smaller piece. Follow-up: what's the most she could charge for 8% and still break even? (About $1,033.)
+
+## Challenges
+
+Three challenge cards sit under the tool. Each Start button loads its scenario and makes a link you can post. Sample solutions (there are others):
+
+- **Negotiate the fee** (phone cases, big creator): the post brings in about $1,572 of profit before the fee, so a fee of $1,572 or less breaks even ($1,500 works). She asked for $6,000. Ask: would she take that? What does this tell you about follower counts?
+- **How fake is too fake?** (sneaker shop, mid creator, only the fake share changes): 35% or less breaks even (about $7 profit at 35%, a $3 loss at 36%). Debrief: how could a brand check for fake followers before paying?
+- **Grow the small creator** (phone cases, small creator, fee and rates locked): about 32,000 followers earns $500 (31,000 is about $483). Four times her audience, and still a fraction of the big creator's fee.
+
 ## Common misconceptions
 
 - **"More followers means more sales."** Sales come from real people who pay attention. The big phone-case creator has 800,000 followers but only 6,720 real fans who engage.

@@ -8,7 +8,7 @@ import { money, num, niceMax, svgEl, linkRange, presetButtons, wireReveals, fitW
 
 // Each market starts in balance at a round price and quantity. pMax/qMax fix the chart axes so a
 // shift visibly moves a curve instead of rescaling the chart. Events add units to a shift.
-const PRESETS = [
+export const PRESETS = [
   {
     name: 'Strawberries', unit: 'quarts', per: 'per week', cents: true,
     a: 1600, b: 150, d: 400, low: 1.5, pMax: 10, qMax: 2000, shiftStep: 10,

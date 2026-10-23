@@ -49,7 +49,7 @@ const tryIt = [
       <fieldset class={FIELDSET}>
         <legend class={LEGEND}>The creators</legend>
         <span class={HINT}>Pick a creator to change their numbers.</span>
-        <div class={PRESETS} data-pick role="group" aria-label="Which creator to edit"></div>
+        <div class={PRESETS} data-pick data-tabs role="group" aria-label="Which creator to edit"></div>
         <RangeField id="inf-fee" label="Fee for one post" unit="$" step="10" max={20000} aria="Fee for one post in dollars" />
         <RangeField id="inf-followers" label="Followers" step="100" max={2000000} width="w-[112px]" aria="Number of followers" />
         <RangeField id="inf-eng" label="Engagement rate" unit="%" step="0.1" max={20} aria="Engagement rate in percent" hint="Percent of followers who like, comment, or share a post." />

@@ -65,6 +65,21 @@ The four-shift pattern students should be able to state without the tool:
 | Supply increases | Down | Up |
 | Supply decreases | Up | Down |
 
+## Predict first
+
+Two prediction cards sit above the challenges. Students pick Goes up, Goes down, or Stays the same; the tool makes the change on screen and shows before and after.
+
+- **Both curves shift the same amount** (strawberries, demand +300 and supply +300): the price **stays the same** at $4.00. The quantity sold rises (1,000 to 1,300 quarts). Follow-up: what if supply grew by more than demand? (The price falls.)
+- **Halloween demand** (pumpkins, demand +400): pumpkins sold **go up**, 800 to about 1,067, even though the price rises from $6.00 to about $7.33. Many students think a higher price always means fewer sold. Follow-up: when does a higher price mean fewer sold? (Moving along a demand curve, not when the whole curve shifts.)
+
+## Challenges
+
+Three challenge cards sit under the tool. Each Start button loads its scenario and makes a link you can post. Sample solutions (there are others):
+
+- **Undo the drought** (strawberries, supply shift stays −400): demand has to fall by 400 quarts or more (demand shift −400 gives exactly $4.00). Blueberries on sale (−250) alone isn't enough. Debrief: is falling demand a good way to fix high prices?
+- **Meet the hype** (sneakers, demand stays +300): supply has to rise by 300 pairs or more. Cheaper materials (+200) alone leaves the price at about $127. At +300 the price is back to $120 and 800 pairs sell instead of 500.
+- **End the gas shortage** (price locked at $3.00, demand shift 0 or more): supply has to rise by 4,500 gallons or more. A new pipeline (+4,000) still leaves a 500-gallon shortage. Ask why governments are tempted to cap prices, and what this shows about the result.
+
 ## Common misconceptions
 
 - **"Price went up, so demand went down."** A price change moves buyers *along* the demand curve (quantity demanded). Only a change in something else (tastes, income, the price of a substitute, the season) shifts demand.

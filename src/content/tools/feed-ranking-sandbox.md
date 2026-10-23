@@ -47,6 +47,21 @@ Feed order for each built-in algorithm (your bakery post in **bold**):
 - Scores are relative: each signal is scaled against the busiest post in the feed, so changing your post can also change how the others score.
 - "Reset my post" puts the bakery back to its starting numbers.
 
+## Predict first
+
+Two prediction cards sit above the challenges. Students pick Goes up, Goes down, or Stays the same; the tool makes the change on screen and shows before and after.
+
+- **Twice the likes under "Newest first"** (120 to 240 likes): your score **stays the same** at 93.8. That algorithm only counts how new a post is. Follow-up: what would make the likes matter? (Give likes some weight.)
+- **Newer post, half the likes** (still "Newest first," 1 hour old instead of 3, 60 likes): your score **goes up** to 97.9, tied with the beach photo. Follow-up: is this a better post? (No, it's just newer. Ask whether "Newest first" is fair.)
+
+## Challenges
+
+Three challenge cards sit under the tool. Each Start button loads its scenario and makes a link you can post. Sample solutions (there are others):
+
+- **Make a better post** (algorithm stays "Keep them watching," post stays 3 hours old): raise watch time to 22 seconds or more (a video that holds attention). Shares alone don't do it: even 400 shares only reaches 5th. Good debrief: what kind of post gets watched for 22 seconds?
+- **Cool down the feed** (watch time counts 5 or more, your post unchanged): comments 0, likes 4, watch 5 puts the meme first. The shouting match has the most comments and the longest watch time, so cutting both is the key. Ask: why would a platform choose to reward the shouting match?
+- **Build a feed that helps the bakery** (post unchanged, at least 3 signals count): recency 10, likes 1, friend 1, everything else 0 puts the bakery 3rd. Small, new posts only win when the algorithm cares mostly about newness. Point out that the platform, not the post, decided who won.
+
 ## Common misconceptions
 
 - **"The feed shows posts in the order they were posted."** Only if newness is the only signal. Most feeds mix several.
