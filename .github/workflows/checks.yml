@@ -1,5 +1,10 @@
 # Runs on every pull request and every push to main. A red X on a PR means something broke:
 # open "Details" to see which check failed and why. See the README's "Checks" section.
+#
+# The browser tests are split across 3 machines that run at the same time (shards), so a PR finishes
+# in a few minutes instead of about 9. The last job is named "checks": it passes only when every
+# other job passed, and it's the one branch protection on main requires. Keep that job name.
+
 name: Checks
 
 on:
@@ -12,38 +17,78 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  checks:
+  unit:
+    name: Math and content
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-
       - name: Install
         run: npm ci
-
       - name: Math and content (no em-dashes, challenge and prediction data)
         run: npm test
 
+  browser:
+    name: Browser tests (${{ matrix.shard }} of 3)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install
+        run: npm ci
       - name: Build
         run: npm run build
 
+      # The test browser is the same every run until Playwright's version changes, so keep a copy.
+      - name: Playwright version
+        id: pw
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+      - name: Cache the test browser
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
       - name: Install browser
+        if: steps.pw-cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps chromium
+      - name: Install browser system libraries
+        if: steps.pw-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
 
       - name: Browser tests (every page, phone width, share links, Copy results, challenges, predictions)
-        run: npx playwright test
+        run: npx playwright test --shard=${{ matrix.shard }}/3
 
       - name: Save the report if anything failed
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.shard }}
           path: |
             playwright-report/
             test-results/
           retention-days: 7
+
+  checks:
+    name: checks
+    needs: [unit, browser]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Every job passed
+        run: |
+          echo "Math and content: ${{ needs.unit.result }}"
+          echo "Browser tests: ${{ needs.browser.result }}"
+          test "${{ needs.unit.result }}" = "success" && test "${{ needs.browser.result }}" = "success"
