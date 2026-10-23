@@ -22,6 +22,7 @@ import { paycheck } from '../scripts/tools/paycheck.js';
 import { outlook } from '../scripts/tools/investing-risk.js';
 import { compare } from '../scripts/tools/insurance.js';
 import { compareCars } from '../scripts/tools/car-buying.js';
+import { runPayroll } from '../scripts/tools/payroll.js';
 
 const beUnits = (s) => {
   const cm = s.v('be-price') - s.v('be-vc');
@@ -52,6 +53,15 @@ const invest = (s) => outlook({ amount: s.v('ir-amount'), years: Math.max(1, Mat
 const ins = (s) => compare({ aDed: s.v('in-a-ded'), aPrem: s.v('in-a-prem'), bDed: s.v('in-b-ded'), bPrem: s.v('in-b-prem'), cost: s.v('in-cost'), claims: Math.round(s.v('in-claims')), savings: s.v('in-savings') });
 
 const car = (s) => compareCars({ newPrice: s.v('cb-new-price'), usedPrice: s.v('cb-used-price'), down: s.v('cb-down'), term: s.v('cb-term'), credit: s.v('cb-credit'), pay: s.v('cb-pay'), other: s.v('cb-other') });
+
+const payroll = (s) =>
+  runPayroll({
+    employees: ['a', 'b', 'c'].map((w) => ({ hours: s.v(`pr-${w}-hours`), rate: s.v(`pr-${w}-rate`) })),
+    freq: s.v('pr-freq'),
+    k: s.v('pr-k'),
+    state: s.v('pr-state'),
+    suta: s.v('pr-suta'),
+  });
 
 export const PREDICTIONS = {
   'break-even-lab': [
@@ -201,6 +211,21 @@ export const PREDICTIONS = {
       start: { g0: 0 },
       change: { 'cb-credit': 0 },
       measure: { label: 'Used car monthly payment', value: (s) => car(s).used.monthly, fmt: (n) => money(n, 2) },
+    },
+  ],
+
+  'payroll-lab': [
+    {
+      question: 'Every coffee shop employee starts saving 5% of their pay in a 401(k). What happens to the employer\'s payroll taxes?',
+      start: { g0: 0 },
+      change: { 'pr-k': 5 },
+      measure: { label: 'Employer payroll taxes', value: (s) => payroll(s).t.employer, fmt: (n) => money(n, 2) },
+    },
+    {
+      question: 'Ben\'s hours double, from 20 to 40 a week. What happens to the federal income tax withheld from his check?',
+      start: { g0: 0 },
+      change: { 'pr-b-hours': 40 },
+      measure: { label: 'Ben\'s federal withholding', value: (s) => payroll(s).checks[1].fed, fmt: (n) => money(n, 2) },
     },
   ],
 };

@@ -66,7 +66,7 @@ export const COURSE_GUIDES = {
     ],
   },
   Accounting: {
-    intro: 'A sequence that runs from the accounting equation through financial analysis. The first seven fit Accounting 1; the last three are built for Advanced Accounting.',
+    intro: 'A sequence that runs from the accounting equation through financial analysis. The first eight fit Accounting 1; the last three are built for Advanced Accounting.',
     sequence: [
       { id: 'accounting-equation-lab', level: 'Accounting 1', why: 'The foundation. Every later tool assumes students know A = L + E holds after every transaction.' },
       { id: 't-account-lab', level: 'Accounting 1', why: 'Same transactions, written the way accountants do: debits, credits, T-accounts, and a trial balance.' },
@@ -74,6 +74,7 @@ export const COURSE_GUIDES = {
       { id: 'financial-statements', level: 'Accounting 1', why: 'Once students can post transactions, show where those transactions end up and how the three statements connect.' },
       { id: 'closing-entries-lab', level: 'Accounting 1', why: 'With the statements done, close the month. Revenue, expenses, and drawing reset to zero, and the profit moves into Capital.' },
       { id: 'bank-reconciliation-lab', level: 'Accounting 1', why: 'A new month starts. Before trusting the Cash balance, check it against the bank statement and find out why they disagree.' },
+      { id: 'payroll-lab', level: 'Accounting 1', why: 'Payday is the most common big entry a small business makes. Withholdings become liabilities, and the business owes payroll taxes of its own.' },
       { id: 'break-even-lab', level: 'Accounting 1', why: 'Separates fixed and variable costs, which students need for cost behavior and managerial accounting.' },
       { id: 'inventory-methods', level: 'Advanced', why: 'Start Advanced Accounting here. Same sales, three methods, three different profits.' },
       { id: 'depreciation', level: 'Advanced', why: 'Another place where the method changes reported profit but not the total. Pairs well right after inventory.' },
