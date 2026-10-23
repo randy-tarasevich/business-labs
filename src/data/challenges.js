@@ -42,6 +42,7 @@ import { simulateRunway } from '../scripts/tools/startup-runway.js';
 import { dealMath } from '../scripts/tools/investor-deal.js';
 import { unitEconomics } from '../scripts/tools/unit-economics.js';
 import { PRESETS as SD_MARKETS, at as sdAt, equilibrium } from '../scripts/tools/supply-demand.js';
+import { runPayroll } from '../scripts/tools/payroll.js';
 
 const near = (a, b, tol = 0.005) => Math.abs(a - b) <= tol;
 
@@ -199,6 +200,14 @@ const offSites = (s, product) => {
   return { home: unitCost(sites[0], w, false).good, away: unitCost(sites[1], w, true).good };
 };
 const offFactory = (s, product) => s.pick(1) === 1 && ['wage', 'hours', 'mat', 'ship', 'defect'].every((k) => s.v(`off-${k}`) === OFF_PRODUCTS[product].sites[1][k]);
+const payroll = (s) =>
+  runPayroll({
+    employees: ['a', 'b', 'c'].map((w) => ({ hours: s.v(`pr-${w}-hours`), rate: s.v(`pr-${w}-rate`) })),
+    freq: s.v('pr-freq'),
+    k: s.v('pr-k'),
+    state: s.v('pr-state'),
+    suta: s.v('pr-suta'),
+  });
 
 export const CHALLENGES = {
   'break-even-lab': [
@@ -1103,6 +1112,39 @@ export const CHALLENGES = {
       rules: [
         { text: 'Both factories stay the same.', ok: (s) => offFactory(s, 2) },
         { text: 'Tariff stays at 25%.', ok: (s) => s.v('off-tariff') === 25 },
+      ],
+    },
+  ],
+
+  'payroll-lab': [
+    {
+      title: 'Same hours, lower cost',
+      goal: 'The coffee shop\'s payroll costs $1,721.28 for 90 hours of work. Get the total cost to $1,650 or less without cutting any hours.',
+      start: { g0: 0 },
+      met: (s) => payroll(s).cost <= 1650,
+      rules: [
+        { text: 'Total hours stay at 90.', ok: (s) => s.v('pr-a-hours') + s.v('pr-b-hours') + s.v('pr-c-hours') === 90 },
+        { text: 'Nobody\'s hourly pay changes.', ok: (s) => s.v('pr-a-rate') === 16 && s.v('pr-b-rate') === 15.5 && s.v('pr-c-rate') === 19 },
+      ],
+    },
+    {
+      title: 'Stay on budget',
+      goal: 'The landscaping crew has a $4,800 payroll budget, but this payroll really costs $4,930.62. Cut Cara\'s hours until the total cost fits the budget.',
+      start: { g0: 1 },
+      met: (s) => payroll(s).cost <= 4800,
+      rules: [
+        { text: 'Ana and Ben keep 80 hours each.', ok: (s) => s.v('pr-a-hours') === 80 && s.v('pr-b-hours') === 80 },
+        { text: 'Nobody\'s hourly pay changes.', ok: (s) => s.v('pr-a-rate') === 22 && s.v('pr-b-rate') === 20 && s.v('pr-c-rate') === 18 },
+      ],
+    },
+    {
+      title: 'A raise for Cara',
+      goal: 'At the small office, Cara takes home $654.32 a paycheck. Find the hourly pay that gets her take-home to $700 or more.',
+      start: { g0: 2 },
+      met: (s) => payroll(s).checks[2].net >= 700,
+      rules: [
+        { text: 'Cara still works 40 hours.', ok: (s) => s.v('pr-c-hours') === 40 },
+        { text: '401(k) savings stay at 5%.', ok: (s) => s.v('pr-k') === 5 },
       ],
     },
   ],

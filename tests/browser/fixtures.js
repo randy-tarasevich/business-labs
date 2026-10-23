@@ -141,6 +141,11 @@ export const CHALLENGE_ANSWERS = {
     { solve: { 'off-hours': 3, 'off-defect': 2 }, break: { 'off-tariff': 10 } },
     { solve: { 'off-currency': -8 }, break: { 'off-tariff': 0 } },
   ],
+  'payroll-lab': [
+    { solve: { 'pr-c-hours': 20, 'pr-b-hours': 40 }, break: { 'pr-c-rate': 16 } },
+    { solve: { 'pr-c-hours': 52 }, break: { 'pr-a-rate': 20 } },
+    { solve: { 'pr-c-rate': 22 }, break: { 'pr-c-hours': 44 } },
+  ],
 };
 
 // Predictions: the right answer for each card, in order ('up', 'down', or 'same').
@@ -172,6 +177,7 @@ export const PREDICTION_ANSWERS = {
   'currency-trade': ['down', 'up'],
   'market-entry': ['same', 'down'],
   'offshoring-decision-lab': ['same', 'down'],
+  'payroll-lab': ['same', 'up'],
 };
 
 // T-Account Lab: [debit account, credit account, amount] for each transaction.

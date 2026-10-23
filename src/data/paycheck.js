@@ -30,3 +30,10 @@ export const MEDICARE_RATE = 1.45;
 /** Extra Medicare tax on wages above this amount (single filer). */
 export const ADDITIONAL_MEDICARE_RATE = 0.9;
 export const ADDITIONAL_MEDICARE_OVER = 200000;
+
+// Employer-only payroll taxes, used by the Payroll Lab.
+// FUTA: 6.0% minus a 5.4% credit for paying state unemployment tax = 0.6% on each employee's first $7,000.
+// Source: Iowa Workforce Development, Federal Unemployment Tax Act
+// https://workforce.iowa.gov/employers/unemployment-insurance/ui-tax-and-audit/federal-unemployment-tax-act
+export const FUTA_RATE = 0.6;
+export const FUTA_WAGE_BASE = 7000;

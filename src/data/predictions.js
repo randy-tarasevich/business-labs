@@ -39,6 +39,7 @@ import { simulateRunway } from '../scripts/tools/startup-runway.js';
 import { dealMath } from '../scripts/tools/investor-deal.js';
 import { unitEconomics } from '../scripts/tools/unit-economics.js';
 import { PRESETS as SD_MARKETS, equilibrium } from '../scripts/tools/supply-demand.js';
+import { runPayroll } from '../scripts/tools/payroll.js';
 
 const beUnits = (s) => {
   const cm = s.v('be-price') - s.v('be-vc');
@@ -125,6 +126,14 @@ const awayCost = (s, product) => {
   for (const k of ['wage', 'hours', 'mat', 'ship', 'defect']) site[k] = s.v(`off-${k}`);
   return Math.round(unitCost(site, { tariff: s.v('off-tariff'), currency: s.v('off-currency') }, true).good * 100) / 100;
 };
+const payroll = (s) =>
+  runPayroll({
+    employees: ['a', 'b', 'c'].map((w) => ({ hours: s.v(`pr-${w}-hours`), rate: s.v(`pr-${w}-rate`) })),
+    freq: s.v('pr-freq'),
+    k: s.v('pr-k'),
+    state: s.v('pr-state'),
+    suta: s.v('pr-suta'),
+  });
 
 export const PREDICTIONS = {
   'break-even-lab': [
@@ -529,6 +538,21 @@ export const PREDICTIONS = {
       start: { g0: 1, g1: 1 },
       change: { 'off-defect': 2 },
       measure: { label: 'Overseas cost per good piece', value: (s) => awayCost(s, 1), fmt: (n) => money(n, 2) },
+    },
+  ],
+
+  'payroll-lab': [
+    {
+      question: 'Every coffee shop employee starts saving 5% of their pay in a 401(k). What happens to the employer\'s payroll taxes?',
+      start: { g0: 0 },
+      change: { 'pr-k': 5 },
+      measure: { label: 'Employer payroll taxes', value: (s) => payroll(s).t.employer, fmt: (n) => money(n, 2) },
+    },
+    {
+      question: 'Ben\'s hours double, from 20 to 40 a week. What happens to the federal income tax withheld from his check?',
+      start: { g0: 0 },
+      change: { 'pr-b-hours': 40 },
+      measure: { label: 'Ben\'s federal withholding', value: (s) => payroll(s).checks[1].fed, fmt: (n) => money(n, 2) },
     },
   ],
 };

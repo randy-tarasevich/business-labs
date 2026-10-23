@@ -19,6 +19,7 @@ import { paycheck } from '../../src/scripts/tools/paycheck.js';
 import { outlook, normalCdf, normalizeMix, Z90 } from '../../src/scripts/tools/investing-risk.js';
 import { compare, breakEven, yearCost } from '../../src/scripts/tools/insurance.js';
 import { compareCars, payment as carPayment } from '../../src/scripts/tools/car-buying.js';
+import { employeeCheck, runPayroll, entryTotals } from '../../src/scripts/tools/payroll.js';
 
 const near = (actual, expected, tol, msg) =>
   assert.ok(Math.abs(actual - expected) <= tol, `${msg ?? ''} expected ${expected}, got ${actual}`);
@@ -439,4 +440,43 @@ test('car buying: first car, prime credit, $2,000 down, 60 months', () => {
   assert.equal(c.used.check.term, false);
   assert.equal(c.used.check.budget, false);
   near(c.used.downShare, 0.125, 1e-9);
+});
+
+test('payroll: coffee shop, Ana 30 hours at $16 a week', () => {
+  const c = employeeCheck({ hours: 30, rate: 16 }, { freq: 52, k: 0, state: 3, suta: 2.8 });
+  assert.equal(c.gross, 480);
+  assert.equal(c.ss, 29.76); // 6.2% x 480
+  assert.equal(c.medicare, 6.96); // 1.45% x 480
+  assert.equal(c.state, 14.4); // 3% x 480
+  // Federal: 480 x 52 = 24,960 a year; - 16,100 = 8,860 taxable; 10% = 886; / 52 = 17.038 -> 17.04
+  assert.equal(c.fed, 17.04);
+  assert.equal(c.net, 411.84); // 480 - 17.04 - 29.76 - 6.96 - 14.40
+  // Employer: match 29.76 + 6.96, FUTA 0.6% = 2.88, SUTA 2.8% = 13.44 -> 53.04
+  assert.equal(c.employer.futa, 2.88);
+  assert.equal(c.employer.suta, 13.44);
+  assert.equal(c.employer.total, 53.04);
+});
+
+test('payroll: both journal entries balance to the cent in every preset', () => {
+  const E = (a, b, c) => [a, b, c].map(([hours, rate]) => ({ hours, rate }));
+  const runs = [
+    { employees: E([30, 16], [20, 15.5], [40, 19]), freq: 52, k: 0, state: 3, suta: 2.8 },
+    { employees: E([80, 22], [80, 20], [60, 18]), freq: 26, k: 3, state: 3, suta: 2.8 },
+    { employees: E([80, 28], [80, 35], [40, 20]), freq: 26, k: 5, state: 4, suta: 2.8 },
+    { employees: E([37.5, 17.33], [12.25, 21.17], [44, 33.33]), freq: 24, k: 7, state: 5.5, suta: 3.1 },
+  ];
+  for (const s of runs) {
+    const p = runPayroll(s);
+    for (const entry of [p.payrollEntry, p.taxEntry]) {
+      const t = entryTotals(entry);
+      assert.equal(t.dr, t.cr, `debits ${t.dr} should equal credits ${t.cr}`);
+    }
+    assert.equal(p.cost, Math.round((p.t.gross + p.t.employer) * 100) / 100);
+  }
+});
+
+test('payroll: 401(k) savings do not change the employer payroll taxes', () => {
+  const E = [{ hours: 30, rate: 16 }, { hours: 20, rate: 15.5 }, { hours: 40, rate: 19 }];
+  const base = { employees: E, freq: 52, state: 3, suta: 2.8 };
+  assert.equal(runPayroll({ ...base, k: 0 }).t.employer, runPayroll({ ...base, k: 5 }).t.employer);
 });

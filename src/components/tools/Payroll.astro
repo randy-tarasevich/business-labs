@@ -1,0 +1,111 @@
+---
+// Payroll Lab: markup only. Behavior lives in src/scripts/tools/payroll.js
+// Tax numbers come from src/data/paycheck.js (shared with the Paycheck Lab).
+import RangeField from '../ui/RangeField.astro';
+import Stat from '../ui/Stat.astro';
+import TryIt from '../ui/TryIt.astro';
+import { TOOL, PANEL, PANEL_TIGHT, LOWER, H2, H3, PROSE, PRESETS, HINT, CHART_KEY, SVG, RESULTS, VERDICT, FORMULA, FIELDSET, LEGEND, SELECT, TABLE_BOX, TABLE } from '../../scripts/lib/ui.js';
+import { EMPLOYEES, SCHEDULES } from '../../scripts/tools/payroll.js';
+
+const WHO = ['a', 'b', 'c'];
+
+const tryIt = [
+  {
+    q: 'Load the coffee shop. Gross pay is $1,550. How much does this payroll really cost the business?',
+    a: '$1,721.28. On top of wages, the business pays $171.28 in its own payroll taxes: a Social Security and Medicare match, plus federal (FUTA) and state (SUTA) unemployment tax.',
+  },
+  {
+    q: 'In the first journal entry, why is Cash only $1,318.56 when Wages Expense is $1,550?',
+    a: 'The business keeps $231.44 of withholdings (income taxes, Social Security, Medicare) and owes it to the government. Those become liabilities, the "Payable" accounts, until the business sends the money in.',
+  },
+  {
+    q: 'Social Security Tax Payable shows up in both entries. Why?',
+    a: 'Once for the 6.2% withheld from employees ($96.10) and once for the business\'s matching 6.2% ($96.10). The business owes both, $192.20 in all.',
+  },
+  {
+    q: 'Load the small office and look at the register. Ben earns $560 more than Ana per paycheck. How much more federal income tax is withheld from him?',
+    a: '$74.07 more ($245.58 vs. $171.51). More of Ben\'s pay lands in the 22% bracket, so his withholding grows faster than his pay.',
+  },
+];
+---
+<div class={TOOL} data-tool="payroll">
+  <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Payroll inputs">
+      <h2 class={H2}>This pay period</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example businesses"></div>
+      {WHO.map((who, i) => (
+        <fieldset class={FIELDSET}>
+          <legend class={LEGEND}>{EMPLOYEES[i]}</legend>
+          <RangeField id={`pr-${who}-hours`} label="Hours worked" unit=" hrs" step="0.5" max={100} width="w-[70px]" aria={`${EMPLOYEES[i]}'s hours this pay period`} />
+          <RangeField id={`pr-${who}-rate`} label="Hourly pay" unit="$" step="0.25" max={60} aria={`${EMPLOYEES[i]}'s hourly pay in dollars`} />
+        </fieldset>
+      ))}
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>Everyone</legend>
+        <div class="grid gap-1.5">
+          <label for="pr-freq" class="font-semibold text-[14px]">Pay schedule</label>
+          <select id="pr-freq" class={`${SELECT} w-full min-w-0`}>
+            {SCHEDULES.map((s) => <option value={String(s.n)}>{s.label} ({s.n} paychecks a year)</option>)}
+          </select>
+        </div>
+        <RangeField id="pr-k" label="401(k) savings" unit="%" step="1" max={25} width="w-[70px]" aria="401(k) savings in percent of pay" />
+        <RangeField id="pr-state" label="State income tax rate" unit="%" step="0.5" max={10} width="w-[70px]" aria="State income tax rate in percent" />
+        <RangeField id="pr-suta" label="State unemployment tax (SUTA)" unit="%" step="0.1" max={10} width="w-[70px]" aria="State unemployment tax rate in percent" hint="Set by each state for each employer. The business pays it; nothing comes out of paychecks." />
+      </fieldset>
+    </div>
+
+    <div class={PANEL_TIGHT}>
+      <h3 class={H3}>What this payroll really costs</h3>
+      <div class={CHART_KEY} data-r="key"></div>
+      <div class="w-full min-w-0"><svg class={SVG} data-chart viewBox="0 0 640 72" role="img"></svg></div>
+      <div class={RESULTS}>
+        <Stat label="Gross pay" r="gross" />
+        <Stat label="Paid to employees" r="net" live />
+        <Stat label="Employer payroll taxes" r="employer" />
+        <Stat label="Total cost to the business" r="cost" keyed live />
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+
+      <h3 class={H3}>Payroll register</h3>
+      <div class={TABLE_BOX}>
+        <table data-copy-table class={TABLE}>
+          <thead>
+            <tr><th scope="col" class="text-left!">Employee</th><th scope="col">Gross</th><th scope="col">Federal</th><th scope="col">Soc. Sec.</th><th scope="col">Medicare</th><th scope="col">State</th><th scope="col">401(k)</th><th scope="col">Net pay</th></tr>
+          </thead>
+          <tbody data-r="register"></tbody>
+        </table>
+      </div>
+
+      <h3 class={H3}>Journal entry 1: record the payroll</h3>
+      <div class={TABLE_BOX}>
+        <table data-copy-table class={TABLE}>
+          <thead><tr><th scope="col" class="text-left!">Account</th><th scope="col">Debit</th><th scope="col">Credit</th></tr></thead>
+          <tbody data-r="entry1"></tbody>
+        </table>
+      </div>
+
+      <h3 class={H3}>Journal entry 2: the employer's payroll taxes</h3>
+      <div class={TABLE_BOX}>
+        <table data-copy-table class={TABLE}>
+          <thead><tr><th scope="col" class="text-left!">Account</th><th scope="col">Debit</th><th scope="col">Credit</th></tr></thead>
+          <tbody data-r="entry2"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}><strong>Withholdings</strong> come out of the employee's pay: income taxes, Social Security, Medicare, and any 401(k) savings. The business holds that money and owes it to the government or the 401(k) plan, so each becomes a <strong>liability</strong> (a "Payable" account). On top of wages, the business pays its own <strong>payroll taxes</strong>: it matches Social Security and Medicare and pays federal and state unemployment tax. That second cost is recorded as Payroll Tax Expense. Federal income tax withholding here is an estimate; real payroll uses each employee's W-4 and the IRS tables.</p>
+      <p class={HINT} data-r="year"></p>
+    </div>
+    <TryIt items={tryIt} />
+  </section>
+</div>
+
+<script>
+  import { initPayroll } from '../../scripts/tools/payroll.js';
+  document.querySelectorAll('[data-tool="payroll"]').forEach(initPayroll);
+</script>
