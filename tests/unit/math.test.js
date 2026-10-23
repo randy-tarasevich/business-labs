@@ -14,6 +14,7 @@ import { payoff, duration } from '../../src/scripts/tools/credit-card.js';
 import { grow } from '../../src/scripts/tools/start-early.js';
 import { TRANSACTIONS, ACCOUNTS, balances } from '../../src/scripts/tools/t-accounts.js';
 import { oppCost } from '../../src/scripts/tools/comparative-advantage.js';
+import { plan, payment } from '../../src/scripts/tools/student-loans.js';
 
 const near = (actual, expected, tol, msg) =>
   assert.ok(Math.abs(actual - expected) <= tol, `${msg ?? ''} expected ${expected}, got ${actual}`);
@@ -288,4 +289,38 @@ test('positioning map: customer splits and the gap lesson', async () => {
     const counted = c.groups.reduce((t, g) => t + g.split.reduce((a, b) => a + b, 0) + g.unserved, 0);
     assert.ok(Math.abs(counted - c.total) < 1e-9);
   }
+});
+
+test('student loans: in-state public ($28,000 cost, $6,000 grants, $10,000 family, 4 years, 10% private)', () => {
+  const p = plan({ cost: 28000, aid: 6000, family: 10000, years: 4, rate: 10, salary: 55000, sub: true });
+  // Gap $12,000 a year. Federal limits 5,500 / 6,500 / 7,500 / 7,500 = 27,000; private covers the rest = 21,000.
+  assert.equal(p.fedBorrowed, 27000);
+  assert.equal(p.privBorrowed, 21000);
+  // Subsidized 3,500 + 4,500 + 5,500 + 5,500 = 19,000, so $2,000 unsubsidized each year.
+  assert.equal(p.subBorrowed, 19000);
+  // Money waits 4.5, 3.5, 2.5, 1.5 years (school left + 6-month grace).
+  // Federal: 2,000 x 6.52% x (4.5 + 3.5 + 2.5 + 1.5) = 1,564.80
+  // Private: 10% x (6,500 x 4.5 + 5,500 x 3.5 + 4,500 x 2.5 + 4,500 x 1.5) = 6,650
+  near(p.accrued, 8214.8, 0.01);
+  near(p.owed, 56214.8, 0.01);
+});
+
+test('student loans: no subsidized loans means interest on the whole federal loan', () => {
+  const p = plan({ cost: 28000, aid: 6000, family: 10000, years: 4, rate: 10, salary: 55000, sub: false });
+  // Federal: 6.52% x (5,500 x 4.5 + 6,500 x 3.5 + 7,500 x 2.5 + 7,500 x 1.5) = 6.52% x 77,500 = 5,053
+  near(p.accrued, 5053 + 6650, 0.01);
+});
+
+test('student loans: federal lifetime limit stops at $31,000', () => {
+  // 6 years with a big gap: 5,500 + 6,500 + 7,500 + 7,500 = 27,000, then only 4,000 more allowed.
+  const p = plan({ cost: 40000, aid: 0, family: 0, years: 6, rate: 10, salary: 55000, sub: true });
+  assert.equal(p.fedBorrowed, 31000);
+  assert.equal(p.subBorrowed, 23000);
+  assert.equal(p.borrowed, 240000);
+});
+
+test('student loans: monthly payment matches textbook amortization tables', () => {
+  near(payment(10000, 6, 120), 111.02, 0.01); // $10,000 at 6% for 10 years
+  near(payment(10000, 10, 120), 132.15, 0.01); // $10,000 at 10% for 10 years
+  near(payment(12000, 0, 120), 100, 0.001); // no interest: just split it up
 });
