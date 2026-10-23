@@ -94,6 +94,8 @@ Challenges live in `src/data/challenges.js`, keyed by tool slug. Each has `title
 
 Every pull request runs automatic checks on GitHub (`.github/workflows/checks.yml`). A green check means it's safe to merge; a red X means something broke. Click **Details** next to it to see which check failed and why.
 
+The browser tests are split across 3 machines that run at the same time, so a PR takes a few minutes. One summary job named **checks** passes only when everything else passed, and branch protection on `main` requires it, so the merge button stays locked until it's green. Keep that job's name if you edit the workflow.
+
 What's checked:
 
 - **Math** (`tests/unit/math.test.js`): depreciation, inventory costing, ratios, the marketing funnel, credit card payoff, savings growth, and the T-Account Lab's trial balance. Each expected answer is worked out a different way than the tool does it (a textbook formula or by hand), so the tests catch the tool being wrong, not just changing.
