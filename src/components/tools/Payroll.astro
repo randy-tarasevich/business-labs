@@ -36,7 +36,7 @@ const tryIt = [
       {WHO.map((who, i) => (
         <fieldset class={FIELDSET}>
           <legend class={LEGEND}>{EMPLOYEES[i]}</legend>
-          <RangeField id={`pr-${who}-hours`} label="Hours worked" unit=" hours" step="0.5" max={100} width="w-[80px]" aria={`${EMPLOYEES[i]}'s hours this pay period`} />
+          <RangeField id={`pr-${who}-hours`} label="Hours worked" unit=" hrs" step="0.5" max={100} width="w-[70px]" aria={`${EMPLOYEES[i]}'s hours this pay period`} />
           <RangeField id={`pr-${who}-rate`} label="Hourly pay" unit="$" step="0.25" max={60} aria={`${EMPLOYEES[i]}'s hourly pay in dollars`} />
         </fieldset>
       ))}
@@ -44,7 +44,7 @@ const tryIt = [
         <legend class={LEGEND}>Everyone</legend>
         <div class="grid gap-1.5">
           <label for="pr-freq" class="font-semibold text-[14px]">Pay schedule</label>
-          <select id="pr-freq" class={SELECT}>
+          <select id="pr-freq" class={`${SELECT} w-full min-w-0`}>
             {SCHEDULES.map((s) => <option value={String(s.n)}>{s.label} ({s.n} paychecks a year)</option>)}
           </select>
         </div>
