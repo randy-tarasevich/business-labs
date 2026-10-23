@@ -1,0 +1,78 @@
+---
+// Investing Risk Lab: markup only. Behavior lives in src/scripts/tools/investing-risk.js
+// Historical return figures live in src/data/investing.js.
+import RangeField from '../ui/RangeField.astro';
+import Stat from '../ui/Stat.astro';
+import TryIt from '../ui/TryIt.astro';
+import { TOOL, PANEL, PANEL_TIGHT, LOWER, H2, H3, PROSE, PRESETS, HINT, CHART_KEY, SWATCH, SVG, RESULTS, VERDICT, FORMULA, FIELDSET, LEGEND } from '../../scripts/lib/ui.js';
+
+const LINE = 'w-[18px] h-0 inline-block border-t-[3px]';
+
+const tryIt = [
+  {
+    q: 'Load the car fund. You need the money in 2 years and put it all in stocks. What is the chance you end up with less than $5,000?',
+    a: 'About 21%, roughly 1 in 5. The bad case is $4,437. Money you need in the next few years belongs somewhere that can\'t drop, like cash.',
+  },
+  {
+    q: 'Still all stocks: change the years from 2 to 20. What happens to the chance of losing money? Why?',
+    a: 'It drops from about 21% to under 1%. Over 20 years, good years make up for bad ones. The range gets wider in dollars, but it rarely ends below what you put in.',
+  },
+  {
+    q: 'Load Retirement, 40 years. Compare the bad case with Play it safe (all cash). Which ends up with more?',
+    a: 'Even the retirement plan\'s bad case ($58,880) is more than three times the all-cash result ($18,536). Over 40 years, playing it safe has its own risk: your money barely grows.',
+  },
+  {
+    q: 'Load College, 10 years (60% stocks, 40% bonds). Move the bonds to 0%, so the 40% sits in cash. What happens to the bad case and the middle?',
+    a: 'Both get worse: the bad case falls from $7,213 to $6,858 and the middle from $11,278 to $10,597. Bonds earn more than cash, and they don\'t rise and fall at the same time as stocks, so mixing them in helps.',
+  },
+];
+---
+<div class={TOOL} data-tool="investing-risk">
+  <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Investment inputs">
+      <h2 class={H2}>Your investment</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example goals"></div>
+      <RangeField id="ir-amount" label="Amount invested" unit="$" step="100" max={50000} aria="Amount invested in dollars" />
+      <RangeField id="ir-years" label="Years until you need it" unit=" years" step="1" min={1} max={50} width="w-[70px]" aria="Years invested" />
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>Your mix</legend>
+        <RangeField id="ir-stocks" label="Stocks" unit="%" step="5" max={100} width="w-[70px]" aria="Percent in stocks" hint="Shares of many companies, like an S&P 500 index fund." />
+        <RangeField id="ir-bonds" label="Bonds" unit="%" step="5" max={100} width="w-[70px]" aria="Percent in bonds" hint="Loans to the U.S. government." />
+        <p class="text-[14px] m-0">Cash (savings): <strong class="font-mono" data-r="cash-pct" data-copy="Cash">0%</strong></p>
+      </fieldset>
+    </div>
+
+    <div class={PANEL_TIGHT}>
+      <h3 class={H3}>The range of what could happen</h3>
+      <div class={CHART_KEY} aria-hidden="true">
+        <span><i class={`${LINE} border-accent`}></i>Middle outcome</span>
+        <span><i class={SWATCH} style="background:var(--accent);opacity:0.18"></i>Bad case to good case (8 in 10 land here)</span>
+        <span><i class={`${LINE} border-dashed border-warn`}></i>All cash</span>
+        <span><i class="w-[18px] h-0 inline-block border-t-[2px] border-dotted border-muted"></i>What you put in</span>
+      </div>
+      <div class="w-full min-w-0"><svg class={SVG} data-chart viewBox="0 0 640 280" role="img"></svg></div>
+      <div class={RESULTS}>
+        <Stat label="Middle outcome" r="middle" keyed live />
+        <Stat label="Bad case (1 in 10)" r="bad" box="bad-box" />
+        <Stat label="Good case (1 in 10)" r="good" />
+        <Stat label="Chance you end with less than you put in" r="loss" box="loss-box" live />
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}>Stocks have grown the most over time, but they also have the biggest <strong>swings</strong>: some years are way up and some are way down. Bonds swing less and grow less. Cash never drops, but it barely grows. The longer you invest, the more the good years make up for the bad ones, so the <strong>chance of losing money</strong> shrinks. The bad case is a year-after-year bad run that happens about 1 time in 10; the good case is the same on the upside.</p>
+      <p class={HINT} data-r="data"></p>
+    </div>
+    <TryIt items={tryIt} />
+  </section>
+</div>
+
+<script>
+  import { initInvestingRisk } from '../../scripts/tools/investing-risk.js';
+  document.querySelectorAll('[data-tool="investing-risk"]').forEach(initInvestingRisk);
+</script>

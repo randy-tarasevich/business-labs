@@ -20,6 +20,7 @@ import { plan, repay, TAKE_HOME } from '../scripts/tools/student-loans.js';
 import { payoff } from '../scripts/tools/credit-card.js';
 import { grow } from '../scripts/tools/start-early.js';
 import { paycheck } from '../scripts/tools/paycheck.js';
+import { outlook } from '../scripts/tools/investing-risk.js';
 
 const near = (a, b, tol = 0.005) => Math.abs(a - b) <= tol;
 
@@ -60,6 +61,8 @@ const saver = (s, who) =>
   grow(s.v('se-monthly'), who === 'a' ? s.v('se-rate') : s.v('se-bRate'), Math.round(s.v(`se-${who}Start`)), Math.round(s.v(`se-${who}Stop`))).final;
 
 const pay = (s) => paycheck({ hourly: s.v('pc-hourly'), hours: s.v('pc-hours'), k: s.v('pc-k'), state: s.v('pc-state') });
+
+const invest = (s) => outlook({ amount: s.v('ir-amount'), years: Math.max(1, Math.round(s.v('ir-years'))), stocks: s.v('ir-stocks'), bonds: s.v('ir-bonds') });
 
 export const CHALLENGES = {
   'break-even-lab': [
@@ -298,6 +301,41 @@ export const CHALLENGES = {
       rules: [
         { text: 'Hourly pay stays at $40.', ok: (s) => s.v('pc-hourly') === 40 },
         { text: 'Hours stay at 40 a week.', ok: (s) => s.v('pc-hours') === 40 },
+      ],
+    },
+  ],
+
+  'investing-risk-lab': [
+    {
+      title: 'Protect the car fund',
+      goal: 'You need this $5,000 for a car in 2 years. All in stocks, there is about a 1 in 5 chance you end up with less. Get that chance under 1%.',
+      start: { g0: 0 },
+      met: (s) => invest(s).lossChance < 0.01,
+      rules: [
+        { text: 'You still need the money in 2 years.', ok: (s) => s.v('ir-years') === 2 },
+        { text: 'You still invest $5,000.', ok: (s) => s.v('ir-amount') === 5000 },
+      ],
+    },
+    {
+      title: 'Safe, but too safe',
+      goal: 'All in cash for 40 years, $5,000 only grows to about $18,500. Get the middle outcome to $40,000 or more.',
+      start: { g0: 3 },
+      met: (s) => invest(s).middle >= 40000,
+      rules: [
+        { text: 'Still 40 years.', ok: (s) => s.v('ir-years') === 40 },
+        { text: 'You still invest $5,000.', ok: (s) => s.v('ir-amount') === 5000 },
+        { text: 'The bad case stays above $25,000.', ok: (s) => invest(s).bad > 25000 },
+      ],
+    },
+    {
+      title: 'Raise the floor',
+      goal: 'The college fund\'s bad case is $7,213. Change the mix so the bad case is $7,250 or more.',
+      start: { g0: 1 },
+      met: (s) => invest(s).bad >= 7250,
+      rules: [
+        { text: 'Still 10 years.', ok: (s) => s.v('ir-years') === 10 },
+        { text: 'You still invest $5,000.', ok: (s) => s.v('ir-amount') === 5000 },
+        { text: 'The middle outcome stays at $10,000 or more.', ok: (s) => invest(s).middle >= 10000 },
       ],
     },
   ],

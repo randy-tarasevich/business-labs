@@ -41,6 +41,11 @@ export const CHALLENGE_ANSWERS = {
     { solve: { 'pc-k': 9 }, break: { 'pc-hours': 15 } },
     { solve: { 'pc-k': 21 }, break: { 'pc-hours': 32 } },
   ],
+  'investing-risk-lab': [
+    { solve: { 'ir-stocks': 0 }, break: { 'ir-years': 20 } },
+    { solve: { 'ir-stocks': 25 }, break: { 'ir-amount': 15000 } },
+    { solve: { 'ir-stocks': 50, 'ir-bonds': 50 }, break: { 'ir-amount': 6000 } },
+  ],
 };
 
 // Predictions: the right answer for each card, in order ('up', 'down', or 'same').
@@ -52,6 +57,7 @@ export const PREDICTION_ANSWERS = {
   'credit-card-payoff-lab': ['same', 'up'],
   'start-early-lab': ['same', 'up'],
   'paycheck-lab': ['up', 'same'],
+  'investing-risk-lab': ['down', 'same'],
 };
 
 // T-Account Lab: [debit account, credit account, amount] for each transaction.
