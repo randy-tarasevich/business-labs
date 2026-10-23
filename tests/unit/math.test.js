@@ -18,6 +18,7 @@ import { plan, payment } from '../../src/scripts/tools/student-loans.js';
 import { paycheck } from '../../src/scripts/tools/paycheck.js';
 import { outlook, normalCdf, normalizeMix, Z90 } from '../../src/scripts/tools/investing-risk.js';
 import { compare, breakEven, yearCost } from '../../src/scripts/tools/insurance.js';
+import { compareCars, payment as carPayment } from '../../src/scripts/tools/car-buying.js';
 
 const near = (actual, expected, tol, msg) =>
   assert.ok(Math.abs(actual - expected) <= tol, `${msg ?? ''} expected ${expected}, got ${actual}`);
@@ -417,4 +418,25 @@ test('insurance: a repair bigger than both deductibles costs the same either way
   const plans = { aDed: 250, aPrem: 230, bDed: 1000, bPrem: 195, claims: 1 };
   assert.equal(yearCost(195, 1000, 1, 3000).outOfPocket, 1000);
   assert.equal(compare({ ...plans, cost: 3000 }).diff, compare({ ...plans, cost: 9000 }).diff);
+});
+
+test('car buying: loan payments match textbook amortization tables', () => {
+  // $20,000 at 6% for 60 months is $386.66 a month (standard table value).
+  near(carPayment(20000, 6, 60), 386.66, 0.01);
+  near(carPayment(12000, 0, 48), 250, 1e-9);
+});
+
+test('car buying: first car, prime credit, $2,000 down, 60 months', () => {
+  const c = compareCars({ newPrice: 28000, usedPrice: 16000, down: 2000, term: 60, credit: 1, pay: 45760, other: 250 });
+  assert.equal(c.new.apr, 6.15);
+  assert.equal(c.used.apr, 8.81);
+  assert.equal(c.used.principal, 14000);
+  // Total cost = price + interest, and interest = 60 payments - amount borrowed.
+  near(c.used.total, 16000 + c.used.monthly * 60 - 14000, 1e-6);
+  // 20/4/10: $2,000 of $16,000 is 12.5% down (fails); 60 months (fails);
+  // 10% of 45,760 / 12 = 381.33 a month; payment + 250 is over that (fails).
+  assert.equal(c.used.check.down, false);
+  assert.equal(c.used.check.term, false);
+  assert.equal(c.used.check.budget, false);
+  near(c.used.downShare, 0.125, 1e-9);
 });

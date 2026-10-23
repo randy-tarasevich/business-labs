@@ -1,0 +1,105 @@
+---
+// Car Buying Lab: markup only. Behavior lives in src/scripts/tools/car-buying.js
+// Loan rates by credit tier live in src/data/car-loans.js (update once a year).
+import RangeField from '../ui/RangeField.astro';
+import Stat from '../ui/Stat.astro';
+import TryIt from '../ui/TryIt.astro';
+import { TOOL, PANEL, PANEL_TIGHT, LOWER, H2, H3, PROSE, PRESETS, HINT, CHART_KEY, SWATCH, SVG, RESULTS, VERDICT, FORMULA, FIELDSET, LEGEND, SELECT, TABLE_BOX, TABLE } from '../../scripts/lib/ui.js';
+import { CREDIT_TIERS, TERMS } from '../../data/car-loans.js';
+
+const tryIt = [
+  {
+    q: 'Load First car. Which costs less in total, and why does the used car win even with a higher loan rate?',
+    a: 'The used car: $19,360 vs. $32,268. Its loan rate is higher (8.81% vs. 6.15%), but you borrow $12,000 less, so you pay less interest ($3,360 vs. $4,268) and far less for the car.',
+  },
+  {
+    q: 'Load Stretch it to 84 months. What happens to the new car\'s monthly payment and total interest compared with 60 months?',
+    a: 'The payment drops from $504 to $382 a month, but interest jumps from $4,268 to $6,062. A longer loan feels cheaper every month and costs more overall.',
+  },
+  {
+    q: 'Load No credit history yet. How much more interest do you pay on the used car than with prime credit?',
+    a: '$7,836 instead of $3,360, about $4,476 more, for the same car. Building credit before you borrow is worth real money.',
+  },
+  {
+    q: 'Look at the 20/4/10 table on First car. Why do neither of the cars pass the 10% part?',
+    a: '10% of $45,760 is about $381 a month for all car costs. Insurance, gas, and upkeep already take $250 of that, leaving only about $131 for a loan payment.',
+  },
+];
+---
+<div class={TOOL} data-tool="car-buying">
+  <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Car buying inputs">
+      <h2 class={H2}>New or used?</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example buyers"></div>
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>The cars</legend>
+        <RangeField id="cb-new-price" label="New car price" unit="$" step="500" max={60000} aria="New car price in dollars" />
+        <RangeField id="cb-used-price" label="Used car price" unit="$" step="500" max={60000} aria="Used car price in dollars" />
+        <p class={HINT}>Example prices, not real cars.</p>
+      </fieldset>
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>The loan</legend>
+        <RangeField id="cb-down" label="Down payment" unit="$" step="250" max={20000} aria="Down payment in dollars" hint="Money you pay up front, so you borrow less." />
+        <div class="grid gap-1.5">
+          <label for="cb-term" class="font-semibold text-[14px]">Loan length</label>
+          <select id="cb-term" class={SELECT}>
+            {TERMS.map((m) => <option value={String(m)}>{m} months ({m / 12} years)</option>)}
+          </select>
+        </div>
+        <div class="grid gap-1.5">
+          <label for="cb-credit" class="font-semibold text-[14px]">Your credit score</label>
+          <select id="cb-credit" class={SELECT}>
+            {CREDIT_TIERS.map((t, i) => <option value={String(i)}>{t.name}</option>)}
+          </select>
+          <span class={HINT} data-r="rates"></span>
+        </div>
+      </fieldset>
+      <fieldset class={FIELDSET}>
+        <legend class={LEGEND}>Your budget</legend>
+        <RangeField id="cb-pay" label="Yearly pay before taxes" unit="$" step="1000" max={150000} aria="Yearly gross pay in dollars" />
+        <RangeField id="cb-other" label="Insurance, gas, and upkeep per month" unit="$" step="10" max={1000} aria="Other monthly car costs in dollars" />
+      </fieldset>
+    </div>
+
+    <div class={PANEL_TIGHT}>
+      <h3 class={H3}>What each car really costs</h3>
+      <div class={CHART_KEY} aria-hidden="true">
+        <span><i class={SWATCH} style="background:var(--good)"></i>Down payment</span>
+        <span><i class={SWATCH} style="background:var(--accent)"></i>Loan</span>
+        <span><i class={SWATCH} style="background:var(--bad);opacity:0.6"></i>Interest</span>
+      </div>
+      <div class="w-full min-w-0"><svg class={SVG} data-chart viewBox="0 0 640 160" role="img"></svg></div>
+      <div class={RESULTS}>
+        <Stat label="New car: monthly payment" r="new-pay" />
+        <Stat label="Used car: monthly payment" r="used-pay" live />
+        <Stat label="New car: total cost" r="new-total" />
+        <Stat label="Used car: total cost" r="used-total" keyed live />
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+      <h3 class={H3}>The 20/4/10 guideline</h3>
+      <div class={TABLE_BOX}>
+        <table data-copy-table class={TABLE}>
+          <thead>
+            <tr><th scope="col" class="text-left!">Guideline</th><th scope="col">New car</th><th scope="col">Used car</th></tr>
+          </thead>
+          <tbody data-r="rule"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}>You borrow the <strong>price minus your down payment</strong> and pay it back in equal monthly payments. A <strong>longer loan</strong> lowers the payment but adds months of interest. A <strong>better credit score</strong> gets a lower rate. The <strong>20/4/10 guideline</strong> is a common rule of thumb: put at least 20% down, borrow for 4 years or less, and keep all car costs under 10% of your pay before taxes.</p>
+      <p class={HINT} data-r="asof"></p>
+    </div>
+    <TryIt items={tryIt} />
+  </section>
+</div>
+
+<script>
+  import { initCarBuying } from '../../scripts/tools/car-buying.js';
+  document.querySelectorAll('[data-tool="car-buying"]').forEach(initCarBuying);
+</script>

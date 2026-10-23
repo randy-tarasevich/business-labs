@@ -51,6 +51,11 @@ export const CHALLENGE_ANSWERS = {
     { solve: { 'in-b-prem': 100 }, break: { 'in-claims': 0 } },
     { solve: { 'in-a-prem': 210 }, break: { 'in-b-prem': 215 } },
   ],
+  'car-buying-lab': [
+    { solve: { 'cb-term': 48, 'cb-used-price': 6000 }, break: { 'cb-term': 48, 'cb-down': 3200, 'cb-other': 0 } },
+    { solve: { 'cb-term': 36 }, break: { 'cb-new-price': 20000 } },
+    { solve: { 'cb-credit': 0 }, break: { 'cb-used-price': 7000 } },
+  ],
 };
 
 // Predictions: the right answer for each card, in order ('up', 'down', or 'same').
@@ -64,6 +69,7 @@ export const PREDICTION_ANSWERS = {
   'paycheck-lab': ['up', 'same'],
   'investing-risk-lab': ['down', 'same'],
   'insurance-deductible-lab': ['same', 'down'],
+  'car-buying-lab': ['up', 'down'],
 };
 
 // T-Account Lab: [debit account, credit account, amount] for each transaction.
