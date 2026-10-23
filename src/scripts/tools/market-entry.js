@@ -10,7 +10,7 @@ const YEARS = 5;
 // shipShare: the exporter's shipments are worth about this share of foreign sales, so a tariff of T% costs T × shipShare.
 const SHIP_SHARE = 0.4;
 
-const MODES = [
+export const MODES = [
   { key: 'license', name: 'Licensing', up: 5000, keep: 5, control: 'Low', risk: 'Very low', owned: false, color: '--muted', how: 'A foreign company makes and sells your product and pays you a royalty.' },
   { key: 'export', name: 'Exporting', up: 20000, keep: 12, control: 'Low', risk: 'Low', owned: false, color: '--accent', how: 'You make it at home and ship it to a distributor in the other country.' },
   { key: 'franchise', name: 'Franchising', up: 30000, keep: 8, control: 'Medium', risk: 'Low', owned: false, color: '--good', how: 'Local owners run stores under your brand and rules, and pay you fees.' },

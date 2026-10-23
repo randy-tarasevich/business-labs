@@ -5,7 +5,7 @@
 
 import { num, svgEl, presetButtons, wireReveals, fitWidth, onWidthChange, setTone } from '../lib/util.js';
 
-const PRESETS = [
+export const PRESETS = [
   {
     name: 'Two islands', goods: ['fish', 'coconuts'],
     c: [{ name: 'Palm Island', max: [10, 40], base: 50 }, { name: 'Reef Island', max: [20, 20], base: 50 }],

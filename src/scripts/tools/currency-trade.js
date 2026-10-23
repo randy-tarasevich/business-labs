@@ -10,7 +10,7 @@ import { niceMax, svgEl, linkRange, presetButtons, wireReveals, fitWidth, onWidt
 const CURRENCIES = {
   EUR: 'euros', JPY: 'yen', CAD: 'Canadian dollars', MXN: 'Mexican pesos', GBP: 'British pounds', VND: 'Vietnamese dong', CNY: 'Chinese yuan',
 };
-const PRESETS = [
+export const PRESETS = [
   { name: 'Import: olive oil from Italy', mode: 'import', cur: 'EUR', item: 'bottle', price: 6, rate: 0.9, ship: 1.5, tariff: 10, markup: 60, rival: 16, rivalNote: 'U.S.-made olive oil' },
   { name: 'Import: sneakers from Vietnam', mode: 'import', cur: 'VND', item: 'pair', price: 500000, rate: 25000, ship: 2, tariff: 20, markup: 100, rival: 60, rivalNote: 'U.S.-made sneakers' },
   { name: 'Export: guitars to Japan', mode: 'export', cur: 'JPY', item: 'guitar', price: 800, rate: 150, ship: 60, tariff: 0, markup: 40, rival: 170000, rivalNote: 'a Japanese-made guitar' },

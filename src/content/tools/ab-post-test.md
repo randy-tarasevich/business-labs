@@ -41,6 +41,21 @@ The tool runs 1,000 fake tests where both versions have the same click rate (the
 - Try it #4: with identical results the gap is 0, so every fake test counts as "at least as big." The chart still shows a spread: that's normal random variation.
 - The results are seeded, so the same inputs always give the same numbers. A different input gives a fresh set of fake tests.
 
+## Predict first
+
+Two prediction cards sit above the challenges. Students pick Goes up, Goes down, or Stays the same; the tool makes the change on screen and shows before and after.
+
+- **Bigger test, same rates** (bake sale, 200 to 800 viewers each, still 3% and 5%): the gap **stays the same** at 2.0 points. A bigger test doesn't change what happened, it changes how sure you can be. Follow-up: so what did change? (Luck now explains it only about 3 times in 100, down from 39.)
+- **Shrink the huge test** (20,000 to 2,000 viewers each, still 3.0% and 3.5%): the chance it's luck **goes up**, from under 1 in 100 to about 41 in 100. A half-point gap needs a big test to show up. Follow-up: is the post any worse than before? (No. Same rates; the test just can't see the gap anymore.)
+
+## Challenges
+
+Three challenge cards sit under the tool. Each Start button loads its scenario and makes a link you can post. Sample solutions (there are others):
+
+- **Run a bigger test** (bake sale, keep 3% and 5%): 800 viewers each with 24 and 40 clicks gives about 3 in 100. 1,000 each (30 and 50) works too. 600 each is about 8 in 100, not enough. Debrief: why does the same gap become convincing?
+- **How many clicks would it take?** (200 viewers each, A stays at 6 clicks): B needs 16 clicks (8%), about 3 in 100. At 15 clicks it's about 5 in 100, just short. With a small test, only a huge gap counts.
+- **Too small to tell** (keep 3.0% and 3.5%, same viewers each): any test up to about 4,000 viewers each works. 1,000 each (30 and 35 clicks) is about 57 in 100. Ask: if a small business can only reach 1,000 people, should it bother testing a tiny change?
+
 ## Common misconceptions
 
 - **"B got more clicks, so B is better."** Small tests bounce around. The bake sale gap shows up by luck alone more than a third of the time.

@@ -35,6 +35,21 @@ A 15–20 minute **predict, test, explain** activity. Students know the format f
 - **Dog treat bakery:** a modest ask ($125,000, about 3.1 times sales). Good contrast with the headset brand.
 - **Question 4:** 90% of $1 million is $900,000. 75% of $2 million is $1.5 million. The bigger pie wins by $600,000.
 
+## Predict first
+
+Two prediction cards sit above the challenges. Students pick Goes up, Goes down, or Stays the same; the tool makes the change on screen and shows before and after.
+
+- **Higher sales** (smoothie truck, sales $120,000 to $240,000, same $50,000 for 10% ask): the company value in your ask **stays the same** at $500,000. Value comes only from the money and the share: $50,000 ÷ 10%. Follow-up: what did change? (The value as a multiple of sales, about 4.2× down to 2.1×, so the ask now looks much more reasonable.)
+- **Same money, bigger share** (headset brand, $300,000 for 10% to $300,000 for 15%): the investor's value **goes down**, $3,000,000 to $2,000,000. Asking for more of the company for the same money means they think it's worth less. Follow-up: who gains if the founder accepts? (The investor.)
+
+## Challenges
+
+Three challenge cards sit under the tool. Each Start button loads its scenario and makes a link you can post. Sample solutions (there are others):
+
+- **A realistic ask** (smoothie truck, still asking $50,000): offer 17% to 20%. 17% values it at about $294,118; 20% at $250,000 and keeps exactly 80%. 16% is about $312,500, too high.
+- **Make it worth their while** (phone case startup, $100,000 ask, $2 million sale): offer 25% to 30%. At 25% the investor gets $500,000 at the sale, exactly 5×. Debrief: why would an investor need 5× on some deals? (Many startups fail, so the winners have to pay for the losers.)
+- **Dream big** (dog treat bakery, offer locked at $25,000 for 30%): the sale has to reach about $714,286, so $750,000 on the slider (you get $525,000). That is 2.5 times the $300,000 the founder expected.
+
 ## Common misconceptions
 
 - Students think the valuation is the money the founder gets. The investment goes into the company, not the founder's pocket.

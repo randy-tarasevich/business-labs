@@ -43,6 +43,21 @@ The viral post is there to break the formula on purpose. When engagement by foll
 - Try it #4: 10% of 4,000 is 400 interactions, so the small account needs 80 more than this post's 320.
 - This tool counts likes, comments, and shares equally. Many marketers count saves too, and some count only comments and shares as "real" engagement. Worth a quick discussion: which actions show more interest?
 
+## Predict first
+
+Two prediction cards sit above the challenges. Students pick Goes up, Goes down, or Stays the same; the tool makes the change on screen and shows before and after.
+
+- **Buy 20,000 followers** (big account): the rate by followers **goes down**, 0.50% to 0.36%. Bought followers add to the bottom of the fraction but never like or comment. Follow-up: why would a brand checking this account notice? (The rate drops while the follower count jumps.)
+- **Twice the reach, same interactions** (small account, 2,500 to 5,000 people saw it): the rate by followers **stays the same** at 8.0%. That rate only uses followers and interactions. Follow-up: which rate did change? (Rate by people who saw it, 12.8% to 6.4%: the same interactions spread over twice the audience.)
+
+## Challenges
+
+Three challenge cards sit under the tool. Each Start button loads its scenario and makes a link you can post. Sample solutions (there are others):
+
+- **Wake up the quiet fans** (big account, 50,000 followers, reach stays 4,000): 500 interactions in total, for example 480 likes with the same 15 comments and 5 shares. That's 12.5% of the people who saw it, double the old 6.3%, so the post itself has to be much better.
+- **Undo the bought followers** (small account with 20,000 bought, real followers stay 4,000): 8% of 24,000 is 1,920 interactions, for example 1,860 likes plus the 40 comments and 20 shares. Six times the original post. The point: buying followers makes every honest number harder to hit.
+- **Reach is the problem** (big account, rate by reach stays 6.3% or less): 2% of 50,000 is 1,000 interactions, and at 6.25% that means 16,000 people have to see it (16,000 reach, 980 likes). Debrief: how could a real account get its post in front of more followers? (Posting time, shares, video, paying to boost.)
+
 ## Common misconceptions
 
 - **"More followers means more people see every post."** Most followers never see a given post. The feed chooses what each person sees. The big account reaches only 8% of its followers.

@@ -56,6 +56,21 @@ Overseas breakdowns:
 - The "tariff that ties" for headphones is lower (5%) than students expect because the 10% currency change already raised overseas costs.
 - The tariff is charged on the factory cost (labor plus materials), not on shipping. Real tariff rules are more complicated; this keeps the math readable.
 
+## Predict first
+
+Two prediction cards sit above the challenges. Students pick Goes up, Goes down, or Stays the same; the tool makes the change on screen and shows before and after.
+
+- **Make twice as many shirts** (T-shirts, 100,000 to 200,000 a year): the overseas cost per good shirt **stays the same** at $6.08. In this tool each shirt costs the same no matter how many you make; what doubles is the total savings. Follow-up: in real life, why might the cost per shirt drop with more volume? (Bulk materials, spreading fixed costs.)
+- **Fewer defects overseas** (furniture, 6% to 2%): the overseas cost per good piece **goes down**, about $183.51 to $176.02. Every bad piece has to be paid for and made again. Follow-up: is that enough to beat making it at home? (No. Home is still about $170.41.)
+
+## Challenges
+
+Three challenge cards sit under the tool. Each Start button loads its scenario and makes a link you can post. Sample solutions (there are others):
+
+- **The tariff that brings it home** (T-shirts, factory and currency locked): about 152% or more. The tool's break-even tariff is about 151.6%. Point out how big a tariff it takes when labor is that much cheaper.
+- **A better factory** (furniture, overseas wage, materials, shipping, and tariff locked): cut hours to 3 and defects to 2% (about $169.60 vs. $170.41 at home), or cut hours to 2 with the same 6% defects. Shipping a couch across an ocean is the real problem.
+- **Currency swing** (headphones, factories and tariff locked): a currency change of −8% or lower (about $53.28 overseas vs. $53.54 at home). It started at +10%, so that's an 18-point swing. Debrief: why do companies worry about exchange rates they can't control?
+
 ## Common misconceptions
 
 - **"Lower wages always mean lower costs."** Overseas workers may take more hours per unit, and wages are only part of the cost. Furniture shows shipping and tariffs can outweigh a wage gap of almost 5 to 1.

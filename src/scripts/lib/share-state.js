@@ -190,6 +190,7 @@ export function describeFields(root) {
 /**
  * The tool's current values, for code that checks them (challenge mode).
  * v(key) reads an input by its share-link key as a number (checkboxes are 1 or 0).
+ * raw(key) reads an input's saved text as-is (a radio's or select's value, like "import").
  * pick(n) is the index of the pressed button in preset/tab group n, or -1.
  */
 export function readState(root) {
@@ -201,6 +202,10 @@ export function readState(root) {
       const raw = f ? read(f) : null;
       const n = parseFloat(raw);
       return Number.isFinite(n) ? n : NaN;
+    },
+    raw: (key) => {
+      const f = map.get(key);
+      return f ? read(f) : null;
     },
     pick: (n) => (groups[n] ? pressedIndex(groups[n]) : -1),
   };

@@ -8,7 +8,7 @@ const ASSETS = { cash: 'Cash', ar: 'Accounts receivable', supplies: 'Supplies', 
 const LIABS = { ap: 'Accounts payable', loan: 'Loan payable' };
 
 // fx: account changes per $1 of the amount. kind/name: how it touches owner's equity.
-const PRESETS = [
+export const PRESETS = [
   {
     name: 'Bakery, March',
     title: 'Sweet Spot Bakery',

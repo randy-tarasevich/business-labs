@@ -37,7 +37,7 @@ const tryIt = [
       <fieldset class={FIELDSET}>
         <legend class={LEGEND}>The two factories</legend>
         <span class={HINT}>Pick a factory to change its numbers.</span>
-        <div class={PRESETS} data-pick role="group" aria-label="Which factory to edit"></div>
+        <div class={PRESETS} data-pick data-tabs role="group" aria-label="Which factory to edit"></div>
         <RangeField id="off-wage" label="Wage per hour" unit="$" step="0.5" max={60} aria="Wage per hour in dollars" />
         <RangeField id="off-hours" label="Hours to make one" step="0.1" max={10} aria="Hours of work to make one unit" hint="Better machines and training mean fewer hours." />
         <RangeField id="off-mat" label="Materials per unit" unit="$" step="0.5" max={200} aria="Materials per unit in dollars" />

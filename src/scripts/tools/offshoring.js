@@ -9,7 +9,7 @@ import { money, num, svgEl, linkRange, presetButtons, wireReveals, fitWidth, onW
 
 export const SITES = ['Make at home', 'Make overseas'];
 
-const PRESETS = [
+export const PRESETS = [
   {
     name: 'T-shirts',
     tariff: 15, currency: 0, units: 100000,
