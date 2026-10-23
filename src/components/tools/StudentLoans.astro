@@ -1,0 +1,120 @@
+---
+// Student Loan Simulator: markup only. Behavior lives in src/scripts/tools/student-loans.js
+// Federal rates and limits live in src/data/student-loans.js (update once a year).
+import RangeField from '../ui/RangeField.astro';
+import Stat from '../ui/Stat.astro';
+import TryIt from '../ui/TryIt.astro';
+import { TOOL, PANEL, PANEL_TIGHT, LOWER, H2, H3, PROSE, PRESETS, HINT, CHART_KEY, SWATCH, SVG, RESULTS, VERDICT, FORMULA, TABLE_BOX, TABLE } from '../../scripts/lib/ui.js';
+
+// Same layout as LOWER but a different class string, so projector view keeps these panels open.
+const MIDDLE = 'grid grid-cols-2 gap-[18px] items-start max-[860px]:grid-cols-1';
+
+const tryIt = [
+  {
+    q: 'Load In-state public. How much do you borrow, and how much do you owe when payments start? Why are they different?',
+    a: 'You borrow $48,000 but owe $56,215. About $8,215 of interest piled up on the unsubsidized and private loans while you were in school and during the 6-month grace period.',
+  },
+  {
+    q: 'Still on In-state public: uncheck the subsidized loans box. How much more do you owe when payments start?',
+    a: 'You owe $59,703, about $3,488 more. Without subsidized loans, interest builds on the whole federal loan during school, not just part of it.',
+  },
+  {
+    q: 'Turn subsidized loans back on. Compare paying it back over 10 years and over 25 years. What does the lower payment cost you?',
+    a: '25 years cuts the payment from $690 to $444 a month, about $246 less. But total interest jumps from $34,804 to $85,345, about $50,541 more.',
+  },
+  {
+    q: 'Compare Out-of-state public and Private college. Which has the higher price? Which makes you borrow more?',
+    a: 'The private college costs $65,000 a year to the public school\'s $45,000, but its $30,000 in grants means you borrow $100,000 instead of $108,000. Compare what you would actually pay, not the price.',
+  },
+  {
+    q: 'Load In-state public. How much family help per year turns the result green (borrowing $44,000 or less on a $55,000 salary)?',
+    a: '$11,000 a year. That cuts each year\'s gap to $11,000, so you borrow $44,000, which is 80% of the starting salary.',
+  },
+];
+---
+<div class={TOOL} data-tool="student-loans">
+  <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="College plan inputs">
+      <h2 class={H2}>Your college plan</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example schools"></div>
+      <p class={HINT}>Example costs, not real schools. Use a real school's net price calculator for real numbers.</p>
+      <RangeField id="sl-cost" label="Cost per year" unit="$" step="500" max={90000} aria="Cost per year in dollars" hint="Tuition, fees, housing, and food." />
+      <RangeField id="sl-aid" label="Grants and scholarships per year" unit="$" step="500" max={60000} aria="Grants and scholarships per year in dollars" hint="Free money. You never pay it back." />
+      <RangeField id="sl-family" label="Family help, savings, and work per year" unit="$" step="500" max={60000} aria="Family help, savings, and work per year in dollars" />
+      <RangeField id="sl-years" label="Years in school" unit=" years" step="1" min={1} max={6} width="w-[70px]" aria="Years in school" />
+      <label class="inline-flex items-start gap-2 text-[14px] font-medium cursor-pointer"><input type="checkbox" id="sl-sub" class="accent-accent w-4 h-4 m-0 mt-0.5 shrink-0" /> <span>I qualify for subsidized loans <span class="block text-[12.5px] text-muted font-normal">Based on financial need. No interest while you're in school.</span></span></label>
+      <RangeField id="sl-rate" label="Private loan rate" unit="%" step="0.5" max={20} aria="Private loan interest rate in percent" hint="An example rate. Private lenders set rates by credit score, often with a cosigner." />
+      <RangeField id="sl-salary" label="Starting salary after school" unit="$" step="1000" max={150000} aria="Starting salary in dollars" />
+    </div>
+
+    <div class={PANEL_TIGHT}>
+      <h3 class={H3}>Each year's loans, and the interest they add before payments start</h3>
+      <div class={CHART_KEY} aria-hidden="true">
+        <span><i class={SWATCH} style="background:var(--accent)"></i>Federal loan</span>
+        <span><i class={SWATCH} style="background:var(--warn)"></i>Private loan</span>
+        <span><i class={SWATCH} style="background:var(--bad);opacity:0.55"></i>Interest while in school</span>
+      </div>
+      <div class="w-full min-w-0"><svg class={SVG} data-chart viewBox="0 0 640 280" role="img"></svg></div>
+      <div class={RESULTS}>
+        <Stat label="Total borrowed" r="borrowed" />
+        <Stat label="Owed when payments start" r="owed" keyed live />
+        <Stat label="Monthly payment (10 years)" r="monthly" live />
+        <Stat label="Total interest (10 years)" r="interest" />
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+    </div>
+  </section>
+
+  <section class={MIDDLE}>
+    <div class={PANEL}>
+      <h2 class={H2}>Paying it back</h2>
+      <div class={TABLE_BOX}>
+        <table data-copy-table class={TABLE}>
+          <thead>
+            <tr><th scope="col" class="text-left!">Pay it off in</th><th scope="col">Monthly payment</th><th scope="col">Total interest</th><th scope="col">Total paid</th><th scope="col">Share of take-home pay</th></tr>
+          </thead>
+          <tbody data-r="terms"></tbody>
+        </table>
+      </div>
+      <p class={HINT} data-r="takehome"></p>
+      <p class={HINT}>Federal plans set your term based on how much you owe, and lenders offer longer terms too. A smaller payment means more months of interest.</p>
+    </div>
+
+    <div class={PANEL}>
+      <h2 class={H2}>Federal vs. private</h2>
+      <dl class="grid gap-3 text-[14px] m-0 [&_dt]:font-semibold [&_dd]:m-0 [&_b]:font-semibold">
+        <div>
+          <dt>Interest rate</dt>
+          <dd><b>Federal:</b> fixed, set by law each year, the same for every student.</dd>
+          <dd><b>Private:</b> set by the lender based on credit. Often variable, so it can go up.</dd>
+        </div>
+        <div>
+          <dt>Cosigner</dt>
+          <dd><b>Federal:</b> not needed.</dd>
+          <dd><b>Private:</b> usually needed, and the cosigner owes the loan if you don't pay.</dd>
+        </div>
+        <div>
+          <dt>If money gets tight</dt>
+          <dd><b>Federal:</b> ways to pause payments or pay based on your income.</dd>
+          <dd><b>Private:</b> few options. It depends on the lender.</dd>
+        </div>
+      </dl>
+      <p class="font-semibold text-[14px]" data-r="split" data-copy="Loan mix"></p>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}>Each year, the <strong>gap</strong> between cost and the money you have is borrowed. Federal loans come first, up to a yearly limit, and private loans cover the rest. <strong>Subsidized</strong> loans don't charge interest while you're in school. <strong>Unsubsidized</strong> and private loans do, and that interest is added to what you owe when payments start. The take-home estimate assumes about 22% of your pay goes to taxes.</p>
+      <p class={HINT} data-r="asof"></p>
+    </div>
+    <TryIt items={tryIt} />
+  </section>
+</div>
+
+<script>
+  import { initStudentLoans } from '../../scripts/tools/student-loans.js';
+  document.querySelectorAll('[data-tool="student-loans"]').forEach(initStudentLoans);
+</script>
