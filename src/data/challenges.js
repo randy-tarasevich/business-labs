@@ -16,6 +16,7 @@
 
 import { schedule } from '../scripts/tools/depreciation.js';
 import { funnel } from '../scripts/tools/marketing-funnel.js';
+import { plan, repay, TAKE_HOME } from '../scripts/tools/student-loans.js';
 
 const near = (a, b, tol = 0.005) => Math.abs(a - b) <= tol;
 
@@ -37,6 +38,18 @@ const fn = (s) =>
     aov: s.v('fn-aov'),
     margin: s.v('fn-margin'),
   });
+
+// Student Loan Simulator: the same plan the tool draws, read from the inputs.
+const loans = (s) =>
+  plan({
+    cost: s.v('sl-cost'),
+    aid: s.v('sl-aid'),
+    family: s.v('sl-family'),
+    years: Math.max(1, Math.min(6, Math.round(s.v('sl-years')))),
+    rate: s.v('sl-rate'),
+    sub: s.v('sl-sub') === 1,
+  });
+const takeHomeShare = (s) => repay(loans(s), s.v('sl-rate'), 10).monthly / ((s.v('sl-salary') * TAKE_HOME) / 12);
 
 export const CHALLENGES = {
   'break-even-lab': [
@@ -137,6 +150,44 @@ export const CHALLENGES = {
         { text: 'Budget stays at $1,600 or more.', ok: (s) => s.v('fn-budget') >= 1600 },
         { text: 'Cost per 1,000 views stays at $70 or more.', ok: (s) => s.v('fn-cpm') >= 70 },
         { text: 'Average order stays at $300 or less.', ok: (s) => s.v('fn-aov') <= 300 },
+      ],
+    },
+  ],
+
+  'student-loan-simulator': [
+    {
+      title: 'Pass the paycheck test',
+      goal: 'At the in-state school, you borrow more than 80% of your $55,000 starting salary. Get total borrowing down to 80% of your salary or less.',
+      start: { g0: 1 },
+      met: (s) => loans(s).borrowed <= 0.8 * s.v('sl-salary'),
+      rules: [
+        { text: 'Cost stays at $28,000 a year.', ok: (s) => s.v('sl-cost') === 28000 },
+        { text: 'Starting salary stays at $55,000.', ok: (s) => s.v('sl-salary') === 55000 },
+      ],
+    },
+    {
+      title: 'Cut the interest',
+      goal: 'At the in-state school, over $8,000 of interest piles up before your first payment. Get it under $6,000.',
+      start: { g0: 1 },
+      met: (s) => {
+        const p = loans(s);
+        return p.owed - p.borrowed < 6000;
+      },
+      rules: [
+        { text: 'Cost stays at $28,000 a year.', ok: (s) => s.v('sl-cost') === 28000 },
+        { text: 'Grants stay at $6,000 a year.', ok: (s) => s.v('sl-aid') === 6000 },
+        { text: 'Family help stays at $10,000 a year.', ok: (s) => s.v('sl-family') === 10000 },
+      ],
+    },
+    {
+      title: 'What would you need to earn?',
+      goal: 'At the out-of-state school, the 10-year payment takes almost half your take-home pay. Find a starting salary that brings it to 15% or less.',
+      start: { g0: 2 },
+      met: (s) => s.v('sl-salary') > 0 && takeHomeShare(s) <= 0.15,
+      rules: [
+        { text: 'Cost stays at $45,000 a year.', ok: (s) => s.v('sl-cost') === 45000 },
+        { text: 'Grants stay at $8,000 a year.', ok: (s) => s.v('sl-aid') === 8000 },
+        { text: 'Family help stays at $10,000 a year.', ok: (s) => s.v('sl-family') === 10000 },
       ],
     },
   ],

@@ -7,7 +7,16 @@ grades: 9–12
 minutes: [20, 30]
 component: StudentLoans
 order: 25
-indicators: []
+indicators:
+  - code: FI:831
+    name: Discuss options for financing a college education
+    level: CS
+  - code: FI:782
+    name: Calculate the cost of credit
+    level: CS
+  - code: FI:568
+    name: Control debt
+    level: CS
 alsoAligned:
   - "Jump$tart National Standards: Managing Credit"
 ---
@@ -47,6 +56,21 @@ Private loan rate 10%, starting salary $55,000, subsidized loans on.
 - In-state public with subsidized loans off: owes $59,703 when payments start, $3,488 more.
 - In-state public, paying it back: 10 years $690 a month ($34,804 interest), 20 years $480 ($67,233), 25 years $444 ($85,345).
 - Try it #5: $11,000 a year of family help brings borrowing to $44,000, which is 80% of $55,000.
+
+## Predict first
+
+Two prediction cards sit above the challenges. Students pick Goes up, Goes down, or Stays the same; the tool makes the change on screen and shows before and after. Take a show of hands first.
+
+- **Pricier school** (out-of-state public to private college): total borrowed **goes down**, $108,000 to $100,000. The private college costs $20,000 more a year, but its $30,000 in grants beats the public school's $8,000. Follow-up: what number should families compare instead of the price? (Cost minus grants, the net price.)
+- **No subsidized loans** (in-state public): total borrowed **stays the same** at $48,000. Subsidized only changes who pays the interest during school, not how much you borrow. Follow-up: so what does change? (What you owe when payments start, $56,215 to $59,703.)
+
+## Challenges
+
+Three challenge cards sit under the tool. Each Start button loads its scenario and makes a link you can post. Sample solutions (there are others):
+
+- **Pass the paycheck test** (in-state public, borrow 80% of $55,000 or less, cost and salary stay): raise family help to $11,000 a year, which brings borrowing to $44,000. More grants work too. Ask which lever a real family controls.
+- **Cut the interest** (in-state public, interest before payments start under $6,000, cost, grants, and family help stay): drop the private rate to 6.5% ($5,887), or finish in 3 years ($5,303). Good debrief: a cosigner with strong credit is one way to get a lower private rate, and the cosigner owes the loan if you don't pay.
+- **What would you need to earn?** (out-of-state public, 10-year payment 15% of take-home or less, school costs stay): a starting salary of about $177,000. Most careers don't start there, which is the point. Follow-up: what would you change about the plan instead?
 
 ## Common misconceptions
 

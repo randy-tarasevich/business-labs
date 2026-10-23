@@ -15,6 +15,7 @@
 import { schedule } from '../scripts/tools/depreciation.js';
 import { funnel } from '../scripts/tools/marketing-funnel.js';
 import { money, num } from '../scripts/lib/util.js';
+import { plan } from '../scripts/tools/student-loans.js';
 
 const beUnits = (s) => {
   const cm = s.v('be-price') - s.v('be-vc');
@@ -24,6 +25,16 @@ const METHODS = ['sl', 'ddb', 'syd'];
 const dep = (s) => schedule(METHODS[s.pick(1)] ?? 'sl', s.v('dp-cost'), Math.min(s.v('dp-salvage'), s.v('dp-cost')), Math.max(1, Math.round(s.v('dp-life'))));
 const fn = (s) =>
   funnel({ budget: s.v('fn-budget'), cpm: s.v('fn-cpm'), ctr: s.v('fn-ctr'), conv: s.v('fn-conv'), aov: s.v('fn-aov'), margin: s.v('fn-margin') });
+
+const borrowed = (s) =>
+  plan({
+    cost: s.v('sl-cost'),
+    aid: s.v('sl-aid'),
+    family: s.v('sl-family'),
+    years: Math.max(1, Math.min(6, Math.round(s.v('sl-years')))),
+    rate: s.v('sl-rate'),
+    sub: s.v('sl-sub') === 1,
+  }).borrowed;
 
 export const PREDICTIONS = {
   'break-even-lab': [
@@ -68,6 +79,21 @@ export const PREDICTIONS = {
       start: { g0: 0 },
       change: { 'fn-aov': 35 },
       measure: { label: 'Cost per customer', value: (s) => fn(s).cac, fmt: (n) => money(n, 2) },
+    },
+  ],
+
+  'student-loan-simulator': [
+    {
+      question: 'You switch from the out-of-state public school ($45,000 a year) to the private college ($65,000 a year). What happens to the total you borrow?',
+      start: { g0: 2 },
+      change: { g0: 3 },
+      measure: { label: 'Total borrowed', value: borrowed, fmt: (n) => money(n, 0) },
+    },
+    {
+      question: 'At the in-state school, it turns out you don\'t qualify for subsidized loans. What happens to the total you borrow?',
+      start: { g0: 1, 'sl-sub': 1 },
+      change: { 'sl-sub': 0 },
+      measure: { label: 'Total borrowed', value: borrowed, fmt: (n) => money(n, 0) },
     },
   ],
 };
