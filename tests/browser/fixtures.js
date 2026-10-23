@@ -36,6 +36,11 @@ export const CHALLENGE_ANSWERS = {
     { solve: { 'se-bStart': 26 }, break: { 'se-bRate': 8 } },
     { solve: { 'se-bRate': 5 }, break: { 'se-rate': 3 } },
   ],
+  'paycheck-lab': [
+    { solve: { 'pc-hours': 44 }, break: { 'pc-hourly': 24 } },
+    { solve: { 'pc-k': 9 }, break: { 'pc-hours': 15 } },
+    { solve: { 'pc-k': 21 }, break: { 'pc-hours': 32 } },
+  ],
 };
 
 // Predictions: the right answer for each card, in order ('up', 'down', or 'same').
@@ -46,6 +51,7 @@ export const PREDICTION_ANSWERS = {
   'student-loan-simulator': ['down', 'same'],
   'credit-card-payoff-lab': ['same', 'up'],
   'start-early-lab': ['same', 'up'],
+  'paycheck-lab': ['up', 'same'],
 };
 
 // T-Account Lab: [debit account, credit account, amount] for each transaction.

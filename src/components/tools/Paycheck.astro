@@ -1,0 +1,83 @@
+---
+// Paycheck Lab: markup only. Behavior lives in src/scripts/tools/paycheck.js
+// Federal tax numbers live in src/data/paycheck.js (update once a year).
+import RangeField from '../ui/RangeField.astro';
+import Stat from '../ui/Stat.astro';
+import TryIt from '../ui/TryIt.astro';
+import { TOOL, PANEL, PANEL_TIGHT, LOWER, H2, H3, PROSE, PRESETS, HINT, CHART_KEY, SVG, RESULTS, VERDICT, FORMULA, TABLE_BOX, TABLE, SELECT } from '../../scripts/lib/ui.js';
+import { SCHEDULES } from '../../scripts/tools/paycheck.js';
+
+const tryIt = [
+  {
+    q: 'Load the part-time job. You earn $340 a week. How much federal income tax comes out? Why so little?',
+    a: 'About $3.04 a week ($158 a year). The $16,100 standard deduction covers almost all of the $17,680 you earn, so only $1,580 is taxed, at 10%. Social Security and Medicare still come out of every dollar.',
+  },
+  {
+    q: 'Load the first full-time job. Your 401(k) takes $52.80 a paycheck. Set the 401(k) to 0%. How much does take-home pay go up?',
+    a: 'From $1,400.33 to $1,445.21, only $44.88. Saving $52.80 costs you less than $52.80 because 401(k) money comes out before income taxes.',
+  },
+  {
+    q: 'Still on the first full-time job, set the hourly pay to $32, then $33. Your federal bracket jumps from 12% to 22%. Does your take-home pay go down?',
+    a: 'No. It goes up, from $1,998.73 to $2,058.26 a paycheck. Only the dollars above $50,400 of taxable pay are taxed at 22%. Every dollar below that is taxed the same as before.',
+  },
+  {
+    q: 'Load the skilled full-time job. You\'re in the 22% bracket. What share of your pay actually goes to federal income tax?',
+    a: 'About 10.1%. Your first $12,400 of taxable pay is taxed at 10%, the next part at 12%, and only the top slice at 22%. The bracket is your top rate, not your average.',
+  },
+];
+---
+<div class={TOOL} data-tool="paycheck">
+  <section class="grid grid-cols-[340px_minmax(0,1fr)] gap-[18px] items-start max-[860px]:grid-cols-1">
+    <div class={PANEL} aria-label="Job inputs">
+      <h2 class={H2}>Your job</h2>
+      <div class={PRESETS} data-presets role="group" aria-label="Example jobs"></div>
+      <RangeField id="pc-hourly" label="Hourly pay" unit="$" step="0.25" max={60} aria="Hourly pay in dollars" />
+      <RangeField id="pc-hours" label="Hours a week" unit=" hours" step="1" max={60} width="w-[70px]" aria="Hours worked per week" />
+      <div class="grid gap-1.5">
+        <label for="pc-freq" class="font-semibold text-[14px]">How often you're paid</label>
+        <select id="pc-freq" class={SELECT}>
+          {SCHEDULES.map((s) => <option value={String(s.n)}>{s.label} ({s.n} paychecks a year)</option>)}
+        </select>
+      </div>
+      <RangeField id="pc-k" label="401(k) savings" unit="%" step="1" max={25} aria="401(k) savings in percent of pay" hint="Retirement savings taken out before income taxes." />
+      <RangeField id="pc-state" label="State income tax rate" unit="%" step="0.5" max={10} aria="State income tax rate in percent" hint="One flat rate as an estimate. Connecticut's rates run from 2% to 6.99%. Some states, like Florida and Texas, have none." />
+    </div>
+
+    <div class={PANEL_TIGHT}>
+      <h3 class={H3}>Where your pay goes</h3>
+      <div class={CHART_KEY} data-r="key"></div>
+      <div class="w-full min-w-0"><svg class={SVG} data-chart viewBox="0 0 640 64" role="img"></svg></div>
+      <div class={RESULTS}>
+        <Stat label="Gross pay per paycheck" r="gross" />
+        <Stat label="Take-home per paycheck" r="net" keyed live />
+        <Stat label="Federal tax bracket" r="marginal" />
+        <Stat label="Federal tax as % of pay" r="effective" live />
+      </div>
+      <div class={VERDICT} data-r="verdict" role="status"></div>
+      <h3 class={H3}>Your pay stub</h3>
+      <div class={TABLE_BOX}>
+        <table data-copy-table class={TABLE}>
+          <thead>
+            <tr><th scope="col" class="text-left!">&nbsp;<span class="sr-only">Line</span></th><th scope="col" data-r="stub-head">Each paycheck</th><th scope="col">Per year</th></tr>
+          </thead>
+          <tbody data-r="stub"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class={LOWER}>
+    <div class={PANEL}>
+      <h2 class={H2}>The math</h2>
+      <div class={FORMULA} data-r="formula"></div>
+      <p class={PROSE}><strong>Gross pay</strong> is what you earn. <strong>Net pay</strong> is what lands in your account. Federal income tax uses <strong>brackets</strong>: each rate applies only to the dollars inside its range, so moving into a higher bracket never lowers your take-home pay. <strong>Social Security</strong> and <strong>Medicare</strong> (together called FICA) take the same percentage of every dollar. A real paystub uses your W-4 and the IRS withholding tables, so it can be a little different.</p>
+      <p class={HINT} data-r="year"></p>
+    </div>
+    <TryIt items={tryIt} />
+  </section>
+</div>
+
+<script>
+  import { initPaycheck } from '../../scripts/tools/paycheck.js';
+  document.querySelectorAll('[data-tool="paycheck"]').forEach(initPaycheck);
+</script>

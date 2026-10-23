@@ -18,6 +18,7 @@ import { money, num } from '../scripts/lib/util.js';
 import { plan } from '../scripts/tools/student-loans.js';
 import { payoff } from '../scripts/tools/credit-card.js';
 import { grow } from '../scripts/tools/start-early.js';
+import { paycheck } from '../scripts/tools/paycheck.js';
 
 const beUnits = (s) => {
   const cm = s.v('be-price') - s.v('be-vc');
@@ -40,6 +41,8 @@ const borrowed = (s) =>
 
 const saver = (s, who) =>
   grow(s.v('se-monthly'), who === 'a' ? s.v('se-rate') : s.v('se-bRate'), Math.round(s.v(`se-${who}Start`)), Math.round(s.v(`se-${who}Stop`)));
+
+const pay = (s) => paycheck({ hourly: s.v('pc-hourly'), hours: s.v('pc-hours'), k: s.v('pc-k'), state: s.v('pc-state') });
 
 export const PREDICTIONS = {
   'break-even-lab': [
@@ -129,6 +132,21 @@ export const PREDICTIONS = {
       start: { g0: 0 },
       change: { 'se-bStart': 31 },
       measure: { label: 'Saver A minus Saver B at 65', value: (s) => saver(s, 'a').final - saver(s, 'b').final, fmt: (n) => money(n, 0) },
+    },
+  ],
+
+  'paycheck-lab': [
+    {
+      question: 'You get a raise from $32 to $33 an hour, and it pushes you from the 12% federal bracket into the 22% bracket. What happens to your take-home pay?',
+      start: { g0: 1, 'pc-hourly': 32 },
+      change: { 'pc-hourly': 33 },
+      measure: { label: 'Take-home per paycheck', value: (s) => pay(s).net / s.v('pc-freq'), fmt: (n) => money(n, 2) },
+    },
+    {
+      question: 'At the part-time job, you cut back from 20 hours a week to 15. What happens to the share of your pay that goes to Social Security?',
+      start: { g0: 0 },
+      change: { 'pc-hours': 15 },
+      measure: { label: 'Social Security share of pay', value: (s) => { const p = pay(s); return p.gross ? Math.round((p.ss / p.gross) * 1000) / 10 : 0; }, fmt: (n) => `${num(n, 1)}%` },
     },
   ],
 };
