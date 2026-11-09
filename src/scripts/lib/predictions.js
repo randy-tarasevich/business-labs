@@ -61,7 +61,11 @@ export function initPredictions(root, panel) {
       setTone(card, '');
       again.hidden = true;
     };
+    // Put the tool back on the question's starting numbers so the question, the inputs, and the
+    // results match again (and the change drops out of the share URL). Skipped while another card
+    // is replaying, so it can't interrupt that replay.
     again.addEventListener('click', () => {
+      if (!busy) applyParams(root, p.start, { force: true });
       reset();
       choices[0].focus();
     });

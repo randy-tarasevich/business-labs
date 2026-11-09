@@ -53,6 +53,17 @@ for (const [slug, answers] of Object.entries(PREDICTION_ANSWERS)) {
   });
 }
 
+test('predictions: Try it again puts the tool back on the starting numbers', async ({ page }) => {
+  await page.goto('/tools/financial-statements/');
+  const card = page.locator('[data-pr]').nth(0);
+  await card.locator('[data-choice="same"]').click();
+  await expect(card.locator('[data-again]')).toBeVisible();
+  await expect(page).toHaveURL(/f10=1600/);
+  await card.locator('[data-again]').click();
+  await expect(page).not.toHaveURL(/f10=1600/);
+  await expect(page.locator('main')).toContainText(/Withdrawals\s*\$800/);
+});
+
 test('predictions: a second card waits while the first replays', async ({ page }) => {
   await page.goto('/tools/break-even-lab/');
   const cards = page.locator('[data-pr]');
