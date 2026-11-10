@@ -905,9 +905,9 @@ export const CHALLENGES = {
   'financial-statements': [
     {
       title: 'Cash is not profit',
-      goal: 'The bakery ends March with $6,950 in cash and $950 of net income. Change the month so it ends with $8,000 or more in cash, but the same net income.',
+      goal: 'The bakery ends March with $7,950 in cash and $950 of net income. Change the month so it ends with $9,000 or more in cash, but the same net income.',
       start: { g0: 0 },
-      met: (s) => fs(s).bal.cash >= 8000,
+      met: (s) => fs(s).bal.cash >= 9000,
       rules: [{ text: 'Net income stays at $950.', ok: (s) => Math.abs(fs(s).ni - 950) < 0.005 }],
     },
     {
